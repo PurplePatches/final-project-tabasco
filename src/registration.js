@@ -1,0 +1,40 @@
+import React from 'react';
+
+export default class Registration extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {};
+    }
+    submit() {
+        axios.post('/register', {
+            first: this.state.first,
+            last: this.state.last
+        }).then(
+            ({data}) => {
+                // this.setState({
+                //     error: true
+                // })
+                location.replace('/');
+            }
+        ).catch(
+            
+        )
+    }
+    render() {
+        const handleInput = e => {
+            this.setState(
+                [e.target.name]: e.target.value
+            );
+        };
+        return (
+            <div>
+                {this.state.error && <div className="error">Oops</div>}
+                <input onInput={handleInput} name="first" />
+                <input name="last" onInput={handleInput} />
+                <input name="email" />
+                <input name="pass" />
+                <button onClick={e => this.submit()}>Join up</button>
+            </div>
+        )
+    }
+}
