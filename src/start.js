@@ -1,5 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import Registration from "./registration";
+import Welcome from "./welcome";
 
 // import Welcome from "./welcome";
 // let elem;
@@ -11,8 +13,12 @@ import ReactDOM from "react-dom";
 //     elem = <img src="/logo.gif" />;
 // }
 
-ReactDOM.render(<HelloWorld />, document.querySelector("main"));
+ReactDOM.render(<Welcome />, document.querySelector("main"));
 
-function HelloWorld() {
-    return <div>Hello, World!</div>;
+function RenderAllElements() {
+    return (
+        <div>
+            <Registration />
+        </div>
+    );
 }

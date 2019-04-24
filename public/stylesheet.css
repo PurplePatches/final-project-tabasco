@@ -4,5 +4,13 @@
 
 body {
     margin: 0;
-    background-color: tomato;
+    font-family: calibri, sans-serif;
+}
+
+.register-container {
+    border: 1px solid black;
+}
+
+.error {
+    color: red;
 }
