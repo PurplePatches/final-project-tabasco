@@ -1,11 +1,10 @@
 const express = require("express");
-const app = express();
+const app = (exports.app = express());
 
 const compression = require("compression");
 app.use(compression());
 
 // const db = require("./db");
-// const bc = require("./bc");
 
 if (process.env.NODE_ENV != "production") {
     app.use(
@@ -20,8 +19,7 @@ if (process.env.NODE_ENV != "production") {
     });
 }
 
-var valRoute = require("./routers/validation");
-app.use(valRoute);
+require("./routers/validation");
 
 app.use(express.static("./public"));
 
