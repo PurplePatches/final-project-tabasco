@@ -35,13 +35,23 @@ app.use(
     })
 );
 app.use(bodyParser.json());
-// app.use(csurf());
-// app.use((request, response, next) => {
-//     // response.setHeader("x-frame-options", "DENY");
-//     response.locals.csrfToken = request.csrfToken();
-//     next();
-// });
+app.use(csurf());
+app.use((request, response, next) => {
+    response.cookie("mytoken", request.csrfToken());
+    next();
+});
 
+app.get("/logout", (request, response) => {
+    request.session = null;
+    response.redirect("/welcome");
+});
+app.get("/welcome", (request, response) => {
+    if (request.session.userId) {
+        response.redirect("/");
+    } else {
+        response.sendFile(__dirname + "/index.html");
+    }
+});
 app.post("/register", (request, response) => {
     let firstName = request.body.firstName;
     let lastName = request.body.lastName;
@@ -58,20 +68,47 @@ app.post("/register", (request, response) => {
             });
         })
         .catch(err => {
-            console.log("hashing an empty password???", err);
+            console.log("Error in post register", err);
+            response.json({ error: err.message });
         });
 });
-app.get("/logout", (request, response) => {
-    request.session = null;
-    response.redirect("/");
-});
-app.get("/welcome", (request, response) => {
+app.get("/bio", (request, response) => {
     if (request.session.userId) {
         response.redirect("/");
     } else {
         response.sendFile(__dirname + "/index.html");
     }
 });
+app.get("/login", (request, response) => {
+    if (request.session.userId) {
+        response.redirect("/");
+    } else {
+        response.sendFile(__dirname + "/index.html");
+    }
+});
+app.post("/login", (request, response) => {
+    db.userPassword(request.body.email)
+        .then(user => {
+            bc.checkPassword(request.body.password, user.rows[0].password).then(
+                data => {
+                    if (data) {
+                        request.session.userId = user.rows[0].id;
+                        request.session.firstName = user.rows[0].first_name;
+                        request.session.lastName = user.rows[0].last_name;
+                        console.log("LOGGED IN");
+                        response.json(data);
+                    } else {
+                        throw new Error("Whoops!");
+                    }
+                }
+            );
+        })
+        .catch(err => {
+            console.log("LOGIN ", err);
+            response.json({ error: err.message });
+        });
+});
+
 app.get("*", (request, response) => {
     if (!request.session.userId && request.url != "/welcome") {
         response.redirect("/welcome");
