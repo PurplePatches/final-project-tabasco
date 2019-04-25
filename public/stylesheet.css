@@ -5,10 +5,36 @@
 body {
     margin: 0;
     font-family: calibri, sans-serif;
+    display: flex;
+    justify-content: center;
 }
 
-.register-container {
-    border: 1px solid black;
+.register-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.register-container input,
+button {
+    margin: 5px 0 5px 0;
+}
+
+.welcome-container h1 {
+    font-weight: 100;
+}
+
+.login-container h1 {
+    font-weight: 100;
+}
+
+.login-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-container input,
+button {
+    margin: 5px 0 5px 0;
 }
 
 .error {

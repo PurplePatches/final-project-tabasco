@@ -2,8 +2,17 @@ const express = require("express");
 const app = express();
 const compression = require("compression");
 const cookieSession = require("cookie-session");
+// const csurf = require("csurf");
+
+////////////////////
+// COMPRESS DATA //
+//////////////////
 
 app.use(compression());
+
+////////////
+// ? //
+//////////
 
 if (process.env.NODE_ENV != "production") {
     app.use(
@@ -15,8 +24,30 @@ if (process.env.NODE_ENV != "production") {
 } else {
     app.use("/bundle.js", (req, res) => res.sendFile(`${__dirname}/bundle.js`));
 }
+////////////
+// CSURF // (NOT WORKING)
+//////////
+
+// app.use(csurf());
+//
+// app.use(function(req, res, next) {
+//     res.cookie("mytoken", req.csrfToken());
+//     next();
+// });
+
+//////////////
+// COOKIES //
+////////////
+
+///////////////////////////
+// ACCESS PUBLIC FOLDER //
+/////////////////////////
 
 app.use(express.static("./public"));
+
+//////////////
+// ROUTING //
+////////////
 
 app.post("/register", (req, res) => {});
 
