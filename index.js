@@ -16,11 +16,7 @@ app.use(
         maxAge: 1000 * 60 * 60 * 24 * 7 * 14
     })
 );
-app.use(
-    bodyParser.urlencoded({
-        extended: false
-    })
-);
+app.use(bodyParser.json());
 app.use(csurf());
 
 app.use(function(req, res, next) {
@@ -38,9 +34,6 @@ if (process.env.NODE_ENV != "production") {
 } else {
     app.use("/bundle.js", (req, res) => res.sendFile(`${__dirname}/bundle.js`));
 }
-app.get("/", (req, res) => {
-    res.render("/logo");
-});
 
 app.get("/welcome", (req, res) => {
     if (req.session.userId) {
@@ -52,24 +45,64 @@ app.get("/welcome", (req, res) => {
 
 app.post("/registration", (req, res) => {
     bc.hashPassword(req.body.password).then(hash => {
+        console.log("show me req.body: ", req.body);
         return db
             .register(
+                // req.body.id,
                 req.body.first_name,
                 req.body.last_name,
                 req.body.email,
                 hash
             )
             .then(data => {
-                req.session.first_name = data.rows[0].first_name;
-                req.session.last_name = data.rows[0].last_name;
-                req.session.userID = data.rows[0].id;
-                res.json(true);
+                req.session.userId = data.rows[0].id;
+                res.json({
+                    success: true
+                });
+                console.log(
+                    "show me req.session.userId in POST/registration",
+                    req.session.userId
+                );
             })
             .catch(err => {
-                res.json(false);
-            })
-            .console.log(err);
+                res.json({ success: false });
+                console.log("Please try again", err);
+            });
     });
+});
+
+app.post("/login", (req, res) => {
+    db.login(req.body.email).then(data => {
+        console.log(
+            "show me req.session.userId in POST/login: ",
+            req.session.userId
+        );
+        req.session.userId = data.rows[0].id;
+        if (data) {
+            bc.checkPassword(req.body.password, data.rows[0].password)
+                .then(data => {
+                    if (data == true) {
+                        res.redirect("/");
+                    } else {
+                        res.json({
+                            success: false
+                        });
+                    }
+                })
+                .catch(err => {
+                    req.session.userID = null;
+                    res.json({
+                        success: false
+                    });
+                    console.log("err, reason", err);
+                });
+        }
+    });
+});
+
+app.get("/logout", (req, res) => {
+    req.session = null;
+    res.redirect("/welcome");
 });
 
 app.get("*", (req, res) => {
@@ -80,6 +113,4 @@ app.get("*", (req, res) => {
     }
 });
 
-app.listen(8080, function() {
-    console.log("I'm listening.");
-});
+app.listen(process.env.PORT || 8080, () => console.log("I'm listening"));

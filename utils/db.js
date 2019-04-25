@@ -7,7 +7,13 @@ var db =
 exports.register = function(first_name, last_name, email, password) {
     let q = `INSERT INTO users (first_name, last_name, email, password)
     VALUES ($1, $2, $3, $4)
-    RETURNING first_name, last_name, email, password`;
+    RETURNING id, first_name, last_name, email, password`;
     let params = [first_name, last_name, email, password];
     return db.query(q, params);
+};
+
+exports.login = function(email) {
+    let q = `SELECT * FROM users
+    WHERE email = $1;`;
+    return db.query(q, [email]);
 };

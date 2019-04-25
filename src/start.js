@@ -1,9 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Welcome from "./welcome.js";
+import Logo from "./logo";
 
-let nnnn
+let element;
 
-if/else
+if (location.pathname == "/welcome") {
+    element = <Welcome />;
+} else {
+    element = <Logo />;
+}
 
-ReactDOM.render(nnn, document.querySelector("main"));
+ReactDOM.render(element, document.querySelector("main"));
