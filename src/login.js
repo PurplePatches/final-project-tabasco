@@ -2,24 +2,22 @@ import React from "react";
 import axios from "./axios";
 import { Link } from "react-router-dom";
 
-export default class Register extends React.Component {
+export default class Login extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            error: false
-        };
+        this.state = {};
         this.inputting = this.inputting.bind(this);
-        this.register = this.register.bind(this);
+        this.login = this.login.bind(this);
     }
     inputting(e) {
         this.setState({
             [e.target.name]: e.target.value
         });
     }
-    register(e) {
+    login(e) {
         e.preventDefault();
         axios
-            .post("/register", this.state)
+            .post("/login", this.state)
             .then(({ data }) => {
                 this.setState({ error: data.error });
                 if (this.error == false) {
@@ -41,18 +39,6 @@ export default class Register extends React.Component {
                 )}
                 <form>
                     <input
-                        type="text"
-                        name="firstName"
-                        placeholder="First Name"
-                        onChange={this.inputting}
-                    />
-                    <input
-                        type="text"
-                        name="lastName"
-                        placeholder="Last Name"
-                        onChange={this.inputting}
-                    />
-                    <input
                         type="email"
                         name="email"
                         placeholder="Email"
@@ -64,9 +50,9 @@ export default class Register extends React.Component {
                         placeholder="Password"
                         onChange={this.inputting}
                     />
-                    <button onClick={this.register}>Submit</button>
+                    <button onClick={this.login}>Login</button>
                 </form>
-                <Link to="/login">Click here to Log in!</Link>
+                <Link to="/">Click here to register!</Link>
             </div>
         );
     }

@@ -18,7 +18,14 @@ function addUser(first_name, last_name, email, password) {
     return db.query(q, params);
 }
 
+function getPass(email) {
+    let q = "SELECT password, id FROM users WHERE email=($1);";
+    let params = [email];
+    return db.query(q, params);
+}
+
 module.exports = {
     checkEmail,
-    addUser
+    addUser,
+    getPass
 };
