@@ -1,8 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import Welcome from "./welcome.js";
 
-ReactDOM.render(<HelloWorld />, document.querySelector("main"));
+let nnnn
 
-function HelloWorld() {
-    return <div>Hello, World!</div>;
-}
+if/else
+
+ReactDOM.render(nnn, document.querySelector("main"));
