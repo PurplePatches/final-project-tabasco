@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import axios from "./axios";
 
 export default class Registration extends React.Component {
     constructor(props) {
@@ -73,3 +73,9 @@ export default class Registration extends React.Component {
         );
     }
 }
+
+// To Do:
+// create error message for missing first name
+// create error message for missing last name
+// create error message for missing e-mail adress
+// create error message for missing password

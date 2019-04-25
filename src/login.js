@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import axios from "./axios";
 
 export default class Login extends React.Component {
     constructor(props) {
@@ -63,5 +63,5 @@ export default class Login extends React.Component {
 }
 
 // To Do:
-// create error message for invalid e-mail adress
-// create error message for invalid password
+// create error message for missing e-mail adress
+// create error message for missing password
