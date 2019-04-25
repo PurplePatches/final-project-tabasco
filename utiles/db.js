@@ -10,3 +10,9 @@ exports.createUser = function createUser(firstname, lastname, email, password) {
     let params = [firstname, lastname, email, password];
     return db.query(q, params);
 };
+
+exports.logIn = function logIn(email) {
+    let q = `SELECT * FROM users WHERE email = $1`;
+    let params = [email];
+    return db.query(q, params);
+};

@@ -1,14 +1,48 @@
 * {
     margin: 0;
-    border: border-box;
+    font-family: "Roboto", sans-serif;
 }
 
-.welcome {
+.logo {
     width: 50vw;
     text-align: center;
     height: 100vh;
-    font-size: 6rem;
+    font-size: 12rem;
     display: flex;
-    justify-content: center;
     align-items: center;
+}
+
+.welcome {
+    display: flex;
+}
+
+.registration-form {
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    width: 50vw;
+}
+
+.registration-block {
+    margin-left: 10vw;
+    padding: 5rem;
+    border: 2px solid black;
+}
+
+.input-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding-bottom: 2rem;
+}
+
+.input-field {
+    font-style: italic;
+}
+
+.input {
+    margin-bottom: 1.5rem;
+}
+
+.registration-button {
+    float: right;
 }

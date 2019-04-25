@@ -5,6 +5,7 @@ const cookieSession = require("cookie-session");
 const bcrypt = require("./utiles/bcrypt");
 const db = require("./utiles/db");
 const body = require("body-parser");
+const csurf = require("csurf");
 
 app.use(compression());
 
@@ -26,6 +27,13 @@ app.use(
     })
 );
 
+app.use(csurf());
+
+app.use(function(req, res, next) {
+    res.cookie("mytoken", req.csrfToken());
+    next();
+});
+
 app.use(body.urlencoded({ extended: false }));
 app.use(body.json());
 
@@ -40,19 +48,41 @@ app.get("/welcome", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-    console.log(req.body.password);
-    bcrypt.hashPassword(req.body.password).then(hashedPassword => {
-        console.log(hashedPassword);
-        db.createUser(
-            req.body.firstname,
-            req.body.lastname,
-            req.body.email,
-            hashedPassword
-        ).then(id => {
-            req.session.userId = id.rows[0].id;
-            res.json(id.rows[0]);
+    bcrypt
+        .hashPassword(req.body.password)
+        .then(hashedPassword => {
+            db.createUser(
+                req.body.firstname,
+                req.body.lastname,
+                req.body.email,
+                hashedPassword
+            ).then(id => {
+                req.session.userId = id.rows[0].id;
+                res.json(id.rows[0]);
+            });
+        })
+        .catch(err => {
+            res.json({ error: true });
         });
-    });
+});
+
+app.post("/login", (req, res) => {
+    db.logIn(req.body.email)
+        .then(data => {
+            bcrypt
+                .checkPassword(req.body.password, data.rows[0].password)
+                .then(match => {
+                    if (!match) {
+                        res.json({ wrongPassword: true });
+                    } else {
+                        req.session.userId = data.rows[0].id;
+                        res.json(data);
+                    }
+                });
+        })
+        .catch(err => {
+            res.json({ wrongEmail: true });
+        });
 });
 
 /////////LAST PART///////////////////////////
