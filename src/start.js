@@ -1,13 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Welcome from './welcome';
+import Main from './main';
 
 ReactDOM.render(
-    <HelloWorld />,
+    <Start />,
     document.querySelector('main')
 );
 
-function HelloWorld() {
+
+
+function Start() {
+    const toRender = document.location.pathname === "/welcome" ? <Welcome /> : <Main />
     return (
-        <div>Hello, World!</div>
+         toRender
     );
 }

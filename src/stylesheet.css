@@ -1,0 +1,77 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+
+}
+
+
+
+body {
+  font-size: 10px;
+  background: green;
+  font-family: 'Titillium Web', sans-serif;
+}
+
+
+
+footer {
+  bottom: 0;
+  width: 100vw;
+  height: 3rem;
+  margin: auto;
+  background: red;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+footer * {
+  padding-left: 1rem;
+  font-size: 1.3rem;
+  
+}
+
+a {
+  color: hotpink;
+  text-decoration: underline;
+}
+
+/* mouse over link */
+a:hover {
+  color: blue;
+  cursor: pointer;
+
+}
+
+h1 {
+  text-align: center;
+  font-size: 4rem;
+}
+
+.form {
+  width: 20rem;
+  margin: auto;
+  font-size: 2rem;
+  padding: 2rem;
+}
+
+.form *{
+  width: 100%;
+  line-height: 1.5rem;;
+}
+
+.form p{
+  font-size: 1rem;
+}
+
+.form .error {
+  color: red;
+  font-size: 1.5rem;
+
+}
+
+.hidden {
+  display: none;
+}
