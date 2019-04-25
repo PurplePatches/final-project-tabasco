@@ -6,6 +6,7 @@ const db = require("./db");
 const chalkAnimation = require("chalk-animation");
 const bodyParser = require("body-parser");
 const bcrypt = require("./bcrypt.js");
+const csurf = require("csurf");
 
 app.use(compression());
 
@@ -22,7 +23,20 @@ if (process.env.NODE_ENV != "production") {
 
 app.use(express.static("./public"));
 
-app.use(require("body-parser").json());
+app.use(bodyParser.json());
+
+app.use(
+    cookieSession({
+        maxAge: 1000 * 60 * 60 * 24 * 14,
+        secret: `I'm always hungry.`
+    })
+);
+app.use(csurf());
+
+app.use(function(req, res, next) {
+    res.cookie("mytoken", req.csrfToken());
+    next();
+});
 
 app.post("/register", (req, res) => {
     console.log("post register");
@@ -49,16 +63,39 @@ app.post("/register", (req, res) => {
         })
         .catch(err => {
             console.log("error in hash password", err);
+            res.send({ message: "error" });
+        });
+});
+
+//---------------- LOGIN -----------------------//
+
+app.post("/login", async (req, res) => {
+    let email = req.body.email;
+    console.log("EMAIL in Login", email);
+    let newpassword = req.body.newpassword;
+    console.log("newpassword in Login", newpassword);
+
+    let password = await db
+        .getPassword(email)
+        .then(result => {
+            return result.rows[0].password;
+        })
+        .catch(err => {
+            console.log("error in password", err);
         });
 
-    // db.addUsers(firstname, lastname, email, password)
-    //     .then(results => {
-    //         console.log("results in addUsers", results);
-    //     })
-    //     .catch(err => {
-    //         console.log("error in addUsers", err);
-    //     });
-    // res.json()  ----  all routs will send json
+    let checkPassword = await bcrypt
+        .checkPassword(newpassword, password)
+        .then(result => {
+            if (result == true) {
+                res.redirect("/");
+            } else {
+                console.log("error in password");
+            }
+        })
+        .catch(err => {
+            console.log("error on check password", err);
+        });
 });
 
 app.get("/logout", (req, res) => {

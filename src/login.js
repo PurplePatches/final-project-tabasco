@@ -1,20 +1,21 @@
 import React from "react";
 import axios from "./axios";
-import { Link } from "react-router-dom";
 
-export default class Registration extends React.Component {
+export default class Login extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
     }
     submit() {
         axios
-            .post("/register", {
-                firstname: this.firstname,
-                lastname: this.lastname,
-                email: this.email,
-                password: this.password
-            })
+            .post(
+                "/login",
+                { email: this.email, newpassword: this.newpassword },
+                {
+                    xsrfCookieName: "mytoken",
+                    xsrfHeaderName: "csrf-token"
+                }
+            )
             .then(({ data }) => {
                 // this.setState({
                 //     error: true;
@@ -22,7 +23,7 @@ export default class Registration extends React.Component {
                 location.replace("/");
             })
             .catch(err => {
-                console.log("error in register", err);
+                console.log("error in LOGIN", err);
             });
     }
     render() {
@@ -30,20 +31,8 @@ export default class Registration extends React.Component {
             this[e.target.name] = e.target.value;
         };
         return (
-            <div id="registration">
+            <div id="login">
                 {this.state.error && <div className="error">Ooops</div>}
-                <p className="inputtitle">First Name:</p>
-                <input
-                    onChange={handleInput}
-                    name="firstname"
-                    placeholder="firstname"
-                />
-                <p className="inputtitle">Last Name:</p>
-                <input
-                    onChange={handleInput}
-                    name="lastname"
-                    placeholder="lastname"
-                />
                 <p className="inputtitle">E-mail:</p>
                 <input
                     onChange={handleInput}
@@ -55,14 +44,10 @@ export default class Registration extends React.Component {
                 <input
                     onChange={handleInput}
                     type="password"
-                    name="password"
+                    name="newpassword"
                     placeholder="password"
                 />
                 <button onClick={e => this.submit()}>Join up</button>
-                <br />
-                <Link to="/login" id="linklogin">
-                    Click here to Log in!
-                </Link>
             </div>
         );
     }

@@ -14,3 +14,11 @@ exports.addUsers = function addUsers(firstname, lastname, email, password) {
     let params = [firstname, lastname, email, password];
     return db.query(q, params);
 };
+
+//((((((((((((((((((((((((((((((((((((((((((     LOGIN     ))))))))))))))))))))))))))))))))))))))))))
+
+exports.getPassword = function getPassword(email) {
+    let q = `SELECT password FROM users WHERE email = $1;`;
+    let params = [email];
+    return db.query(q, params);
+};
