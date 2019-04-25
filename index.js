@@ -2,7 +2,7 @@
     "use strict";
 
     const express = require("express");
-    const app = express();
+    const app = (exports.app = express());
     const compression = require("compression");
     const cookieSession = require("cookie-session");
     const bodyParser = require("body-parser");
@@ -73,15 +73,8 @@
     // ROUTING //
     ////////////
 
-    app.post("/register", (req, res) => {});
-
-    app.get("/welcome", (req, res) => {
-        // if (req.session.userId) {
-        //     res.redirect("/");
-        // } else {
-        //     res.sendFile(__dirname + "/index.html");
-        // }
-    });
+    require("./utility/auth");
+    require("./utility/welcome");
 
     app.get("*", (req, res) => {
         // if (!req.session.userId && req.url != "/welcome") {

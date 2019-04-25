@@ -3,14 +3,14 @@ import ReactDOM from "react-dom";
 import Welcome from "./welcome";
 import Login from "./login";
 
-// let elem;
+// let userLocation;
 //
 // if (location.pathname == "/welcome") {
 //     // user is logged in
-//     elem = <Welcome />;
+//     userLocation = <Welcome />;
 // } else {
 //     // user is not logged in
-//     elem = <Login />;
+//     userLocation = <Login />;
 // }
 
-ReactDOM.render(<Login />, document.querySelector("main"));
+ReactDOM.render(<Welcome />, document.querySelector("main"));

@@ -32,10 +32,7 @@ export default class Login extends React.Component {
     render() {
         return (
             <div className="login-container">
-                <p>
-                    Please log in. If you are not registered yet, click{" "}
-                    <a href="javascript://">here</a>.
-                </p>
+                <p>Please log in. If you are not registered yet, click here.</p>
                 <form>
                     <input
                         type="email"
