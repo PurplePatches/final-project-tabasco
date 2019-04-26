@@ -16,3 +16,15 @@ exports.logIn = function logIn(email) {
     let params = [email];
     return db.query(q, params);
 };
+
+exports.getUserProfile = function getUserProfile(userId) {
+    let q = `SELECT firstname, lastname, image, id FROM users WHERE id = $1`;
+    let params = [userId];
+    return db.query(q, params);
+};
+
+exports.addImage = function addImage(image, userId) {
+    let q = `UPDATE users SET image = COALESCE(NULLIF($1, ''), image) WHERE id = $2 RETURNING image`;
+    let params = [image, userId];
+    return db.query(q, params);
+};
