@@ -51,6 +51,7 @@
             extended: false
         })
     );
+    app.use(bodyParser.json());
 
     ////////////
     // CSURF //
@@ -77,12 +78,11 @@
     require("./utility/welcome");
 
     app.get("*", (req, res) => {
-        // if (!req.session.userId && req.url != "/welcome") {
-        //     res.redirect("/welcome");
-        // } else {
-        //     res.sendFile(__dirname + "/index.html");
-        // }
-        res.sendFile(__dirname + "/index.html");
+        if (!req.session.userId) {
+            res.redirect("/welcome");
+        } else {
+            res.sendFile(__dirname + "/index.html");
+        }
     });
 
     app.listen(8080, function() {

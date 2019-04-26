@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "./axios";
+import { Link } from "react-router-dom";
 
 export default class Login extends React.Component {
     constructor(props) {
@@ -15,11 +16,9 @@ export default class Login extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        console.log("THIS.STATE: ", this.state);
         axios
-            .post("/register", this.state)
+            .post("/login", this.state)
             .then(({ data }) => {
-                console.log("POST /register DATA: ", data);
                 if (data.success) {
                     location.replace("/");
                 }
@@ -31,13 +30,12 @@ export default class Login extends React.Component {
 
     render() {
         return (
-            <div className="login-container">
-                <p>Please log in. If you are not registered yet, click here.</p>
-                <form>
+            <React.Fragment>
+                <form className="login-container">
                     <input
                         type="email"
                         name="email"
-                        placeholder="E-Mail"
+                        placeholder="e-mail"
                         max-length="50"
                         required
                         onChange={this.handleChange}
@@ -45,20 +43,25 @@ export default class Login extends React.Component {
                     <input
                         type="password"
                         name="password"
-                        placeholder="Password"
+                        placeholder="password"
                         max-length="40"
                         required
                         onChange={this.handleChange}
                     />
+                    <div className="empty" />
                     <button type="submit" onClick={this.handleSubmit}>
                         Log In
                     </button>
                 </form>
-            </div>
+                <p>
+                    Please log in. If you are not registered yet, click{" "}
+                    <Link to="/">here</Link>.
+                </p>
+            </React.Fragment>
         );
     }
 }
 
 // To Do:
-// create error message for missing e-mail adress
+// create error message for missing e-mail address
 // create error message for missing password

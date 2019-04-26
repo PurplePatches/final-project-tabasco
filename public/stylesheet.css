@@ -1,3 +1,5 @@
+/* GLOBAL SETTINGS */
+
 * {
     box-sizing: border-box;
 }
@@ -9,7 +11,21 @@ body {
     justify-content: center;
 }
 
-.register-container form {
+/* WELCOME CONTAINER */
+
+.welcome-container {
+    text-align: center;
+}
+
+.welcome-container h1 {
+    font-weight: lighter;
+    font-size: 4em;
+    font-family: "Space Mono", monospace;
+}
+
+/* REGISTER CONTAINER */
+
+.register-container {
     display: flex;
     flex-direction: column;
 }
@@ -19,17 +35,39 @@ button {
     margin: 5px 0 5px 0;
 }
 
-.welcome-container h1 {
-    font-weight: 100;
+.register-container input {
+    border-style: none;
+    background-color: #f6f8fa;
+    height: 50px;
+    font-size: 1em;
+    text-align: center;
+}
+
+.register-container button {
+    border-style: none;
+    background-color: #fff;
+    border: 1px solid #e8e8e8;
+    height: 50px;
+    font-size: 1em;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+}
+
+.register-container button:hover {
+    background-color: #4e4e4e;
+    color: #fff;
+}
+
+/* LOGIN CONTAINER */
+
+.login-container {
+    display: flex;
+    flex-direction: column;
 }
 
 .login-container h1 {
     font-weight: 100;
-}
-
-.login-container form {
-    display: flex;
-    flex-direction: column;
 }
 
 .login-container input,
@@ -37,6 +75,41 @@ button {
     margin: 5px 0 5px 0;
 }
 
+.login-container input {
+    border-style: none;
+    background-color: #f6f8fa;
+    height: 50px;
+    font-size: 1em;
+    text-align: center;
+}
+
+.login-container button {
+    border-style: none;
+    background-color: #fff;
+    border: 1px solid #e8e8e8;
+    height: 50px;
+    font-size: 1em;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+}
+
+.login-container button:hover {
+    background-color: #4e4e4e;
+    color: #fff;
+}
+
+/* MISC */
+
+.empty {
+    border-style: none;
+    background-color: #fff;
+    border: 1px solid #fff;
+    height: 50px;
+}
+
 .error {
     color: red;
 }
+
+/* https://colorhunt.co/palette/143225 */

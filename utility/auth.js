@@ -4,10 +4,6 @@
     const { app } = require("../index");
     const db = require("./db");
     const bcrypt = require("../src/bcrypt.js");
-    // const {
-    //     requireLoggedOutUser,
-    //     requireNoSignature
-    // } = require("./middleware");
 
     // app.get(
     //     "/register",
@@ -32,9 +28,14 @@
                     hash
                 )
                     .then(data => {
-                        let id = data.rows[0].id;
-                        req.session.userId = id;
-                        // res.redirect("/profile");
+                        console.log("POST /register @ auth.js", data);
+                        if (data.rows.length == 1) {
+                            let id = data.rows[0].id;
+                            req.session.userId = id;
+                            res.json({ success: true });
+                        } else {
+                            res.json({ success: false });
+                        }
                     })
                     .catch(err => {
                         console.log(
@@ -89,8 +90,8 @@
     //         });
     // });
 
-    // app.post("/logout", (req, res) => {
-    //     req.session = null;
-    //     res.redirect("/login");
-    // });
+    app.post("/logout", (req, res) => {
+        req.session = null;
+        res.redirect("/");
+    });
 })();

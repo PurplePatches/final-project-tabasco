@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "./axios";
+import { Link } from "react-router-dom";
 
 export default class Registration extends React.Component {
     constructor(props) {
@@ -15,12 +16,10 @@ export default class Registration extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        console.log("THIS.STATE: ", this.state);
         axios
             .post("/register", this.state)
-            .then(({ data }) => {
-                console.log("POST /register DATA: ", data);
-                if (data.success) {
+            .then(data => {
+                if (data.data.success) {
                     location.replace("/");
                 }
             })
@@ -31,12 +30,12 @@ export default class Registration extends React.Component {
 
     render() {
         return (
-            <div className="register-container">
-                <form>
+            <React.Fragment>
+                <form className="register-container">
                     <input
                         type="text"
                         name="first"
-                        placeholder="First name"
+                        placeholder="first name"
                         max-length="40"
                         required
                         onChange={this.handleChange}
@@ -44,7 +43,7 @@ export default class Registration extends React.Component {
                     <input
                         type="text"
                         name="last"
-                        placeholder="Last name"
+                        placeholder="last name"
                         max-length="40"
                         required
                         onChange={this.handleChange}
@@ -52,7 +51,7 @@ export default class Registration extends React.Component {
                     <input
                         type="email"
                         name="email"
-                        placeholder="E-Mail"
+                        placeholder="e-mail"
                         max-length="50"
                         required
                         onChange={this.handleChange}
@@ -60,16 +59,21 @@ export default class Registration extends React.Component {
                     <input
                         type="password"
                         name="password"
-                        placeholder="Password"
+                        placeholder="password"
                         max-length="40"
                         required
                         onChange={this.handleChange}
                     />
+                    <div className="empty" />
                     <button type="submit" onClick={this.handleSubmit}>
                         Register
                     </button>
                 </form>
-            </div>
+                <p>
+                    If you already have an account, please log in{" "}
+                    <Link to="/login">here</Link>.
+                </p>
+            </React.Fragment>
         );
     }
 }
@@ -77,5 +81,5 @@ export default class Registration extends React.Component {
 // To Do:
 // create error message for missing first name
 // create error message for missing last name
-// create error message for missing e-mail adress
+// create error message for missing e-mail address
 // create error message for missing password
