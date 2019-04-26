@@ -17,7 +17,7 @@ export default class Registration extends React.Component {
                 location.replace('/');
             }
         ).catch(
-            
+
         )
     }
     render() {
