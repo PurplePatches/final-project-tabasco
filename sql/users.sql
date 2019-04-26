@@ -5,7 +5,7 @@ CREATE TABLE users(
     first_name VARCHAR(40) NOT NULL,
     last_name VARCHAR(40) NOT NULL,
     email_address VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(40) NOT NULL,
+    password VARCHAR(1337) NOT NULL,
     -- bio
     -- user picture
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
