@@ -36,7 +36,6 @@ export default class Login extends React.Component {
                         type="email"
                         name="email"
                         placeholder="e-mail"
-                        max-length="50"
                         required
                         onChange={this.handleChange}
                     />
@@ -44,7 +43,6 @@ export default class Login extends React.Component {
                         type="password"
                         name="password"
                         placeholder="password"
-                        max-length="40"
                         required
                         onChange={this.handleChange}
                     />

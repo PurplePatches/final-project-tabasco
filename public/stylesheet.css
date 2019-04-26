@@ -99,6 +99,21 @@ button {
     color: #fff;
 }
 
+/* NAVIGATION */
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: tomato;
+    width: 100vw;
+    padding: 20px;
+}
+
+.navigation h2 {
+    margin: 0;
+}
+
 /* MISC */
 
 .empty {

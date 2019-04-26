@@ -25,13 +25,13 @@
         return db.query(query, parameters);
     };
 
-    // exports.getHashedPassword = function getHashedPassword(email_address) {
-    //     let query = `SELECT password, id
-    //     FROM users
-    //     WHERE email_address = $1`;
-    //     let parameters = [email_address || null];
-    //     return db.query(query, parameters);
-    // };
+    exports.getHashedPassword = function getHashedPassword(email_address) {
+        let query = `SELECT password, id
+        FROM users
+        WHERE email_address = $1`;
+        let parameters = [email_address || null];
+        return db.query(query, parameters);
+    };
 
     // exports.getUserInformation = function getUserInformation(user_id) {
     //     let query = `SELECT first_name, last_name, email_address, age, city, url

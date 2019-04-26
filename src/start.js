@@ -1,15 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Welcome from "./welcome";
+import App from "./app";
 
 let userLocation;
 
 if (location.pathname == "/welcome") {
-    // user is not logged in
     userLocation = <Welcome />;
 } else {
-    // user is logged in
-    userLocation = <div>USER IS LOGGED IN</div>;
+    userLocation = <App />;
 }
 
 ReactDOM.render(userLocation, document.querySelector("main"));
