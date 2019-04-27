@@ -5,6 +5,12 @@ const bodyParser = require("body-parser");
 const csurf = require("csurf");
 const db = require("./utils/db");
 const bc = require("./utils/bc");
+var multer = require("multer");
+var uidSafe = require("uid-safe");
+var path = require("path");
+const s3 = require("./utils/s3");
+const config = require("./config.json");
+
 const compression = require("compression");
 
 app.use(compression());
@@ -21,6 +27,23 @@ if (process.env.NODE_ENV != "production") {
         response.sendFile(`${__dirname}/bundle.js`)
     );
 }
+var diskStorage = multer.diskStorage({
+    destination: function(req, file, callback) {
+        callback(null, __dirname + "/uploads");
+    },
+    filename: function(req, file, callback) {
+        uidSafe(24).then(function(uid) {
+            callback(null, uid + path.extname(file.originalname));
+        });
+    }
+});
+
+var uploader = multer({
+    storage: diskStorage,
+    limits: {
+        fileSize: 2097152
+    }
+});
 app.use(express.static(__dirname + "/public"));
 
 app.use(
@@ -79,6 +102,21 @@ app.get("/bio", (request, response) => {
         response.sendFile(__dirname + "/index.html");
     }
 });
+app.post("/upload", uploader.single("file"), s3.upload, (request, response) => {
+    // If nothing went wrong the file is already in the uploads directory
+    const url = config.s3Url + request.file.filename;
+    db.newPic(url, request.session.userId)
+        .then(({ rows }) => {
+            console.log("upload completed", rows[0]);
+            db.newPicHistory(url, request.session.userId).then(({ rows }) => {
+                console.log("upload completed in the image table", rows[0]);
+                response.json(rows[0]);
+            });
+        })
+        .catch(err => {
+            console.log("Can't upload the pic man!", err);
+        });
+});
 app.get("/login", (request, response) => {
     if (request.session.userId) {
         response.redirect("/");
@@ -93,8 +131,6 @@ app.post("/login", (request, response) => {
                 data => {
                     if (data) {
                         request.session.userId = user.rows[0].id;
-                        request.session.firstName = user.rows[0].first_name;
-                        request.session.lastName = user.rows[0].last_name;
                         console.log("LOGGED IN");
                         response.json(data);
                     } else {
@@ -108,7 +144,13 @@ app.post("/login", (request, response) => {
             response.json({ error: err.message });
         });
 });
-
+app.get("/user", (request, response) => {
+    if (request.session.userId) {
+        db.getUser(request.session.userId).then(({ rows }) => {
+            response.json(rows);
+        });
+    }
+});
 app.get("*", (request, response) => {
     if (!request.session.userId && request.url != "/welcome") {
         response.redirect("/welcome");
@@ -117,6 +159,6 @@ app.get("*", (request, response) => {
     }
 });
 
-app.listen(8080, () => {
+app.listen(process.env.PORT || 8080, () => {
     console.log("I'm listening.");
 });

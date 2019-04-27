@@ -29,7 +29,11 @@ exports.removeUser = function removeUser(userId) {
     let params = [userId];
     return db.query(q, params);
 };
-
+exports.getUser = function getUser(userId) {
+    let q = `SELECT * FROM users WHERE id=$1`;
+    let params = [userId];
+    return db.query(q, params);
+};
 exports.updateUserPwd = function updateUserPwd(
     firstName,
     lastName,
@@ -41,6 +45,17 @@ exports.updateUserPwd = function updateUserPwd(
             SET first_name = $1, last_name = $2, email = $3, password $4
             WHERE id=$5`;
     let params = [firstName, lastName, email, password, userId];
+    return db.query(q, params);
+};
+exports.newPic = function newPic(url, userId) {
+    let q = "UPDATE users SET image_url = $1 WHERE id=$2 RETURNING image_url";
+    let params = [url, userId];
+    return db.query(q, params);
+};
+exports.newPicHistory = function newPicHistory(url, userId) {
+    let q =
+        "INSERT INTO images (image_url, userId) VALUES ($1,$2) RETURNING image_url";
+    let params = [url, userId];
     return db.query(q, params);
 };
 /////LOGIN

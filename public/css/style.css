@@ -1,8 +1,169 @@
+@import url("https://fonts.googleapis.com/css?family=Gugi");
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 body {
-    background: aqua;
+    background: lemonchiffon url(/img/background.png) center center / 20%
+        no-repeat;
+    min-height: 100vh;
+    font-family: Gugi, sans-serif;
+}
+main {
+    display: flex;
+    align-items: center;
+}
+main #app {
+    width: 100%;
+}
+span#profilepic {
+    float: right;
+    width: 100px;
+    background: beige;
+    border-radius: 20px;
+    border: 2px solid darkgray;
+    padding: 8px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+}
+img.top_profile {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    margin-top: 0px;
+}
+section#modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    background: rgba(12, 12, 12, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#modal img#spinner {
+    width: 100px;
+    height: 100px;
+}
+#modal .project,
+.project {
+    background: rgba(255, 255, 255, 0.85);
+    padding: 40px;
+    margin: 30px 0;
+    border-radius: 30px;
+    box-shadow: 0px 10px 100px 0px darkblue;
+    max-width: 1000px;
+    display: flex;
+    flex-direction: column;
+}
+.project div div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+span#close {
+    align-self: flex-end;
+    justify-self: flex-start;
+}
+#modal h3 {
+    display: block;
+    margin: 20px 0 30px;
+}
+form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+form label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#modal input,
+input {
+    width: 200px;
+    height: 50px;
+    line-height: 50px;
+    border: 1px solid #ccc;
+    font-size: 18px;
+    color: grey;
+    padding: 10px;
+    box-sizing: border-box;
+    text-indent: 15px;
+    margin: 5px 0 15px 0;
+    font-family: inherit;
+}
+#modal form input[type="file"] {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+#modal form input[type="file"] + label {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    padding: 0.625rem 1.25rem;
+    color: grey;
+    background: #fff;
+    height: 50px;
+    align-items: center;
+    justify-content: center;
+}
+#modal form input[type="file"] + label svg {
+    width: 2em;
+    height: 1em;
+    vertical-align: middle;
+    fill: currentColor;
+    margin-top: -0.25em;
+    margin-right: 0.25em;
+}
+button {
+    background: rosybrown;
+    color: #fff;
+    border: none;
+    position: relative;
+    height: 60px;
+    font-size: 1.6em;
+    padding: 0 2em;
+    cursor: pointer;
+    transition: 800ms ease all;
+    outline: none;
+}
+button:hover {
+    background: #fff;
+    color: rosybrown;
+}
+button:before,
+button:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 2px;
+    width: 0;
+    background: rosybrown;
+    transition: 400ms ease all;
+}
+button:after {
+    right: inherit;
+    top: inherit;
+    left: 0;
+    bottom: 0;
+}
+button:hover:before,
+button:hover:after {
+    width: 100%;
+    transition: 800ms ease all;
 }

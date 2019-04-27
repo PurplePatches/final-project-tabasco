@@ -4,7 +4,7 @@ import Registration from "./registration";
 import Login from "./login";
 export default function Welcome() {
     return (
-        <section id="something">
+        <section className="project">
             <h2>
                 Welcome to Bearbook, the social network for bears and their
                 ursine lovers friend

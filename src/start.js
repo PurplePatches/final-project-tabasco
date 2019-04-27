@@ -2,16 +2,14 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import Welcome from "./welcome";
-import Bio from "./bio";
+import App from "./app";
 
 let elem;
 
 if (location.pathname == "/welcome") {
     elem = <Welcome />;
-} else if (location.pathname == "/bio") {
-    elem = <Bio />;
 } else {
-    elem = HelloWorld();
+    elem = <App />;
 }
 ReactDOM.render(elem, document.querySelector("main"));
 

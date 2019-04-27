@@ -60,7 +60,7 @@ export default class Login extends React.Component {
                 <hr />
                 <p>
                     If you are already registered go to the
-                    <Link to="/">Registration!</Link> page
+                    <Link to="/"> Registration! </Link> page
                 </p>
             </div>
         );

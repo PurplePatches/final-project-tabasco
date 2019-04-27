@@ -12,19 +12,12 @@ export default class Registration extends React.Component {
         e.preventDefault();
         console.log("About to make the post register", this.state);
         axios
-            .post(
-                "/register",
-                {
-                    firstName: this.state.firstName,
-                    lastName: this.state.lastName,
-                    email: this.state.email,
-                    password: this.state.password
-                },
-                {
-                    xsrfCookieName: "mytoken",
-                    xsrfHeaderName: "csrf-token" // the csurf middleware automatically checks this header for the token
-                }
-            )
+            .post("/register", {
+                firstName: this.state.firstName,
+                lastName: this.state.lastName,
+                email: this.state.email,
+                password: this.state.password
+            })
             .then(({ data }) => {
                 console.log("What i got from the server is", data);
                 if (data.error) {
@@ -93,7 +86,7 @@ export default class Registration extends React.Component {
                 <hr />
                 <p>
                     If you are already registered go to the
-                    <Link to="/login">Log in!</Link> page
+                    <Link to="/login"> Log in! </Link> page
                 </p>
             </div>
         );
