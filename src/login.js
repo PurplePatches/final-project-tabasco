@@ -66,6 +66,7 @@ export default class Login extends Component {
   }
 
     login () {
+      e.preventDefault()
       if (this.loggingIn) {
         return console.log('Logging in in-progress, please wait');
       }
@@ -95,7 +96,7 @@ export default class Login extends Component {
     return (
       <>
       <h1>Log in</h1>
-      <div className='form'>
+      <form>
         <div className={this.state.error ? 'error' : 'error hidden'}>something went wrong</div>
         <div className='form-line'>
           <p>Email</p> <input type='email' name='email' onChange={e => this.details[e.target.name] = e.target.value}/>
@@ -103,9 +104,8 @@ export default class Login extends Component {
         <div className='form-line'>
           <p>Password</p> <input type='password' name='password' onChange={e => this.details[e.target.name] = e.target.value}/>
         </div>
-      {/* <input type="hidden" name="_csrf" value="{csrfToken}" /> */}
-      <input type='submit' onClick={this.login} value='Log in'/>
-    </div>
+      <input type='submit' onClick={e => this.login(e)} value='Log in'/>
+    </form>
     <div>
       <p style={{textAlign: 'center'}}>No account yet? <Link to='/'>Register here for free!</Link></p>
     </div>

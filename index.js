@@ -3,8 +3,13 @@ const app = express();
 const compression = require('compression');
 const cookieSession = require('cookie-session')
 const bodyParser = require('body-parser');
-// const csurf = require('csurf');
+const csurf = require('csurf');
 const bcrypt = require('bcryptjs')
+const fs = require('fs');
+const knox = require('knox-s3');
+const multer = require('multer');
+const uidSafe = require('uid-safe')
+const path = require('path')
 
 const db = require('./db')
 
@@ -41,14 +46,83 @@ app.use((req, res, next) => {
     console.log(req.session.userid);
     res.cookie('mytoken', req.csrfToken())
     next();
-})
+});
 
+app.post('/logout', (req, res) => {
+    req.session = null;
+    res.redirect('/welcome')
+});
 
+//handles file uploads ==>
+const diskStorage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, __dirname + '/uploads');
+    },
+    filename: function (req, file, callback) {
+      uidSafe(24).then(function(uid) {
+          callback(null, uid + path.extname(file.originalname));
+      });
+    }
+});
 
-// app.post('/logout', (req, res) => {
-//     req.session = null;
-//     res.sendStatus(200);
-// })  ​
+const uploader = multer({
+    storage: diskStorage,
+    limits: {
+        fileSize: 2097152
+    }
+});
+//<===
+
+// handles S3 ===>
+let secrets;
+if (process.env.NODE_ENV === 'production') {
+    secrets = process.env; // in prod the secrets are environment variables
+} else {
+    secrets = require('./secrets.json'); // secrets.json is in .gitignore
+}
+
+const client = knox.createClient({
+    key: secrets.AWS_KEY,
+    secret: secrets.AWS_SECRET,
+    bucket: 'tabascoimageboard'
+});
+
+function uploadToAWS(req, res, next) {
+    // console.log('uploadAWS');
+    
+    if (!req.file) {
+        console.log('no file');
+        
+        return res.sendStatus(500);
+    }
+    const s3Request = client.put(req.file.filename, {
+        'Content-Type': req.file.mimetype,
+        'Content-Length': req.file.size,
+        'x-amz-acl': 'public-read'
+    });
+    const stream = fs.createReadStream(req.file.path);
+    stream.pipe(s3Request);
+
+    s3Request.on('response', s3Response => {
+        // console.log(s3Response.statusCode, req);
+        if (s3Response.statusCode == 200) {
+            next();
+            fs.unlink(req.file.path, () => {});
+        } else {
+            res.sendStatus(500);
+        }
+    });
+};
+
+//<====
+app.post('/picture', uploader.single('file'), uploadToAWS, function(req, res) {
+    // If nothing went wrong the file is already in the uploads directory
+        // console.log('was here');
+        
+        const url = 'https://s3.amazonaws.com/tabascoimageboard/' + req.file.filename
+        res.json({url})
+        db.saveImage(url, req.session.userid)
+});
 
 app.post('/register', (req, res) => {
     let {email, password} = req.body;
@@ -63,6 +137,30 @@ app.post('/register', (req, res) => {
         })
     .catch(err => console.log('Error: ' + err))
 })
+
+app.post('/profile', (req, res) => {
+    console.log(req.body);
+    db.updateProfile(req.body.data, req.session.userid)
+        .then(() => res.json({succes: true}))
+    
+})
+
+app.get('/profile', (req, res) => {
+    Promise.all([
+        db.getProfile(req.session.userid),
+        db.getImages(req.session.userid)
+    ])
+    .then(data => {
+        for (const prop in data[0].rows[0]){
+            if(data[0].rows[0][prop] === null) data[0].rows[0][prop] = ''
+        }
+        const {bio, dogname, dogbreed, first, last, location} = data[0].rows[0]
+        const profilePic = data[1].rows.length > 0 ? data[1].rows[0].url : ''
+        res.json({bio, dogname, dogbreed, first, last, location, profilePic})  
+    })
+    .catch(err => console.log(err))
+});
+
 
 app.post('/login', (req, res) => {
     let {email, password} = req.body; 

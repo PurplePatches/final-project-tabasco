@@ -13,7 +13,9 @@ body {
   font-family: 'Titillium Web', sans-serif;
 }
 
-
+img {
+  max-height: 100%;
+}
 
 footer {
   bottom: 0;
@@ -33,6 +35,41 @@ footer * {
   
 }
 
+header {
+  top: 0;
+  width: 100vw;
+  height: 5rem;
+  margin: auto;
+  background: red;
+  position: relative;
+  /* display: flex;
+  align-items: center;
+  overflow: hidden; */
+}
+
+header * {
+  padding-left: 1rem;
+  font-size: 1.3rem;
+  height: 100%;
+  vertical-align: middle;
+}
+
+header .profile {
+  right: 0;
+  position: absolute;
+  top: 0;
+  display: flex;
+  align-items: center;
+}
+
+header .profile .username{
+height: auto;
+}
+
+#header-items {
+  display: flex;
+}
+
 a {
   color: hotpink;
   text-decoration: underline;
@@ -50,23 +87,23 @@ h1 {
   font-size: 4rem;
 }
 
-.form {
+form {
   width: 20rem;
   margin: auto;
   font-size: 2rem;
   padding: 2rem;
 }
 
-.form *{
+form *{
   width: 100%;
   line-height: 1.5rem;;
 }
 
-.form p{
+form p{
   font-size: 1rem;
 }
 
-.form .error {
+form .error {
   color: red;
   font-size: 1.5rem;
 
@@ -74,4 +111,62 @@ h1 {
 
 .hidden {
   display: none;
+}
+
+.editProfile {
+  display: flex;
+  justify-content: center;
+}
+
+.editProfile .left {
+ display: flex; 
+ padding: 2rem;
+}
+
+.editProfile .right {
+  display: flex; 
+ }
+
+.editProfile img {
+border: 1rem aliceblue solid;
+height: 15rem;
+width: 13rem;
+object-fit: cover;
+}
+
+.editProfile .editprofilepic {
+  position: relative;
+  text-align: center;
+  color: aliceblue;
+  height: 15rem;
+  width: 13rem;
+}
+
+.editprofilepic p {
+  display: none;
+}
+
+
+.editprofilepic:hover p {
+  display: inherit;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 1;
+  font-size: 2rem;
+}
+
+.editprofilepic:hover img{
+  opacity: .5;
+}
+
+.form-line-title {
+  display: flex; 
+}
+
+.saved{
+  color: red;
+  font-style: italic;
+  text-align: center;
 }

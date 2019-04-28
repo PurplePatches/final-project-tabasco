@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Welcome from './welcome';
-import Main from './main';
+import App from './app';
 
 ReactDOM.render(
     <Start />,
@@ -11,7 +11,7 @@ ReactDOM.render(
 
 
 function Start() {
-    const toRender = document.location.pathname === "/welcome" ? <Welcome /> : <Main />
+    const toRender = document.location.pathname === "/welcome" ? <Welcome /> : <App />
     return (
          toRender
     );

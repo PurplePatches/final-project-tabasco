@@ -13,7 +13,8 @@ export default class Registration extends Component {
     this.submitReg = this.submitReg.bind(this)
   }
 
-    submitReg () {
+    submitReg (e) {
+      e.preventDefault()
       if (this.registering) {
         console.log('regestering already in process, please wait');
       }  
@@ -46,7 +47,7 @@ export default class Registration extends Component {
     return (
       <>
         <h1>Register now!</h1>
-        <div className='form'>
+        <form>
           <div className={this.state.error ? 'error' : 'error hidden'}>something went wrong</div>
           <div className='form-line'>
             <p>Email</p> <input type='email' name='email' onChange={e => this.details[e.target.name] = e.target.value}/>
@@ -54,9 +55,8 @@ export default class Registration extends Component {
           <div className='form-line'>
             <p>Password</p> <input type='password' name='password' onChange={e => this.details[e.target.name] = e.target.value}/>
           </div>
-        {/* <input type="hidden" name="_csrf" value="{csrfToken}" /> */}
-        <input type='submit' onClick={this.submitReg} value='Register'/>
-        </div>
+        <input type='submit' onClick={e => this.submitReg(e)} value='Register'/>
+        </form>
         <div>
           <p style={{textAlign: 'center'}}>Already registered? <Link to='/login'>Click here to login.</Link></p>
         </div>

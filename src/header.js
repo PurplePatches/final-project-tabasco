@@ -1,11 +1,23 @@
-import React from 'react'
+import React from 'react' 
 import Logout from './logout';
 
-export default function Header() {
+export default function Header(props) {
   return (
-    <div>
+    <header>
+      
+      <div id='header-items'>
       LOGO
-      <Logout />
-    </div>
+        <div className='header-item' id='header-profile'>PROFILE</div>
+        <div className='header-item' id='header-profile'>FIND FRIENDS</div>
+      </div>
+     <div className='profile'>
+        <div className='username'>
+          Username
+        </div>
+        <div className='profilepic'>
+          <img src={props.profilePic || './uploads/dogprofile.jpg'} />
+        </div>
+      </div>
+    </header>
   )
 }
