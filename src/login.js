@@ -31,15 +31,24 @@ export default class Login extends React.Component {
             });
     }
     render() {
+        console.log(this.props, "PROPS LABEL");
+
         const handleInput = e => {
             this[e.target.name] = e.target.value; //key value pair [name of the input field
         };
         return (
-            <div>
+            <div className="form-container">
                 {this.state.error && <div className="error">Oops</div>}
+                Type your email address :
                 <input name="email" onChange={handleInput} />
+                Password :
                 <input type="password" name="password" onChange={handleInput} />
-                <button onClick={e => this.submit()}>LOGIN!</button>
+                <button
+                    className="btn btn-dark btn-lg"
+                    onClick={e => this.submit()}
+                >
+                    LOGIN!
+                </button>
                 <Link to="/">Not a member? Register here</Link>
             </div>
         );

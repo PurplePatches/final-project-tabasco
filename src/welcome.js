@@ -5,12 +5,13 @@ import Login from "./login";
 
 export default class Welcome extends React.Component {
     render() {
+        console.log(this.props.age);
         return (
             <div id="welcome">
-                <h1>Welcome!</h1>
-                <img src="../logo.png" />
+                <h1 className="display-1">Social Network</h1>
+                <img className="img-fluid" src="../logo.png" />
                 <HashRouter>
-                    <div>
+                    <div className="container">
                         <Route exact path="/" component={Registration} />
                         <Route path="/login" component={Login} />
                     </div>

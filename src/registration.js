@@ -36,17 +36,28 @@ export default class Registration extends React.Component {
             });
     }
     render() {
+        console.log(this.props, "PROPS IN Register");
+
         const handleInput = e => {
             this[e.target.name] = e.target.value; //key value pair [name of the input field
         };
         return (
-            <div>
+            <div className="form-container">
                 {this.state.error && <div className="error">Oops</div>}
+                First name :
                 <input onChange={handleInput} name="first" />
+                Last name :
                 <input name="last" onChange={handleInput} />
+                Email :
                 <input name="email" onChange={handleInput} />
+                Password :
                 <input type="password" name="password" onChange={handleInput} />
-                <button onClick={e => this.submit()}>Join up</button>
+                <button
+                    className="btn btn-dark btn-lg"
+                    onClick={e => this.submit()}
+                >
+                    Join up
+                </button>
                 <Link to="/login">Already a member? Login here</Link>
             </div>
         );

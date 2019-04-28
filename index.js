@@ -6,6 +6,33 @@ const csurf = require("csurf");
 const db = require("./db.js");
 const bc = require("./bc.js");
 const body = require("body-parser");
+var multer = require("multer");
+var uidSafe = require("uid-safe");
+const config = require("./config");
+
+var path = require("path");
+const s3 = require("./s3");
+
+var diskStorage = multer.diskStorage({
+    destination: function(req, file, callback) {
+        callback(null, __dirname + "/uploads"); //file should be stored locally in uploads folder
+    },
+    filename: function(req, file, callback) {
+        //this will give the name to the file
+        uidSafe(24).then(function(uid) {
+            //uidSafe will generate a name, 24 char long, to avoid same file name
+            callback(null, uid + path.extname(file.originalname)); //figures out the extension of the file
+        });
+    }
+});
+
+var uploader = multer({
+    //that's middleware to actually upload the file, we need configuration :
+    storage: diskStorage, //refers to diskStorage declared above ^^
+    limits: {
+        fileSize: 2097152
+    }
+});
 app.use(compression());
 
 app.use(
@@ -40,25 +67,34 @@ app.use(body.json());
 
 app.use(express.static("./public"));
 
-app.post("/register", (req, res) => {
-    bc.hashPassword(req.body.password)
-        .then(hash => {
-            db.register(
-                req.body.first,
-                req.body.last,
-                req.body.email,
-                hash
-            ).then(id => {
-                req.session.userId = id.rows[0].id;
-                res.json(id);
-            });
-        })
-        .catch(err => {
-            res.json({ error: true });
-            console.log(err);
-        });
+//NEW WAY!!! ASYNC!!!
+app.post("/register", async (req, res) => {
+    try {
+        const hash = await bc.hashPassword(req.body.password);
+        const register = await db.register(
+            req.body.first,
+            req.body.last,
+            req.body.email,
+            hash,
+            null
+        );
+        req.session.userId = register.rows[0].id;
+        res.json({ sucess: true });
+    } catch (err) {
+        console.log("error in register route", err);
+    }
 });
-
+// app.post("/login", async (req, res) => {
+//     const pw = await db.retrievePassword(req.body.email);
+//     const pwcheck = await bc.checkPassword(req.body.password, pw.rows[0].id);
+//     if (pwcheck) {
+//         req.session.userId = pw.rows[0].id;
+//         res.json(pw.rows[0].id);
+//     } else {
+//         res.json({ error: true });
+//         console.log("ERROR HERE!!!");
+//     }
+// });
 app.post("/login", (req, res) => {
     db.retrievePassword(req.body.email)
         .then(hash => {
@@ -95,6 +131,25 @@ app.get("/welcome", function(req, res) {
         res.redirect("/");
     } else {
         res.sendFile(__dirname + "/index.html");
+    }
+});
+//IMAGEUPLOAD
+app.post("/upload", uploader.single("file"), s3.upload, function(req, res) {
+    const url = config.s3Url + req.file.filename;
+
+    db.uploadPicture(req.session.userId, url).then(whatever => {
+        // console.log(whatever, "WHATEVER!!");
+        res.json(whatever);
+    });
+    // db.newImage(url, )
+    // JSON response should be an arroay of object with the above properties
+});
+app.get("/user", (req, res) => {
+    if (req.session.userId) {
+        db.retrieveUser(req.session.userId).then(({ rows }) => {
+            console.log(rows, "CHECKING /USER route");
+            res.json(rows[0]);
+        });
     }
 });
 
