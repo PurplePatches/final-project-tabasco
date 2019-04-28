@@ -13,11 +13,12 @@ export default class App extends React.Component {
         axios.get("/user").then(({ data }) => {
             //we need the user info...
             console.log(data, "DATA");
-            console.log(data[0], "DATA 0");
+            console.log(data.url, "DATA 0");
             this.setState({
-                image: data[0].url,
-                first: data[0].first,
-                last: data[0].last
+                image: data.url,
+                first: data.first,
+                last: data.last,
+                email: data.email
             });
 
             // this.setState({
@@ -43,11 +44,12 @@ export default class App extends React.Component {
         // } this will make a "spinner" appear when the page "loads" the 1st time and there's no id, when componentDidMount it will be faulse and go below
         return (
             <div>
-                <img src="../logo.png" />;
+                <img className="logo" src="../logo.png" />
                 <ProfilePic
                     profilePic={this.state.image} //where I pass the image
                     first={this.state.first}
                     last={this.state.last}
+                    email={this.state.email}
                     clickHandler={() =>
                         this.setState({ isUploaderVisible: true })
                     }

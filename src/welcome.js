@@ -8,10 +8,10 @@ export default class Welcome extends React.Component {
         console.log(this.props.age);
         return (
             <div id="welcome">
-                <h1 className="display-1">Social Network</h1>
-                <img className="img-fluid" src="../logo.png" />
+                <img className="logo" src="../logo.png" />
+                <h1>JOIN US</h1>
                 <HashRouter>
-                    <div className="container">
+                    <div className="wrapper">
                         <Route exact path="/" component={Registration} />
                         <Route path="/login" component={Login} />
                     </div>

@@ -42,6 +42,7 @@ export default class Uploader extends React.Component {
                         {" "}
                         X
                     </p>
+                    <h1>Select a new image for your profile</h1>
                     <input
                         type="file"
                         name="file"
@@ -56,7 +57,7 @@ export default class Uploader extends React.Component {
                         onClick={e => this.uploadFile(e)}
                         type="button"
                     >
-                        NEW PICTURE
+                        UPLOAD
                     </button>
                 </div>
             </div>

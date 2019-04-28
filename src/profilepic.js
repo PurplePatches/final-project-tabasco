@@ -5,17 +5,26 @@ import React from "react";
 //     return <img src={image} />;
 // }
 
-export default function ProfilePic({ profilePic, first, last, clickHandler }) {
+export default function ProfilePic({
+    profilePic,
+    first,
+    last,
+    email,
+    clickHandler
+}) {
     return (
-        <div>
+        <div className="profile-container">
             <img
                 src={profilePic || "../default.jpg"}
-                alt={(first, last)}
+                alt={(first, last, email)}
                 onClick={clickHandler}
             />
             <h2>Your account:</h2>
             <p>
                 {first} {last}
+            </p>
+            <p>
+                <b>Your email</b> {email}
             </p>
         </div>
     );
