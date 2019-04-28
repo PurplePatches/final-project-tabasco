@@ -23,7 +23,7 @@ export default class Login extends React.Component {
             })
             .then(({ data }) => {
                 if (data.success) {
-                    location.replace("/");
+                    location.replace("/app");
                 } else {
                     this.setState({ err: true });
                 }

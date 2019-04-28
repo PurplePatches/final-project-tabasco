@@ -6,6 +6,11 @@ const cookieSession = require("cookie-session");
 const bodyParser = require("body-parser");
 const csurf = require("csurf");
 const bc = require("./utils/bcrypt");
+const uidSafe = require("uid-safe");
+const multer = require("multer");
+const path = require("path");
+const config = require("./config.json");
+const s3 = require("./s3");
 
 app.use(compression());
 app.use(express.static("./public"));
@@ -35,12 +40,39 @@ if (process.env.NODE_ENV != "production") {
     app.use("/bundle.js", (req, res) => res.sendFile(`${__dirname}/bundle.js`));
 }
 
+var diskStorage = multer.diskStorage({
+    destination: function(req, file, callback) {
+        callback(null, __dirname + "/uploads");
+    },
+    filename: function(req, file, callback) {
+        uidSafe(24).then(function(uid) {
+            callback(null, uid + path.extname(file.originalname));
+        });
+    }
+});
+
+var uploader = multer({
+    storage: diskStorage,
+    limits: {
+        fileSize: 2097152
+    }
+});
+
 app.get("/welcome", (req, res) => {
     if (req.session.userId) {
-        res.redirect("/");
+        res.redirect("/app");
     } else {
         res.sendFile(__dirname + "/index.html");
     }
+});
+
+app.get("/user", (req, res) => {
+    res.json({
+        id: req.session.userId,
+        firstName: req.session.firstName,
+        lastName: req.session.lastName,
+        image: req.session.image
+    });
 });
 
 app.post("/registration", (req, res) => {
@@ -77,6 +109,9 @@ app.post("/login", (req, res) => {
             bc.checkPassword(req.body.password, user.rows[0].password)
                 .then(isAuthorized => {
                     req.session.userId = user.rows[0].id;
+                    req.session.firstName = user.rows[0].first_name;
+                    req.session.lastName = user.rows[0].last_name;
+                    req.session.image = user.rows[0].image;
                     if (isAuthorized == true) {
                         console.log("Success!");
                         res.json({
@@ -106,16 +141,31 @@ app.post("/login", (req, res) => {
     });
 });
 
+app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
+    const url = config.s3Url + req.file.filename;
+    db.upLoadImage(url)
+        .then(results => {
+            res.json(results.rows[0]);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+});
+
 app.get("/logout", (req, res) => {
     req.session = null;
     res.redirect("/welcome");
+});
+
+app.get("/app", (req, res) => {
+    res.sendFile(__dirname + "/index.html");
 });
 
 app.get("*", (req, res) => {
     if (!req.session.userId) {
         res.redirect("/welcome");
     } else {
-        res.sendFile(__dirname + "/index.html");
+        res.redirect("/app");
     }
 });
 

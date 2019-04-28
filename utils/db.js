@@ -17,3 +17,10 @@ exports.login = function(email) {
     WHERE email = $1;`;
     return db.query(q, [email]);
 };
+
+exports.uploadImage = function(url) {
+    let q = `INSERT INTO users (url)
+    VALUES ($1)
+    returning url`;
+    return db.query(q, [url]);
+};
