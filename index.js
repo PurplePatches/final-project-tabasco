@@ -72,30 +72,36 @@ app.post("/registration", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-    db.login(req.body.email).then(data => {
-        console.log(
-            "show me req.session.userId in POST/login: ",
-            req.session.userId
-        );
-        req.session.userId = data.rows[0].id;
-        if (data) {
-            bc.checkPassword(req.body.password, data.rows[0].password)
-                .then(data => {
-                    if (data == true) {
-                        res.redirect("/");
-                    } else {
+    db.login(req.body.email).then(user => {
+        if (user.rows.length === 1) {
+            bc.checkPassword(req.body.password, user.rows[0].password)
+                .then(isAuthorized => {
+                    req.session.userId = user.rows[0].id;
+                    if (isAuthorized == true) {
+                        console.log("Success!");
                         res.json({
-                            success: false
+                            success: true
+                        });
+                    } else {
+                        console.log("Fail else!!!, invalid password");
+                        res.json({
+                            err: true
                         });
                     }
                 })
                 .catch(err => {
-                    req.session.userID = null;
+                    req.session.userId = null;
+                    console.log("Fail catch!!!");
                     res.json({
-                        success: false
+                        err: true
                     });
                     console.log("err, reason", err);
                 });
+        } else {
+            console.log("Fail else!!!, invalid email");
+            res.json({
+                err: "Invalid email"
+            });
         }
     });
 });

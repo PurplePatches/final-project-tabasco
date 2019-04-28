@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Welcome from "./welcome.js";
+// import App from "./app";
 import Logo from "./logo";
 
 let element;

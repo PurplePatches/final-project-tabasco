@@ -7,11 +7,9 @@ import Login from "./login";
 export default function Welcome() {
     return (
         <div id="welcomeMessage">
-            <h1>Welcome to my Social Network</h1>
+            <h1>Welcome to Heart On</h1>
             <Logo className="logo" />
-            <h3>
-                This is the place to be if you want to meet like-minded folk!
-            </h3>
+            <h3>Tell us who you have an affection erection for!</h3>
 
             <HashRouter>
                 <div>

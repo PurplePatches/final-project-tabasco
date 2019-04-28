@@ -1,13 +1,13 @@
 * {
     color: red;
-
+    background-image: url("/background_2.jpg");
+    background-size: auto;
     font-family: "Love ya like a sister";
     margin: 0;
 }
 
 body {
-    background-image: url("/background_2.jpg");
-    background-size: auto;
+
 }
 main {
     display: flex;
@@ -50,7 +50,7 @@ input {
 
 .logo {
     border: transparent;
-    width: 200px;
+    width: 300px;
     height: 200px;
     border-radius: 50%;
 }
@@ -70,6 +70,14 @@ input {
     left: 0;
 }
 
+.error {
+    width: 500px;
+    height: 150px;
+    font-size: 50px;
+    padding-top: 20px;
+    border: 2px solid yellow;
+}
+
 #welcomeMessage {
     opacity: 0.6;
 }
@@ -87,4 +95,9 @@ input {
     background-color: black;
     font-size: 20px;
     border: transparent;
+}
+
+/* #first_name { */
+    border-color: black;
+    background-color: black;
 }

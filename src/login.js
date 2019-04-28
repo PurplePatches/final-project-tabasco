@@ -6,6 +6,7 @@ export default class Login extends React.Component {
         super(props);
         this.state = {};
         this.saveInput = this.saveInput.bind(this);
+        this.login = this.login.bind(this);
     }
     saveInput(e) {
         console.log(e.target.value);
@@ -13,7 +14,7 @@ export default class Login extends React.Component {
             [e.target.name]: e.target.value
         });
     }
-    saveData(e) {
+    login(e) {
         e.preventDefault();
         axios
             .post("/login", {
@@ -21,11 +22,14 @@ export default class Login extends React.Component {
                 password: this.state.password
             })
             .then(({ data }) => {
-                console.log("show me POST/login data: ", data);
-                location.replace("/");
+                if (data.success) {
+                    location.replace("/");
+                } else {
+                    this.setState({ err: true });
+                }
             })
             .catch(err => {
-                console.log("Oops!", err);
+                console.log("err: ", err);
             });
     }
 
@@ -33,6 +37,11 @@ export default class Login extends React.Component {
         console.log("show me this.state: ", this.state);
         return (
             <div id="form">
+                {this.state.err && (
+                    <div className="error">
+                        Please enter a valid email and password
+                    </div>
+                )}
                 <input
                     id="email"
                     type="email"
@@ -50,8 +59,8 @@ export default class Login extends React.Component {
                     autoComplete="off"
                     onChange={this.saveInput}
                 />
-                <input type="hidden" name="_csrf" value="{{csrfToken}}" />
-                <button id="logIn" onClick={e => this.saveData(e)}>
+
+                <button id="logIn" onClick={e => this.login(e)}>
                     Login
                 </button>
             </div>
