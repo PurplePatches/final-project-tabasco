@@ -26,6 +26,10 @@ app.post('/register', (req, res) => {
 
 });
 
+app.get('/user', requireUser, function(req, res) {
+    
+});
+
 app.get('/logout', (req, res) => {
     req.session = null;
     res.redirect('/welcome');
@@ -50,3 +54,10 @@ app.get('*', function(req, res) {
 app.listen(8080, function() {
     console.log("I'm listening.");
 });
+
+function requireUser(req, res, next) {
+    if (req.session.userId) {
+        return next();
+    }
+    res.sendStatus(403);
+}

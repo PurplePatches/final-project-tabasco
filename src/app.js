@@ -32,6 +32,27 @@ export default class App extends React.Component {
                     first={this.state.first}
                     clickHandler={() => this.setState({ isUploaderVisible: true })}
                 />
+
+                <Profile
+                    first={this.state.first}
+                    last={this.state.last}
+                    profilePic={
+                        <ProfilePic
+                            id={this.state.id}
+                            first={this.state.first}
+                            last={this.state.last}
+                            image={this.state.image}
+                            onClick={this.showUploader}
+                        />
+                    }
+                    bioEditor={
+                        <BioEditor
+                            bio={this.state.bio}
+                            setBio={this.setBio}
+                        />
+                    }
+                />
+
                 {this.state.isUploaderVisible && <Uploader /> }
             </div>
         )
