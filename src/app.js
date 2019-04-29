@@ -3,6 +3,7 @@ import Header from './header';
 import Home from './home'
 import Profile from './profile'
 import axios from './utils/axios'
+import Dropdown from './dropdown';
 
 export default class App extends Component {
   constructor(props) {
@@ -25,7 +26,15 @@ export default class App extends Component {
       this.setState({...data})
       this.dbProfile = {...data}
     })
+    document.addEventListener('mousemove', (e) => {
+      const dropdown = document.getElementById('dropdown')
+      if(!dropdown.classList.contains('show') && e.target.classList.contains('header-profile')){
+        dropdown.classList.add('show')
+      }else if(dropdown.classList.contains('show') && !e.target.classList.contains('header-profile')){
+        dropdown.classList.remove('show')
+      }
 
+    })
   }
 
   handleChange(e){
@@ -74,6 +83,7 @@ export default class App extends Component {
     return (
       <>
         <Header profilePic={this.state.profilePic} dogname={this.state.dogname} />
+        <Dropdown />
         <Home />
         <Profile 
           first={this.state.first}

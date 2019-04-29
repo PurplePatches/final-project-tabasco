@@ -6,18 +6,16 @@ export default function Header(props) {
     <header>
       
       <div id='header-items'>
-        <div className='profilepic'>
-          <img src='./uploads/doglogo.jpg' />
-        </div>
-        <div className='header-item' id='header-profile'>PROFILE</div>
-        <div className='header-item' id='header-profile'>FIND FRIENDS</div>
+
+        <div className='header-item'>PROFILE</div>
+        <div className='header-item'>FIND FRIENDS</div>
       </div>
-     <div className='profile'>
-        <div className='header-item'>
+     <div className='header-profile outer'>
+        <div className='header-profile header-item'>
           {props.dogname.toUpperCase()}
         </div>
-        <div className='profilepic'>
-          <img src={props.profilePic || './uploads/dogprofile.jpg'} />
+        <div className='profilepic header-profile'>
+          <img className='header-profile' src={props.profilePic || './uploads/dogprofile.jpg'} />
         </div>
       </div>
     </header>

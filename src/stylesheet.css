@@ -43,6 +43,7 @@ header {
   margin: auto;
   background: red;
   position: relative;
+  z-index: 10;
   /* display: flex;
   align-items: center;
   overflow: hidden; */
@@ -55,16 +56,24 @@ header * {
   vertical-align: middle;
 }
 
-header .profile {
+header .header-profile.outer{
   right: 0;
   position: absolute;
   top: 0;
+  margin: 0;
+  padding: 0;
   display: flex;
   align-items: center;
 }
 
-header .profile .username{
+header .header-profile .username{
+  height: 100%;
+}
 
+header .header-profile .profilepic{
+  height: 5rem;
+  widows: 3rem;
+  object-fit: cover;
 }
 
 #header-items {
@@ -176,4 +185,21 @@ object-fit: cover;
   color: red;
   font-style: italic;
   text-align: center;
+}
+
+#dropdown {
+  position: absolute;
+  right: 0;
+  width: 10rem;
+  background-color: black;
+  font-size: 2rem;
+  color: white;
+  padding: 1rem;
+  transform: translateY(-100%);
+  transition: transform 0.5s;
+}
+
+#dropdown.show {
+  transform: translateY(0);
+  transition: transform 2s;
 }
