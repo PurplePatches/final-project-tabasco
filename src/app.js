@@ -15,6 +15,7 @@ export default class App extends Component {
         dogbreed: '',
         location: '',
         profilePic: '',
+        showSaved: " ",
     }
     this.dbProfile = {}
   }
@@ -28,7 +29,10 @@ export default class App extends Component {
   }
 
   handleChange(e){
-    if(e.target.name === 'picture'){
+    if(e.wa){
+      this.setState({location: e.wa.target.title});
+      this.saveData()
+    }else if(e.target.name === 'picture'){
   
         const formToSubmit = new FormData();    
         formToSubmit.append('file', document.getElementById('pic-select').files[0])
@@ -42,7 +46,7 @@ export default class App extends Component {
     }
   }
 
-  saveData (e) {
+  saveData () {
       if (
         this.dbProfile.first != this.state.first ||
         this.dbProfile.last != this.state.last || 
@@ -55,6 +59,8 @@ export default class App extends Component {
           .then((data) => {
             console.log('profile update statuscode', data.status);
             this.dbProfile = {...this.state}
+            this.setState({showSaved: 'saved'})
+            setTimeout(() => this.setState({showSaved: ' '}), 2000)
           })
           .catch(err => console.log(err))
       }
@@ -67,7 +73,7 @@ export default class App extends Component {
   render() {
     return (
       <>
-        <Header profilePic={this.state.profilePic}/>
+        <Header profilePic={this.state.profilePic} dogname={this.state.dogname} />
         <Home />
         <Profile 
           first={this.state.first}
@@ -80,6 +86,7 @@ export default class App extends Component {
           handleChange={(e) => this.handleChange(e)} 
           saveData={e => this.saveData(e)}
           handleClick={() => this.changePhoto()}
+          showSaved={this.state.showSaved}
         />
       <input onChange={(e) => this.handleChange(e)} type="file" name="picture" id='pic-select' style={{display: 'none'}} autoComplete="off" />
       </>

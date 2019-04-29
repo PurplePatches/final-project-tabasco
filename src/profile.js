@@ -1,43 +1,16 @@
 import React, { Component } from 'react'
+import Map from './map'
 
 export default class Profile extends Component {
   constructor(props) {
     super(props)
     this.state = {
-
     }
-    // this.registering = false
-    // this.editProfile = this.editProfile.bind(this)
-    // this.getProfile = this.getProfile.bind(this)
-    // this.handleChange = this.handleChange.bind(this)
   }
-
-  // updateProfile () {
-  //   axios.post('/profile', {
-  //     email: this.details.email,
-  //     password: this.details.password,
-  //   })
-    //   .then(({data}) => {
-    //     this.registering = false
-    //     if(data.status === 'valid') {
-    //       document.location.replace('/')
-    //     }else{
-    //       this.setState({error: true})
-    //     }
-    //     this.registering = false
-    //   })
-    //   .catch(err => {
-    //     this.registering = false
-    //     this.setState({error: true})
-    //     console.log(err);
-    //   })
-  
-
-
-
   render() {
     return (
-      <div className='editProfile'>
+      <>
+      <div className='editProfile top'>
         <div className='left'>
           <div className='editprofilepic' onClick={this.props.handleClick}>
             <img src={this.props.profilePic} />
@@ -46,7 +19,7 @@ export default class Profile extends Component {
         </div>
         <div className='right'>
           <form>
-            <p className='saved'>saved</p>
+            <p className='saved'> {this.props.showSaved}</p>
             <div className='form-line'>
               <p>First Name</p>
               <input type='text' name='first' value={this.props.first} onChange={(e) => this.props.handleChange(e)} onBlur={(e) => this.props.saveData(e)}/>
@@ -74,7 +47,39 @@ export default class Profile extends Component {
             </div>
           </form>
         </div>
+       
       </div>
+      <div className='editProfile bottom'>
+        <Map
+          id="myMap"
+          options={{
+            center: { lat: 41.0082, lng: 28.9784 },
+            zoom: 8
+          }}
+          onMapLoad={map => {
+            const parks = 	[
+              { name: "Mauerpark",
+                lat: 52.544937,
+                lng: 13.402677
+              },
+              { name: "Grunewald",
+                lat: 52.492069,
+                lng: 13.284844
+              }
+            ]
+            parks.forEach(park => {
+              const marker = new window.google.maps.Marker({
+                position: {lat: park.lat, lng: park.lng},
+                map: map,
+                title: park.name
+              })
+              marker.addListener('click', (e) => this.props.handleChange(e))
+            })
+          }}
+
+        />
+      </div>
+      </>
 
     )
   }
