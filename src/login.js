@@ -17,8 +17,8 @@ export default class Login extends React.Component {
                 password: this.password
             })
             .then(({ data }) => {
-                console.log(data);
-                data.scuccess
+                console.log("DATA FROM LOGIN.JS", data);
+                data.success
                     ? location.replace("/")
                     : this.setState({ error: true });
             })

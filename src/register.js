@@ -21,7 +21,6 @@ export default class Register extends React.Component {
                 password: this.password
             })
             .then(({ data }) => {
-                console.log(data);
                 data.scuccess
                     ? location.replace("/")
                     : this.setState({ error: true });
