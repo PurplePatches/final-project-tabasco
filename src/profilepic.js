@@ -1,11 +1,12 @@
 import React from "react";
 
-export default function ProfilePic({ image_url, clickHandler }) {
+export default function ProfilePic(props) {
+    console.log(props);
     return (
-        <span id="profilepic" onClick={clickHandler}>
+        <span id="profilepic" onClick={props.clickHandler}>
             <img
                 className="top_profile"
-                src={image_url || "/img/default.png"}
+                src={props.image_url || "/img/default.png"}
             />
         </span>
     );

@@ -47,6 +47,11 @@ exports.updateUserPwd = function updateUserPwd(
     let params = [firstName, lastName, email, password, userId];
     return db.query(q, params);
 };
+exports.updateBio = function updateBio(bio, userId) {
+    let q = "UPDATE users SET bio = $1 WHERE id=$2 RETURNING bio";
+    let params = [bio, userId];
+    return db.query(q, params);
+};
 exports.newPic = function newPic(url, userId) {
     let q = "UPDATE users SET image_url = $1 WHERE id=$2 RETURNING image_url";
     let params = [url, userId];

@@ -95,12 +95,18 @@ app.post("/register", (request, response) => {
             response.json({ error: err.message });
         });
 });
-app.get("/bio", (request, response) => {
-    if (request.session.userId) {
-        response.redirect("/");
-    } else {
-        response.sendFile(__dirname + "/index.html");
-    }
+app.post("/bio", (request, response) => {
+    let userId = request.session.userId;
+    let bio = request.body.bio;
+    console.log("POST BIO ABOUT TO HAPPEN", bio);
+    db.updateBio(bio, userId)
+        .then(({ rows }) => {
+            response.json(rows[0]);
+            console.log(rows[0]);
+        })
+        .catch(err => {
+            console.log("Problem in the Bio", err);
+        });
 });
 app.post("/upload", uploader.single("file"), s3.upload, (request, response) => {
     // If nothing went wrong the file is already in the uploads directory

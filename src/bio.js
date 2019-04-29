@@ -3,26 +3,33 @@ import axios from "./axios";
 export default class Bio extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            showform: false,
+            showlink: true,
+            showBio: true
+        };
         this.submit = this.submit.bind(this);
         // this.handleInput = this.handleInput.bind(this);
+
+        console.log("In Bio:", this.props);
     }
+
     submit(e) {
         e.preventDefault();
-        console.log("About to make the post register", this.state);
-        axios
-            .post("/bio", this.state, {
-                xsrfCookieName: "mytoken",
-                xsrfHeaderName: "csrf-token" // the csurf middleware automatically checks this header for the token
-            })
-            .then(({ data }) => {
-                console.log("What i got from the server is", data);
-                if (data.error) {
-                    this.setState({ error: data.error });
-                } else {
-                    location.replace("/");
-                }
-            });
+        console.log("About to make the post in the Bio", this.state.bio);
+        axios.post("/bio", this.state).then(({ data }) => {
+            console.log("What i got from the server is", data);
+            if (data.error) {
+                this.setState({ error: data.error });
+            } else {
+                this.setState({
+                    bio: data.bio,
+                    showform: false,
+                    showBio: true,
+                    showlink: true
+                });
+            }
+        });
     }
     render() {
         const handleInput = e => {
@@ -30,31 +37,36 @@ export default class Bio extends React.Component {
                 [e.target.name]: e.target.value
             });
         };
+        const showForm = e => {
+            this.setState({
+                showform: true,
+                showlink: false,
+                showBio: false
+            });
+        };
         return (
             <div>
                 {this.state.error && <div className="error">Ooops!</div>}
-
-                <form>
-                    <label htmlFor="">
-                        Profile Pic
-                        <input
-                            type="file"
-                            onInput={handleInput}
-                            name="firstName"
-                            id="firstName"
-                            required
-                        />
-                    </label>
-                    <label htmlFor="">
-                        Bio
-                        <textarea onInput={handleInput} name="bio" />
-                    </label>
-
-                    <button onClick={e => this.submit(e)}>
-                        Join the Community
-                    </button>
-                </form>
+                BIO:
+                {this.state.showBio && (
+                    <p>{this.state.bio || this.props.bio}</p>
+                )}
                 <hr />
+                {this.state.showlink && <h5 onClick={showForm}>Edit bio</h5>}
+                {this.state.showform && (
+                    <form>
+                        <label htmlFor="">
+                            Bio
+                            <textarea onInput={handleInput} name="bio">
+                                {this.state.bio || this.props.bio}
+                            </textarea>
+                        </label>
+
+                        <button onClick={e => this.submit(e)}>
+                            Save the Bio
+                        </button>
+                    </form>
+                )}{" "}
             </div>
         );
     }

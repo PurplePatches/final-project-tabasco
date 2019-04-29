@@ -2,6 +2,8 @@ import React from "react";
 import axios from "./axios";
 import ProfilePic from "./profilepic";
 import Uploader from "./uploader";
+import Profile from "./profile.js";
+import Bio from "./bio";
 export default class App extends React.Component {
     constructor(props) {
         super(props);
@@ -14,9 +16,6 @@ export default class App extends React.Component {
         });
     }
     render() {
-        // const handleInput = e => {
-        //     this.setState({ [e.target.name]: e.target.value });
-        // };
         if (!this.state.id) {
             return (
                 <section id="modal">
@@ -26,12 +25,25 @@ export default class App extends React.Component {
         } else {
             return (
                 <div id="app">
-                    <ProfilePic
-                        image_url={this.state.image_url}
-                        clickHandler={() =>
-                            this.setState({ showUploader: true })
+                    <Profile
+                        first={this.state.first_name}
+                        last={this.state.last_name}
+                        profilePic={
+                            <ProfilePic
+                                id={this.state.id}
+                                first={this.state.first_name}
+                                last={this.state.last_name}
+                                image_url={this.state.image_url}
+                                clickHandler={() =>
+                                    this.setState({ showUploader: true })
+                                }
+                            />
+                        }
+                        bioEditor={
+                            <Bio bio={this.state.bio} setBio={this.setBio} />
                         }
                     />
+
                     {this.state.showUploader && (
                         <Uploader
                             setImage={url => this.setState({ image_url: url })}

@@ -10,19 +10,14 @@ export default class Login extends React.Component {
     submit(e) {
         e.preventDefault();
         console.log("About to make the post register", this.state);
-        axios
-            .post("/login", this.state, {
-                xsrfCookieName: "mytoken",
-                xsrfHeaderName: "csrf-token" // the csurf middleware automatically checks this header for the token
-            })
-            .then(({ data }) => {
-                console.log("What i got from the server in the login is", data);
-                if (data.error) {
-                    this.setState({ error: data.error });
-                } else {
-                    location.replace("/bio");
-                }
-            });
+        axios.post("/login", this.state).then(({ data }) => {
+            console.log("What i got from the server in the login is", data);
+            if (data.error) {
+                this.setState({ error: data.error });
+            } else {
+                location.replace("/bio");
+            }
+        });
     }
     render() {
         const handleInput = e => {
