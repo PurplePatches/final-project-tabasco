@@ -4,12 +4,15 @@ import Home from './home'
 import Profile from './profile'
 import axios from './utils/axios'
 import Dropdown from './dropdown';
+import Settings from './settings';
+import Cover from './cover';
 
 export default class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
         first: '',
+        email: '',
         last: '',
         bio: '',
         dogname: '',
@@ -17,6 +20,7 @@ export default class App extends Component {
         location: '',
         profilePic: '',
         showSaved: " ",
+        showSettingsModal: false,
     }
     this.dbProfile = {}
   }
@@ -33,7 +37,6 @@ export default class App extends Component {
       }else if(dropdown.classList.contains('show') && !e.target.classList.contains('header-profile')){
         dropdown.classList.remove('show')
       }
-
     })
   }
 
@@ -48,8 +51,6 @@ export default class App extends Component {
         axios.post('/picture', formToSubmit)
           .then(({data}) => this.setState({profilePic: data.url}))
           .catch(err => console.log(err))
-      
- 
     }else{
       this.setState({[e.target.name]: e.target.value});
     }
@@ -79,11 +80,21 @@ export default class App extends Component {
     document.getElementById('pic-select').click()
   }
 
+  clickHandler (e) {
+    if(e.target.id === 'dropdown-settings'){
+      this.setState({showSettingsModal: true})
+    }else if(e.target.id === 'coverdiv'){
+      this.setState({showSettingsModal: false})
+    }
+  }
+
   render() {
     return (
       <>
+        {this.state.showSettingsModal ? <Cover coverClicked={e => this.clickHandler(e)}/> : null}
         <Header profilePic={this.state.profilePic} dogname={this.state.dogname} />
-        <Dropdown />
+        <Dropdown clickHandler={e => this.clickHandler(e)}/>
+          {this.state.showSettingsModal ? <Settings exitSettings={() => this.setState({showSettingsModal: false})} email={this.state.email} handleChange={e => this.handleChange(e)}/> : null}
         <Home />
         <Profile 
           first={this.state.first}

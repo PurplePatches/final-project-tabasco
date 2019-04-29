@@ -1,10 +1,10 @@
 import React from 'react'
 
-export default function Dropdown() {
+export default function Dropdown(props) {
   return (
     <div id='dropdown' className='header-profile'>
-      <p className='header-profile'>Settings</p>
-      <p className='header-profile'>Logout</p>
+      <p id='dropdown-settings' className='header-profile' onClick={props.clickHandler}>Settings</p>
+      <p id='dropdown-logout' className='header-profile' onClick={props.clickHandler}>Logout</p>
     </div>
   )
 }

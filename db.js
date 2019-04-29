@@ -44,3 +44,29 @@ exports.saveImage = function (url, userid) {
 exports.getImages = function (userid) {
   return db.query(`SELECT * FROM images WHERE userid = ${userid}`)
 }
+
+exports.updatePasswordEmail = function (userid, email, password) {
+  if(password){
+      const q = `UPDATE
+          users
+        SET
+          email = $1, password = $2
+        WHERE
+          userid = ${userid}
+        `
+          const params = [ email, password];
+          return db.query(q, params)
+  }else{
+    const q = `UPDATE
+        users
+      SET
+        email = $1
+      WHERE
+        userid = ${userid}
+      `
+    const params = [ email];
+    return db.query(q, params)
+  }
+  
+
+}

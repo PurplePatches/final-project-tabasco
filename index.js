@@ -145,6 +145,18 @@ app.post('/profile', (req, res) => {
     
 })
 
+app.post('/passwordemail', (req, res) => {
+    console.log(req.body);
+    if(req.body.password) {
+        hashPassword(req.body.password)
+            .then(hashed => db.updatePasswordEmail(req.session.userid, req.body.email, hashed))
+            .then(() => res.json({succes: true}))
+    }else{
+        db.updatePasswordEmail(req.session.userid, req.body.email)
+            .then(() => res.json({succes: true}))
+    }    
+})
+
 app.get('/profile', (req, res) => {
     Promise.all([
         db.getProfile(req.session.userid),
@@ -154,9 +166,9 @@ app.get('/profile', (req, res) => {
         for (const prop in data[0].rows[0]){
             if(data[0].rows[0][prop] === null) data[0].rows[0][prop] = ''
         }
-        const {bio, dogname, dogbreed, first, last, location} = data[0].rows[0]
+        const {email, bio, dogname, dogbreed, first, last, location} = data[0].rows[0]
         const profilePic = data[1].rows.length > 0 ? data[1].rows[0].url : ''
-        res.json({bio, dogname, dogbreed, first, last, location, profilePic})  
+        res.json({email, bio, dogname, dogbreed, first, last, location, profilePic})  
     })
     .catch(err => console.log(err))
 });
