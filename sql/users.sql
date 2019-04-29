@@ -6,6 +6,6 @@ CREATE TABLE users(
     last_name VARCHAR(200) NOT NULL,
     email VARCHAR(200) NOT NULL,
     password VARCHAR(300) NOT NULL,
-    picture TEXT,
-    bio TEXT
+    picture VARCHAR(300),
+    bio VARCHAR(300)
 );

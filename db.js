@@ -19,15 +19,21 @@ function addUser(first_name, last_name, email, password) {
 }
 
 function getPass(email) {
-    let q = "SELECT password, id FROM users WHERE email=($1);";
+    let q = "SELECT password, id FROM users WHERE email = ($1);";
     let params = [email];
     return db.query(q, params);
 }
 
 function getUserData(id) {
     let q =
-        "SELECT first_name, last_name, picture, bio FROM users WHERE id=$1;";
+        "SELECT first_name, last_name, picture, bio FROM users WHERE id = $1;";
     let params = [id];
+    return db.query(q, params);
+}
+
+function changePic(id, picture) {
+    let q = "UPDATE users SET picture = $2 WHERE id = $1 RETURNING picture;";
+    let params = [id, picture];
     return db.query(q, params);
 }
 
@@ -35,5 +41,6 @@ module.exports = {
     checkEmail,
     addUser,
     getPass,
-    getUserData
+    getUserData,
+    changePic
 };

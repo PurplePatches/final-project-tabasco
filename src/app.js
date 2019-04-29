@@ -12,7 +12,8 @@ export default class App extends React.Component {
         this.state = {
             uploaderVisible: false
         };
-        this.showUploader = this.showUploader.bind(this);
+        this.toggleUploader = this.toggleUploader.bind(this);
+        this.profilePicUrl = this.profilePicUrl.bind(this);
     }
     componentDidMount() {
         axios.get("/user").then(({ data }) => {
@@ -21,11 +22,18 @@ export default class App extends React.Component {
             const picture = data.picture;
             const bio = data.bio;
             this.setState({ firstName, lastName, picture, bio });
-            console.log("state: ", this.state);
         });
     }
-    showUploader() {
-        this.setState({ uploaderVisible: true });
+    toggleUploader() {
+        if (this.state.uploaderVisible) {
+            this.setState({ uploaderVisible: false });
+        } else {
+            this.setState({ uploaderVisible: true });
+        }
+    }
+    profilePicUrl(picture) {
+        this.setState({ picture });
+        this.setState({ uploaderVisible: false });
     }
     render() {
         return (
@@ -35,9 +43,14 @@ export default class App extends React.Component {
                     firstName={this.state.firstName}
                     lastName={this.state.lastName}
                     image={this.state.picture}
-                    showUploader={this.showUploader}
+                    toggleUploader={this.toggleUploader}
                 />
-                {this.state.uploaderVisible && <Uploader />}
+                {this.state.uploaderVisible && (
+                    <Uploader
+                        toggleUploader={this.toggleUploader}
+                        profilePicUrl={this.profilePicUrl}
+                    />
+                )}
                 <div>Welcome to anti-social network</div>
             </div>
         );
