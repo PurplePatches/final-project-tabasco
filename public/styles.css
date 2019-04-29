@@ -1,0 +1,20 @@
+* {
+    box-sizing: border-box;
+    font-family: "Ubuntu", sans-serif;
+}
+
+a {
+    text-decoration: none;
+    font-weight: 500;
+    color: green;
+}
+
+.logo {
+    max-width: 60px;
+    max-height: 60px;
+}
+
+.profilepic {
+    max-width: 60px;
+    max-height: 60px;
+}

@@ -24,8 +24,16 @@ function getPass(email) {
     return db.query(q, params);
 }
 
+function getUserData(id) {
+    let q =
+        "SELECT first_name, last_name, picture, bio FROM users WHERE id=$1;";
+    let params = [id];
+    return db.query(q, params);
+}
+
 module.exports = {
     checkEmail,
     addUser,
-    getPass
+    getPass,
+    getUserData
 };

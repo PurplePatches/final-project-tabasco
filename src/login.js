@@ -20,7 +20,7 @@ export default class Login extends React.Component {
             .post("/login", this.state)
             .then(({ data }) => {
                 this.setState({ error: data.error });
-                if (this.error == false) {
+                if (data.error == false) {
                     location.replace("/");
                 }
             })

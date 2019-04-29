@@ -20,6 +20,7 @@ if (process.env.NODE_ENV != "production") {
 }
 
 require("./routers/validation");
+require("./routers/profile");
 
 app.use(express.static("./public"));
 

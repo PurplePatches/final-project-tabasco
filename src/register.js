@@ -22,7 +22,7 @@ export default class Register extends React.Component {
             .post("/register", this.state)
             .then(({ data }) => {
                 this.setState({ error: data.error });
-                if (this.error == false) {
+                if (data.error == false) {
                     location.replace("/");
                 }
             })
