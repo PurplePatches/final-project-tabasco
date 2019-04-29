@@ -5,5 +5,6 @@ CREATE TABLE users(
     last VARCHAR(255),
     email VARCHAR(255) NOT NULL UNIQUE,
     password TEXT NOT NULL,
-    url VARCHAR(300)
+    url VARCHAR(300),
+    bio VARCHAR(1000)
 );

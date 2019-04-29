@@ -24,15 +24,12 @@ export default class Uploader extends React.Component {
         var formData = new FormData();
 
         formData.append("file", this.newImage); //file is inside newImage
-        //closes the modal once picture sent
 
-        axios.post("/upload", formData).then(function(results) {
-            console.log(results.data.url, "HEEERE");
-            this.props.setImage(results.data.url); //probably wrong
+        axios.post("/upload", formData).then(({ data }) => {
+            this.props.setImage(data.url); //probably wrong
+
             this.props.clickHandler(); //close modal
         });
-
-        this.props.clickHandler();
     }
     render() {
         return (
@@ -43,6 +40,7 @@ export default class Uploader extends React.Component {
                         X
                     </p>
                     <h1>Select a new image for your profile</h1>
+
                     <input
                         type="file"
                         name="file"

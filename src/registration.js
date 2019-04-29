@@ -15,7 +15,9 @@ export default class Registration extends React.Component {
                 first: this.first,
                 last: this.last,
                 email: this.email,
-                password: this.password
+                password: this.password,
+                url: this.url,
+                bio: this.bio
             })
             .then(({ data }) => {
                 // this.setState({
@@ -42,8 +44,9 @@ export default class Registration extends React.Component {
             this[e.target.name] = e.target.value; //key value pair [name of the input field
         };
         return (
-            <div className="form-container">
+            <div className="container">
                 {this.state.error && <div className="error">Oops</div>}
+                <h1>JOIN US</h1>
                 First name :
                 <input onChange={handleInput} name="first" />
                 Last name :

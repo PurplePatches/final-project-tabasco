@@ -37,8 +37,9 @@ export default class Login extends React.Component {
             this[e.target.name] = e.target.value; //key value pair [name of the input field
         };
         return (
-            <div className="form-container">
+            <div className="container">
                 {this.state.error && <div className="error">Oops</div>}
+                <h1>JOIN US</h1>
                 Type your email address :
                 <input name="email" onChange={handleInput} />
                 Password :

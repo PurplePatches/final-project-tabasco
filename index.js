@@ -76,6 +76,7 @@ app.post("/register", async (req, res) => {
             req.body.last,
             req.body.email,
             hash,
+            null,
             null
         );
         req.session.userId = register.rows[0].id;
@@ -138,8 +139,8 @@ app.post("/upload", uploader.single("file"), s3.upload, function(req, res) {
     const url = config.s3Url + req.file.filename;
 
     db.uploadPicture(req.session.userId, url).then(whatever => {
-        // console.log(whatever, "WHATEVER!!");
-        res.json(whatever);
+        console.log(whatever, "WHATEVER!!");
+        res.json(whatever.rows[0]);
     });
     // db.newImage(url, )
     // JSON response should be an arroay of object with the above properties
@@ -151,6 +152,12 @@ app.get("/user", (req, res) => {
             res.json(rows[0]);
         });
     }
+});
+
+app.post("/bioedit", (req, res) => {
+    db.updateBio(req.session.userId, req.body.bio).then(({ rows }) => {
+        res.json(rows[0]);
+    });
 });
 
 app.get("*", function(req, res) {
