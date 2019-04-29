@@ -105,13 +105,34 @@ button {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: tomato;
+    background-color: #f6f8fa;
+    color: #4e4e4e;
     width: 100vw;
     padding: 20px;
 }
 
 .navigation h2 {
     margin: 0;
+}
+
+.navigation img {
+    max-width: 50px;
+    max-height: auto;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+#logout-button {
+    margin-left: 20px;
+}
+
+#logout-button:hover {
+    cursor: pointer;
 }
 
 /* MISC */
@@ -123,8 +144,8 @@ button {
     height: 50px;
 }
 
-.error {
+/* .error {
     color: red;
-}
+} */
 
 /* https://colorhunt.co/palette/143225 */

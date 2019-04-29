@@ -76,6 +76,8 @@
 
     require("./utility/auth");
     require("./utility/welcome");
+    require("./utility/upload");
+    // require("./utility/user");
 
     app.get("*", (req, res) => {
         if (!req.session.userId) {

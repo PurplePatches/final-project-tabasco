@@ -13,7 +13,13 @@
         email_address,
         password
     ) {
-        let query = `INSERT INTO users (first_name, last_name, email_address, password)
+        let query = `
+        INSERT INTO users (
+            first_name,
+            last_name,
+            email_address,
+            password
+        )
         VALUES ($1, $2, $3, $4)
         RETURNING id;`;
         let parameters = [
@@ -33,13 +39,20 @@
         return db.query(query, parameters);
     };
 
-    // exports.getUserInformation = function getUserInformation(user_id) {
-    //     let query = `SELECT first_name, last_name, email_address, age, city, url
-    //     FROM users
-    //     LEFT JOIN user_profiles
-    //     ON users.id = user_profiles.user_id
-    //     WHERE users.id = $1;`;
-    //     let params = [user_id || null];
-    //     return db.query(query, params);
+    // exports.uploadPicture = function uploadPicture(id, url) {
+    //     let query = `UPDATE users
+    //     SET url = $2
+    //     WHERE id = $1
+    //     RETURNING *`;
+    //     let parameters = [id || null, url || null];
+    //     return db.query(query, parameters);
     // };
+
+    exports.getUserInformation = function getUserInformation(id) {
+        let query = `SELECT *
+        FROM users
+        WHERE id = $1;`;
+        let params = [id || null];
+        return db.query(query, params);
+    };
 })();

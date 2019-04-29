@@ -61,6 +61,20 @@
     // LOG IN ROUTE //
     /////////////////
 
+    // app.post("/login", async (req, res) => {
+    //     try {
+    //         const { email, password } = req.body;
+    //         const getHash = await db.getHashedPassword(req.body.email);
+    //         let id = data.rows[0].id;
+    //         const checkPassword = await bcrypt.checkPassword(
+    //             req.body.password,
+    //             data.rows[0].password
+    //         );
+    //     } catch (e) {
+    //         console.log("POST /login error: ", e);
+    //     }
+    // });
+
     app.post("/login", (req, res) => {
         db.getHashedPassword(req.body.email)
             .then(data => {
@@ -90,6 +104,9 @@
 
     app.get("/logout", (req, res) => {
         req.session = null;
-        res.redirect("/");
+        res.sendStatus(200);
     });
 })();
+
+// TO DO:
+// refactor routes with async and await

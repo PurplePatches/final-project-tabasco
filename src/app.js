@@ -7,18 +7,19 @@ export default class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
+        this.logOut = this.logOut.bind(this);
     }
-    componentDidMount() {
-        axios.get("/user").then(({ data }) => {
-            this.setState(data);
-        });
-    }
-    // logOut() {
-    //     axios.post("/logout", (req, res) => {
-    //         req.session = null;
-    //         res.redirect("/");
+    // componentDidMount() {
+    //     axios.get("/user").then(({ data }) => {
+    //         this.setState(data);
     //     });
     // }
+    logOut() {
+        console.log("LOG OUT CLICKED!");
+        axios.get("/logout").then(() => {
+            location.replace("/welcome");
+        });
+    }
     render() {
         // if (!this.state.id) {
         //     return null;
@@ -26,12 +27,15 @@ export default class App extends React.Component {
         return (
             <React.Fragment>
                 <nav className="navigation">
-                    <h2>social network</h2>
-                    <button onClick={this.logOut} className="logout-button">
-                        log out
-                    </button>
+                    <div className="logo-container">
+                        <h2>social network</h2>
+                        <i
+                            onClick={this.logOut}
+                            className="fas fa-sign-out-alt"
+                            id="logout-button"
+                        />
+                    </div>
                     <ProfilePic
-                        className="profile-picture"
                         image={this.state.image}
                         first={this.state.first}
                         last={this.state.last}
@@ -49,3 +53,9 @@ export default class App extends React.Component {
         );
     }
 }
+
+// TO DO:
+// default picture not showing
+// how to add className to ProfilePic?
+// log out button not working
+// cookies not working correctly
