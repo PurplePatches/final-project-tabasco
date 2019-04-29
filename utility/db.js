@@ -39,14 +39,14 @@
         return db.query(query, parameters);
     };
 
-    // exports.uploadPicture = function uploadPicture(id, url) {
-    //     let query = `UPDATE users
-    //     SET url = $2
-    //     WHERE id = $1
-    //     RETURNING *`;
-    //     let parameters = [id || null, url || null];
-    //     return db.query(query, parameters);
-    // };
+    exports.uploadPicture = function uploadPicture(id, url) {
+        let query = `UPDATE users
+        SET url = $2
+        WHERE id = $1
+        RETURNING *`;
+        let parameters = [id || null, url || null];
+        return db.query(query, parameters);
+    };
 
     exports.getUserInformation = function getUserInformation(id) {
         let query = `SELECT *

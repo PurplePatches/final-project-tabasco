@@ -6,7 +6,9 @@ import Uploader from "./uploader";
 export default class App extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            isUploaderVisible: false
+        };
         this.logOut = this.logOut.bind(this);
     }
     // componentDidMount() {
@@ -15,7 +17,6 @@ export default class App extends React.Component {
     //     });
     // }
     logOut() {
-        console.log("LOG OUT CLICKED!");
         axios.get("/logout").then(() => {
             location.replace("/welcome");
         });

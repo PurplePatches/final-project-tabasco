@@ -7,6 +7,6 @@ CREATE TABLE users(
     email_address VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(1337) NOT NULL,
     bio VARCHAR(140),
-    user_picture TEXT,
+    user_picture VARCHAR(300),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );

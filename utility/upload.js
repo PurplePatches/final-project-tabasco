@@ -39,7 +39,7 @@
 
     app.post("/upload", uploader.single("file"), s3.upload, function(req, res) {
         const url = config.s3Url + req.file.filename;
-        db.insertIntoDatabase(
+        db.uploadPicture(
             req.body.title,
             req.body.description,
             req.body.username,
