@@ -21,43 +21,60 @@ export default class BioEditor extends React.Component {
             this[e.target.name] = e.target.value; //key value pair [name of the input field
         };
         return (
-            <div>
+            <div className="container">
                 {this.props.bio && (
-                    <div className="container">
-                        <p>{this.props.bio}</p>
-                        <button
-                            className="btn btn-dark btn-lg"
-                            onClick={() => {
-                                this.setState({ inEditMode: true });
-                            }}
-                        >
-                            EDIT BIO
-                        </button>
+                    <div>
+                        <div className="edit-container">
+                            <h3>Your current bio:</h3>
+                            <blockquote className="blockquote">
+                                <p className="mb-0">
+                                    <br />{" "}
+                                    <mark className="mb0">
+                                        {this.props.bio}
+                                    </mark>
+                                    <footer className="blockquote-footer">
+                                        by <cite>{this.props.first}</cite>
+                                    </footer>
+                                </p>
+                            </blockquote>
+                            <button
+                                className="btn btn-dark btn-lg hvr-icon-wobble-horizontal"
+                                onClick={() => {
+                                    this.setState({ inEditMode: true });
+                                }}
+                            >
+                                EDIT BIO {""}
+                                <i className="fas fa-plus-circle hvr-icon" />
+                            </button>
+                        </div>
                     </div>
                 )}
                 {!this.props.bio && (
                     <div className="container">
                         <p>{this.props.bio}</p>
                         <button
-                            className="btn btn-dark btn-lg"
+                            className="btn btn-dark btn-lg hvr-icon-wobble-horizontal"
                             onClick={() => {
                                 this.setState({ inEditMode: true });
                             }}
                         >
-                            CREATE BIO
+                            CREATE BIO {""}
+                            <i className="fas fa-plus-circle hvr-icon" />
                         </button>
                     </div>
                 )}
                 {this.state.inEditMode && (
-                    <div>
+                    <div className="edit-container">
+                        <p className="text-muted">Edit your bio text below</p>
                         <textarea name="bio" onChange={handleInput}>
                             TEST
                         </textarea>
                         <button
-                            className="btn btn-dark btn-lg"
+                            className="btn btn-dark btn-lg hvr-icon-wobble-horizontal"
                             onClick={() => this.submit()}
                         >
-                            UPDATE BIO
+                            UPDATE BIO {""}
+                            <i className="fas fa-envelope hvr-icon" />
                         </button>
                     </div>
                 )}
