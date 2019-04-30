@@ -4,6 +4,7 @@ import Logo from "./logo";
 import Profile from "./profile";
 import ProfilePic from "./profilePic";
 import Uploader from "./uploader";
+import BioEditor from "./bioEditor";
 import { BrowserRouter } from "react-router-dom";
 
 export default class App extends React.Component {
@@ -16,8 +17,6 @@ export default class App extends React.Component {
         axios
             .get("/user")
             .then(({ data }) => {
-                console.log("show me data in GET/user", data);
-                // res.json everything except email and password
                 this.setState(data);
             })
             .catch(err => {
@@ -32,8 +31,8 @@ export default class App extends React.Component {
                 </div>
             );
         }
-        const { id, firstName, lastName, image } = this.state;
-        console.log("show me this.state", this.state);
+        const { id, firstName, lastName, image, bio } = this.state;
+
         return (
             <div>
                 <Logo />
@@ -45,9 +44,6 @@ export default class App extends React.Component {
                         this.setState({ isUploaderVisible: true });
                     }}
                 />
-                <BrowserRouter>
-                    <Route path="/user/:id" component={OtherProfile} />
-                </BrowserRouter>
                 <Profile
                     firstName={firstName}
                     lastName={lastName}
@@ -63,7 +59,12 @@ export default class App extends React.Component {
                 />
                 {this.state.isUploaderVisible && (
                     <Uploader
-                        setUrl={image => this.setState({ image: image })}
+                        setUrl={image =>
+                            this.setState({
+                                image: image,
+                                isUploaderVisible: false
+                            })
+                        }
                         clickHandler={() => {
                             this.setState({ isUploaderVisible: false });
                         }}

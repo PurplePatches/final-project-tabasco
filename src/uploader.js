@@ -16,23 +16,21 @@ export default class Uploader extends React.Component {
     }
     uploadImage(e) {
         e.preventDefault();
-        // console.log("show me upload file");
         var formData = new FormData();
         formData.append("file", this.state.file);
-        // console.log("formData: ", formData);
         axios.post("/upload", formData).then(({ data }) => {
-            console.log("show me dat from POST/upload: ", data);
             this.props.setUrl(data.url);
         });
     }
+
     render() {
-        console.log("show me render");
         return (
             <div className="imageModal">
                 <input
                     type="file"
                     accept="image/*"
                     name="file"
+                    title=" "
                     onChange={this.saveInput}
                 />
                 <button

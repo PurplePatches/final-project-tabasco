@@ -60,7 +60,7 @@ var uploader = multer({
 
 app.get("/welcome", (req, res) => {
     if (req.session.userId) {
-        res.redirect("/app");
+        res.redirect("/");
     } else {
         res.sendFile(__dirname + "/index.html");
     }
@@ -82,10 +82,7 @@ app.post("/registration", (req, res) => {
                 res.json({
                     success: true
                 });
-                console.log(
-                    "show me req.session.userId in POST/registration",
-                    req.session.userId
-                );
+                console.log(req.session.userId);
             })
             .catch(err => {
                 res.json({ success: false });
@@ -104,12 +101,10 @@ app.post("/login", (req, res) => {
                     req.session.lastName = user.rows[0].last_name;
                     req.session.image = user.rows[0].image;
                     if (isAuthorized == true) {
-                        console.log("Success!");
                         res.json({
                             success: true
                         });
                     } else {
-                        console.log("Fail else!!!, invalid password");
                         res.json({
                             err: true
                         });
@@ -117,14 +112,12 @@ app.post("/login", (req, res) => {
                 })
                 .catch(err => {
                     req.session.userId = null;
-                    console.log("Fail catch!!!");
                     res.json({
                         err: true
                     });
                     console.log("err, reason", err);
                 });
         } else {
-            console.log("Fail else!!!, invalid email");
             res.json({
                 err: "Invalid email"
             });
@@ -136,15 +129,13 @@ app.get("/user", (req, res) => {
     res.json({
         id: req.session.userId,
         firstName: req.session.firstName,
-        lastName: req.session.lastName,
-        image: req.session.image
+        lastName: req.session.lastName
+        // image: req.session.image
     });
 });
 
 app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
     const image = config.s3Url + req.file.filename;
-    console.log("image: ", image);
-    console.log("we are here at image upload");
     db.uploadImage(image, req.session.userId)
         .then(results => {
             if (results.rowCount == 1) {
@@ -154,16 +145,12 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
                 });
             } else {
                 res.json({ success: false });
-            }S
+            }
         })
         .catch(err => {
             console.log(err);
         });
 });
-
-app.get("/user/:other") => {
-    if ()
-}
 
 app.get("/logout", (req, res) => {
     req.session = null;
@@ -171,14 +158,18 @@ app.get("/logout", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-    res.sendFile(__dirname + "/index.html");
+    if (req.session.userId) {
+        res.sendFile(__dirname + "/index.html");
+    } else {
+        res.redirect("/welcome");
+    }
 });
 
 app.get("*", (req, res) => {
     if (!req.session.userId) {
         res.redirect("/welcome");
     } else {
-        res.redirect("/app");
+        res.redirect("/");
     }
 });
 

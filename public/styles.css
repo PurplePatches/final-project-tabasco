@@ -91,8 +91,8 @@ input {
     width: 300px;
     height:300px;
     background-color: rgba(0, 0, 0, 0.5);
-    overflow: scroll;
-    border: 2px solid yellow;
+    overflow: hidden;
+    /* border: 2px solid yellow; */
 }
 
 /* .inner-modal {
@@ -124,6 +124,14 @@ input {
     background-color: black;
     font-size: 20px;
     border: transparent;
+}
+
+#profileImage img {
+    position: absolute;
+    top: 200px;
+    left: 50px;
+    background: white;
+    border: 2px yellow solid;
 }
 
 /* #first_name { */
