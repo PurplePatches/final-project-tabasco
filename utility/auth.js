@@ -40,40 +40,9 @@
             });
     });
 
-    // app.post("/register", async (req, res) => {
-    //     try {
-    //         const { first, last, email, password } = req.body;
-    //         const hash = await bcrypt.hashPassword(req.body.password);
-    //         const data = await db.registerInfo(
-    //             req.body.first,
-    //             req.body.last,
-    //             req.body.email,
-    //             hash
-    //         );
-    //         req.session.userId = data.rows[0].id;
-    //         res.json({ success: true });
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // });
-
     ///////////////////
     // LOG IN ROUTE //
     /////////////////
-
-    // app.post("/login", async (req, res) => {
-    //     try {
-    //         const { email, password } = req.body;
-    //         const getHash = await db.getHashedPassword(req.body.email);
-    //         let id = data.rows[0].id;
-    //         const checkPassword = await bcrypt.checkPassword(
-    //             req.body.password,
-    //             data.rows[0].password
-    //         );
-    //     } catch (e) {
-    //         console.log("POST /login error: ", e);
-    //     }
-    // });
 
     app.post("/login", (req, res) => {
         db.getHashedPassword(req.body.email)

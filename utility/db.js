@@ -52,7 +52,7 @@
         let query = `SELECT *
         FROM users
         WHERE id = $1;`;
-        let params = [id || null];
-        return db.query(query, params);
+        let parameters = [id || null];
+        return db.query(query, parameters);
     };
 })();

@@ -27,19 +27,21 @@ export default class Modal extends React.Component {
     }
 
     // WORK IN PROGRESS:
-    closeModal() {}
+    closeModal() {
+        this.modalIsVisible = false;
+    }
 
     // WORK IN PROGRESS:
     render() {
         return (
             <React.Fragment>
-                <div className="outer-modal">
+                <div className="outer-modal" onClick={this.closeModal}>
                     <div className="inner-modal">
                         <p>Would you like to change your profile picture?</p>
                         <button type="submit" onClick={this.handleChange}>
                             Change
                         </button>
-                        <button>Cancel</button>
+                        <button onClick={this.closeModal}>Cancel</button>
                     </div>
                 </div>
             </React.Fragment>

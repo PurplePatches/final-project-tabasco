@@ -4,5 +4,13 @@
     const { app } = require("../index");
     const db = require("./db");
 
-    app.post("/user", (req, res) => {});
+    app.get("/user", (req, res) => {
+        db.getUserInformation(req.session.userId)
+            .then(({ rows }) => {
+                res.json(rows);
+            })
+            .catch(e => {
+                console.log("GET /user getUserInformation: ", e);
+            });
+    });
 })();

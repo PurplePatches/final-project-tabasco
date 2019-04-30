@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "./axios";
 import ProfilePic from "./profilepic";
-import Uploader from "./uploader";
+// import Uploader from "./uploader";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -11,11 +11,11 @@ export default class App extends React.Component {
         };
         this.logOut = this.logOut.bind(this);
     }
-    // componentDidMount() {
-    //     axios.get("/user").then(({ data }) => {
-    //         this.setState(data);
-    //     });
-    // }
+    componentDidMount() {
+        axios.get("/user").then(({ data }) => {
+            this.setState(data[0]);
+        });
+    }
     logOut() {
         axios.get("/logout").then(() => {
             location.replace("/welcome");
@@ -37,26 +37,21 @@ export default class App extends React.Component {
                         />
                     </div>
                     <ProfilePic
-                        image={this.state.image}
-                        first={this.state.first}
-                        last={this.state.last}
+                        image={this.state.user_picture}
+                        first={this.state.first_name}
+                        last={this.state.last_name}
                         clickHandler={() =>
                             this.setState({ isUploaderVisible: true })
                         }
                     />
-                    {this.state.isUploaderVisible && (
-                        <Uploader
-                            setImage={image => this.setState({ image })}
-                        />
-                    )}
                 </nav>
             </React.Fragment>
         );
     }
 }
 
-// TO DO:
-// default picture not showing
-// how to add className to ProfilePic?
-// log out button not working
-// cookies not working correctly
+// {
+//     this.state.isUploaderVisible && (
+//         <Uploader setImage={image => this.setState({ image })} />
+//     );
+// }
