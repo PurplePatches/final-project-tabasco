@@ -15,6 +15,7 @@ const client = knox.createClient({
 
 exports.upload = function(req, res, next) {
     if (!req.file) {
+        console.log("500 error");
         return res.sendStatus(500);
     }
     const s3Request = client.put(req.file.filename, {

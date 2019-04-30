@@ -18,9 +18,9 @@ exports.login = function(email) {
     return db.query(q, [email]);
 };
 
-exports.uploadImage = function(url) {
-    let q = `INSERT INTO users (url)
-    VALUES ($1)
-    returning url`;
-    return db.query(q, [url]);
+exports.uploadImage = function(image, id) {
+    let q = `UPDATE users SET image = $1
+    WHERE id = $2`;
+    let params = [image, id];
+    return db.query(q, params);
 };

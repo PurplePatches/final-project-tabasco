@@ -49,10 +49,14 @@ input {
 }
 
 .logo {
-    border: transparent;
+    /* border: transparent; */
+    /* border: 2px red solid; */
     width: 300px;
     height: 200px;
     border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .first_name {
@@ -64,10 +68,15 @@ input {
     font-size: 30px;
 }
 
-.logoAll {
+.profilePic {
+    /* border: 2px red solid; */
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
     position: absolute;
-    top: 0;
-    left: 0;
+    margin-top: 50px;
+    right: 50px;
+    background: white;
 }
 
 .error {
@@ -77,6 +86,26 @@ input {
     padding-top: 20px;
     border: 2px solid yellow;
 }
+.imageModal {
+    position: fixed;
+    width: 300px;
+    height:300px;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow: scroll;
+    border: 2px solid yellow;
+}
+
+/* .inner-modal {
+    width: 90%;
+    height: 90%;
+    margin: 0px auto;
+    padding: 20px 30px;
+    background-color: #a4b3b6;
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+    font-family: Helvetica, Arial, sans-serif;
+    border: 2px solid yellow;
+} */
 
 #welcomeMessage {
     opacity: 0.6;

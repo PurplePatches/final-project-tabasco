@@ -66,15 +66,6 @@ app.get("/welcome", (req, res) => {
     }
 });
 
-app.get("/user", (req, res) => {
-    res.json({
-        id: req.session.userId,
-        firstName: req.session.firstName,
-        lastName: req.session.lastName,
-        image: req.session.image
-    });
-});
-
 app.post("/registration", (req, res) => {
     bc.hashPassword(req.body.password).then(hash => {
         console.log("show me req.body: ", req.body);
@@ -141,23 +132,45 @@ app.post("/login", (req, res) => {
     });
 });
 
+app.get("/user", (req, res) => {
+    res.json({
+        id: req.session.userId,
+        firstName: req.session.firstName,
+        lastName: req.session.lastName,
+        image: req.session.image
+    });
+});
+
 app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
-    const url = config.s3Url + req.file.filename;
-    db.upLoadImage(url)
+    const image = config.s3Url + req.file.filename;
+    console.log("image: ", image);
+    console.log("we are here at image upload");
+    db.uploadImage(image, req.session.userId)
         .then(results => {
-            res.json(results.rows[0]);
+            if (results.rowCount == 1) {
+                res.json({
+                    success: true,
+                    url: image
+                });
+            } else {
+                res.json({ success: false });
+            }S
         })
         .catch(err => {
             console.log(err);
         });
 });
 
+app.get("/user/:other") => {
+    if ()
+}
+
 app.get("/logout", (req, res) => {
     req.session = null;
     res.redirect("/welcome");
 });
 
-app.get("/app", (req, res) => {
+app.get("/", (req, res) => {
     res.sendFile(__dirname + "/index.html");
 });
 
