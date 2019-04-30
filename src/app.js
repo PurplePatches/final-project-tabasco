@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "./axios";
 import ProfilePic from "./profilepic";
-// import Uploader from "./uploader";
+import Uploader from "./uploader";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -21,6 +21,7 @@ export default class App extends React.Component {
             location.replace("/welcome");
         });
     }
+
     render() {
         // if (!this.state.id) {
         //     return null;
@@ -45,13 +46,10 @@ export default class App extends React.Component {
                         }
                     />
                 </nav>
+                {this.state.isUploaderVisible && (
+                    <Uploader setImage={image => this.setState({ image })} />
+                )}
             </React.Fragment>
         );
     }
 }
-
-// {
-//     this.state.isUploaderVisible && (
-//         <Uploader setImage={image => this.setState({ image })} />
-//     );
-// }

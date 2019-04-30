@@ -139,6 +139,24 @@ button {
     cursor: pointer;
 }
 
+/* UPLOADER SETTINGS */
+
+.outer-modal {
+    display: flex;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: tomato;
+    position: fixed;
+}
+
+.inner-modal {
+    margin-top: 5%;
+    width: 50%;
+    height: 50%;
+    background-color: aqua;
+}
+
 /* MISC */
 
 .empty {
