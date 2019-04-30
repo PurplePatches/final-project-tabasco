@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { BrowserRouter, Route, Link} from 'react-router-dom'
+
 import Header from './header';
 import Home from './home'
 import Profile from './profile'
@@ -26,7 +28,7 @@ export default class App extends Component {
   }
 
   componentDidMount () {
-    axios.get('/profile').then(({data}) => {
+    axios.get('/profile.json').then(({data}) => {
       this.setState({...data})
       this.dbProfile = {...data}
     })
@@ -90,27 +92,35 @@ export default class App extends Component {
 
   render() {
     return (
+      <BrowserRouter>
       <>
         {this.state.showSettingsModal ? <Cover coverClicked={e => this.clickHandler(e)}/> : null}
         <Header profilePic={this.state.profilePic} dogname={this.state.dogname} />
         <Dropdown clickHandler={e => this.clickHandler(e)}/>
           {this.state.showSettingsModal ? <Settings exitSettings={() => this.setState({showSettingsModal: false})} email={this.state.email} handleChange={e => this.handleChange(e)}/> : null}
-        <Home />
-        <Profile 
-          first={this.state.first}
-          last={this.state.last} 
-          dogname={this.state.dogname} 
-          dogbreed={this.state.dogbreed} 
-          bio={this.state.bio}
-          location={this.state.location}
-          profilePic={this.state.profilePic}
-          handleChange={(e) => this.handleChange(e)} 
-          saveData={e => this.saveData(e)}
-          handleClick={() => this.changePhoto()}
-          showSaved={this.state.showSaved}
-        />
-      <input onChange={(e) => this.handleChange(e)} type="file" name="picture" id='pic-select' style={{display: 'none'}} autoComplete="off" />
+        <Route exact path='/' component={Home} />
+        <Route  exact path='/profile' render={() => (
+          <>
+            <Profile 
+            first={this.state.first}
+            last={this.state.last} 
+            dogname={this.state.dogname} 
+            dogbreed={this.state.dogbreed} 
+            bio={this.state.bio}
+            location={this.state.location}
+            profilePic={this.state.profilePic}
+            handleChange={(e) => this.handleChange(e)} 
+            saveData={e => this.saveData(e)}
+            handleClick={() => this.changePhoto()}
+            showSaved={this.state.showSaved}
+            />
+            <input onChange={(e) => this.handleChange(e)} type="file" name="picture" id='pic-select' style={{display: 'none'}} autoComplete="off" />
+          </>
+        )} />
+
+      
       </>
+      </BrowserRouter>
     )
   }
 }

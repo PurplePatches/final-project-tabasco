@@ -157,7 +157,7 @@ app.post('/passwordemail', (req, res) => {
     }    
 })
 
-app.get('/profile', (req, res) => {
+app.get('/profile.json', (req, res) => {
     Promise.all([
         db.getProfile(req.session.userid),
         db.getImages(req.session.userid)

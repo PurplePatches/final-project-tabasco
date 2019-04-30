@@ -137,18 +137,15 @@ form .error {
   display: grid;
   grid-template-columns: 1fr 2fr;
   width: 30rem;
- }
-
- .editProfile * {
-
+}
+ 
+ .editProfile .right *{
   padding: 1rem;
  }
 
-
  .editProfile .right .title{
   text-align: right;
-  /* padding-right: 1rem; */
-  border-right: 2px solid grey;
+  border-right: 2px solid grey;noe 
  }
 
  .editProfile .right input{

@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import Map from './map'
+import Input from './input';
+
 
 export default class Profile extends Component {
   constructor(props) {
@@ -10,10 +12,51 @@ export default class Profile extends Component {
       dogname: false,
       dogbreed: false,
       bio: false
-      
+    }
+    this.profileItems = [{
+      name: 'first',
+      title: 'First Name'
+    },{
+      name: 'last',
+      title: 'Last Name'
+    },{
+      name: 'dogname',
+      title: "Dog's Name"
+    },{
+      name: 'dogbreed',
+      title: "Dog's Breed"
+    },{
+      name: 'bio',
+      title: 'Bio'
+    },
+  ]
+  }
+
+  componentDidUpdate(){
+    document.getElementsByTagName('input')[0].focus()
+  }
+
+  selectNextItem(next){
+    if(next){
+      this.setState({[next.name]: true})
     }
   }
+
   render() {
+    const mappedProfile = this.profileItems
+      .map((el,index,arr) => (
+        <Input 
+          key={index}
+          next={arr[index+1]}
+          onTab={(next) => this.selectNextItem(next)} 
+          name={el.name}
+          onClick={() => this.setState({[el.name]: true})} 
+          isInput={this.state[el.name] } 
+          title={el.title} 
+          value={this.props[el.name]} 
+          onChange={(e) => this.props.handleChange(e)} 
+          blur={() => {this.setState({[el.name]: false});this.props.saveData()}}/>
+        ))
     return (
       <>
       <div className='editProfile top'>
@@ -26,11 +69,11 @@ export default class Profile extends Component {
         <form className='right'>
             <p></p>
             <p className='saved'> {this.props.showSaved}</p>
-              <p className='title'>First Name</p>
+              {mappedProfile}
+              {/* <p className='title'>First Name</p>
               {this.state.first 
-              ? <input type='text' name='first' value={this.props.first} onChange={(e) => this.props.handleChange(e)} onBlur={(e) => {this.props.saveData(e); this.setState({first: false})}}/>
+              ? <input type='text' name='first' value={this.props.first} onKeyPress={} onChange={(e) => this.props.handleChange(e)} onBlur={(e) => {this.setState({first: false});this.props.saveData(e)}}/>
               : <p onClick={() => this.setState({first: true})}>{this.props.first}</p>}
-              
               <p className='title'>Last Name</p> 
               {this.state.last 
                 ? <input type='text' name='last' value={this.props.last} onChange={(e) => this.props.handleChange(e)} onBlur={(e) => {this.props.saveData(e); this.setState({last: false})}}/>
@@ -46,7 +89,7 @@ export default class Profile extends Component {
               <p className='title'>Bio</p> 
               {this.state.bio 
               ? <input type='text' name='bio' value={this.props.bio} onChange={(e) => this.props.handleChange(e)} onBlur={(e) => {this.props.saveData(e); this.setState({bio: false})}}/>
-              : <p onClick={() => this.setState({bio: true})}>{this.props.bio}</p>}
+              : <p onClick={() => this.setState({bio: true})}>{this.props.bio}</p>} */}
               <p className='title'>Location</p> 
               <input type='text' name='location' value={this.props.location} onChange={(e) => this.props.handleChange(e)} onBlur={(e) => this.props.saveData(e)}/>
               
