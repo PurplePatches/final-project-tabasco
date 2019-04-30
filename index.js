@@ -27,7 +27,15 @@ app.post('/register', (req, res) => {
 });
 
 app.get('/user', requireUser, function(req, res) {
-    
+
+});
+
+app.get('/user/:id/anything', function(req, res) {
+    if (req.params.id == req.session.userId) {
+        res.json({
+            redirect: true
+        })
+    }
 });
 
 app.get('/logout', (req, res) => {

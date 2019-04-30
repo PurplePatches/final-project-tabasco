@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from './axios';
+import { BrowserRouter, Router, Link } from 'react-router-dom';
 
 export default class App extends React.Component {
     constructor(props) {
@@ -25,6 +26,7 @@ export default class App extends React.Component {
             );
         }
         return (
+            <BrowserRouter>
             <div>
                 <img src="/logo.gif" />
                 <ProfilePic
@@ -32,29 +34,35 @@ export default class App extends React.Component {
                     first={this.state.first}
                     clickHandler={() => this.setState({ isUploaderVisible: true })}
                 />
-
-                <Profile
-                    first={this.state.first}
-                    last={this.state.last}
-                    profilePic={
-                        <ProfilePic
-                            id={this.state.id}
-                            first={this.state.first}
-                            last={this.state.last}
-                            image={this.state.image}
-                            onClick={this.showUploader}
-                        />
-                    }
-                    bioEditor={
-                        <BioEditor
-                            bio={this.state.bio}
-                            setBio={this.setBio}
-                        />
-                    }
-                />
-
+                <div>
+                    <Route path="/" render={(props) => {
+                        return (
+                            <Profile
+                                first={this.state.first}
+                                last={this.state.last}
+                                profilePic={
+                                    <ProfilePic
+                                        id={this.state.id}
+                                        first={this.state.first}
+                                        last={this.state.last}
+                                        image={this.state.image}
+                                        onClick={this.showUploader}
+                                    />
+                                }
+                                bioEditor={
+                                    <BioEditor
+                                        bio={this.state.bio}
+                                        setBio={this.setBio}
+                                    />
+                                }
+                            />
+                        )
+                    }} />
+                    <Route path="/user/:id" component={OtherProfile} />
+                </div>
                 {this.state.isUploaderVisible && <Uploader /> }
             </div>
+            </BrowserRouter>
         )
     }
 }
