@@ -182,6 +182,8 @@ app.post("/bioedit", (req, res) => {
 });
 
 //FRIENDSHIP//
+
+//ORIGINAL REQUEST TO CHECK FRIENDS STATUS
 app.post("/friends", (req, res) => {
     console.log(req.body.otherId, "OTHER ID");
     db.checkFriend(req.session.userId, req.body.otherId).then(({ rows }) => {
@@ -210,6 +212,9 @@ app.post("/friends", (req, res) => {
         }
     });
 });
+
+//ASK FOR FRIENDSHIP
+
 app.post("/ask", (req, res) => {
     db.askFriend(req.session.userId, req.body.otherId, false).then(
         ({ rows }) => {
@@ -218,14 +223,40 @@ app.post("/ask", (req, res) => {
         }
     );
 });
-
+//REFUSE.CANCEL REQUEST / DELETE FRIEND
 app.post("/delete", (req, res) => {
-    db.deleteFriend(req.session.userId, req.body.otherId).then(({ rows }) => {
-        console.log("RESULT AFTER DELETING FRIEND", rows[0]);
-        res.json(rows[0]);
+    db.deleteFriend(req.session.userId, req.body.otherId).then(() => {
+        db.checkFriend(req.session.userId, req.body.otherId).then(
+            ({ rows }) => {
+                console.log("ROWS!", rows[0]);
+                if (rows[0] == undefined) {
+                    console.log("nothing here, no friends");
+                    res.json({
+                        unknown: true
+                    });
+                } else if (
+                    !rows[0].accepted &&
+                    rows[0].sender_id == req.session.userId
+                ) {
+                    console.log(rows[0].sender_id, "SENDER ID!");
+                    console.log("REQUEST SENT BY ME! not accepted yet");
+
+                    res.json({
+                        friendship: false,
+                        requestOwner: true,
+                        unknown: false
+                    });
+                } else if (rows[0].accepted == true) {
+                    res.json({
+                        friendship: true
+                    });
+                }
+            }
+        );
     });
 });
 
+//ACCEPT FRIEND REQUEST
 app.post("/accept", (req, res) => {
     db.acceptFriend(req.session.userId, req.body.otherId, true).then(
         ({ rows }) => {

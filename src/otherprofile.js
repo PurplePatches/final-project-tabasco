@@ -27,8 +27,6 @@ export default class OtherProfile extends React.Component {
                     otherEmail: data.email,
                     otherBio: data.bio
                 });
-                console.log(this.state.otherImage);
-                console.log(data.friendship, "friendship after assig");
             }
         });
     }

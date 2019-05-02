@@ -14,12 +14,26 @@ export default class FriendsButton extends React.Component {
             })
             .then(({ data }) => {
                 console.log("DATA BACK FROM ASK", data);
+                console.log(this.state);
+                this.setState({
+                    friendship: false,
+                    requestOwner: true,
+                    unknown: false
+                });
             });
     }
     deleteFriend() {
-        axios.post("/delete", {
-            otherId: this.props.otherId
-        });
+        axios
+            .post("/delete", {
+                otherId: this.props.otherId
+            })
+            .then(({ data }) => {
+                this.setState({
+                    friendship: false,
+                    requestOwner: false,
+                    unknown: true
+                });
+            });
     }
     acceptFriend() {
         axios
@@ -28,9 +42,9 @@ export default class FriendsButton extends React.Component {
             })
             .then(({ data }) => {
                 this.setState({
-                    friendship: data.friendship,
+                    friendship: true,
                     requestOwner: data.requestOwner,
-                    unknown: data.unknown
+                    unknown: false
                 });
             });
     }
@@ -78,15 +92,26 @@ export default class FriendsButton extends React.Component {
                 {!this.state.friendship &&
                     !this.state.requestOwner &&
                     !this.state.unknown && (
-                        <button
-                            className="btn btn-dark btn-lg hvr-icon-wobble-horizontal"
-                            onClick={e => this.acceptFriend()}
-                        >
-                            {" "}
-                            Accept friend request?{" "}
-                            <i className="fas fa-plus-circle hvr-icon" />
-                        </button>
+                        <div>
+                            <button
+                                className="btn btn-dark btn-lg hvr-icon-wobble-horizontal"
+                                onClick={e => this.acceptFriend()}
+                            >
+                                {" "}
+                                Accept friend request?{" "}
+                                <i className="fas fa-plus-circle hvr-icon" />
+                            </button>
+                            <button
+                                className="btn btn-dark btn-lg hvr-icon-wobble-horizontal"
+                                onClick={e => this.deleteFriend()}
+                            >
+                                {" "}
+                                Refuse friend request?{" "}
+                                <i className="fas fa-plus-circle hvr-icon" />
+                            </button>
+                        </div>
                     )}
+
                 {this.state.friendship && (
                     <button
                         className="btn btn-dark btn-lg hvr-icon-wobble-horizontal"
