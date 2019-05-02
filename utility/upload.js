@@ -38,6 +38,7 @@
     // copied from imageboard, not conifgured yet
 
     app.post("/upload", uploader.single("file"), s3.upload, function(req, res) {
+        console.log("POST request in upload.js");
         const url = config.s3Url + req.file.filename;
         db.uploadPicture(
             req.body.title,

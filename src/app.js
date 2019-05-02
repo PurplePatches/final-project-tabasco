@@ -47,7 +47,12 @@ export default class App extends React.Component {
                     />
                 </nav>
                 {this.state.isUploaderVisible && (
-                    <Uploader setImage={image => this.setState({ image })} />
+                    <Uploader
+                        setImage={image => this.setState({ image })}
+                        setUploaderVisible={() => {
+                            this.setState({ isUploaderVisible: false });
+                        }}
+                    />
                 )}
             </React.Fragment>
         );
