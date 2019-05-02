@@ -10,9 +10,3 @@ CREATE TABLE users (
     bio VARCHAR,
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-
-
-UPDATE users
-SET url = 'https://s3.amazonaws.com/socialnetworksabatini/3dDKt4bZaTCIm6T0U_YiSOFCLl9Bwbxq.jpg'
-WHERE id = 1;

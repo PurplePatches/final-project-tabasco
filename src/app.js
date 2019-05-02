@@ -19,13 +19,15 @@ export default class App extends React.Component {
                 id: data.id,
                 firstname: data.firstname,
                 lastname: data.lastname,
-                url: data.url
+                url: data.url,
+                bio: data.bio
             });
             console.log("DATA", data);
         });
     }
 
     render() {
+        console.log("state", this.state);
         if (!this.state.id) {
             return (
                 <img
@@ -60,15 +62,19 @@ export default class App extends React.Component {
                                     <Profile
                                         firstname={this.state.firstname}
                                         lastname={this.state.lastname}
-                                        profilepicurl={
-                                            <ProfilePic
-                                                id={this.state.userId}
-                                                firstname={this.state.firstname}
-                                                lastname={this.state.lastname}
-                                                url={this.state.url}
-                                                onClick={this.showU}
-                                            />
-                                        }
+                                        imageurl={this.state.url}
+                                        id={this.state.userId}
+                                        onClick={this.showU}
+                                        // />
+                                        // url={
+                                        //     <ProfilePic
+                                        //         id={this.state.userId}
+                                        //         firstname={this.state.firstname}
+                                        //         lastname={this.state.lastname}
+                                        //         url={this.state.url}
+                                        //         onClick={this.showU}
+                                        //     />
+                                        // }
                                         bioEditor={
                                             <BioEditor
                                                 bio={this.state.bio}

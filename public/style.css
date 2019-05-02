@@ -4,6 +4,11 @@
     color: silver;
 }
 
+img {
+    height: 200px;
+    width: 200px;
+}
+
 body {
     background-image: url("https://media.giphy.com/media/RHIKETUlUINYvV7CAO/source.gif");
 }
@@ -13,8 +18,6 @@ title {
 }
 
 main {
-    display: flex;
-    flex-direction: column;
     background-image: url("https://media.giphy.com/media/RHIKETUlUINYvV7CAO/source.gif");
     background-size: cover;
 }
@@ -151,19 +154,45 @@ a:hover {
 #wrapuploader {
     top: 0;
     left: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-image: url("https://media.giphy.com/media/RHIKETUlUINYvV7CAO/source.gif");
     position: fixed;
     height: 100vh;
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .uploader {
     z-index: 100000;
-    background-color: rgba(255, 255, 255, 0.5);
-    height: 800px;
-    width: 100%;
+    height: 600px;
+    width: 400px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    border-radius: 40px;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+#form {
+    margin: 30px;
+}
+
+#nameprofile {
+    font-family: "Piedra", cursive;
+    font-size: 40px;
+    text-decoration: underline;
+}
+
+textarea {
+    height: 100px;
+    width: 500px;
+    font-family: "Piedra", cursive;
+    font-size: 20px;
+    color: silver;
+}
+
+#log {
+    color: silver;
 }

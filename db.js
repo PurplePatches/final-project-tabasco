@@ -31,6 +31,15 @@ exports.updateUsers = function updateUsers(url, id) {
     return db.query(q, params);
 };
 
+exports.updateUsersBio = function updateUsers(bio, id) {
+    let q = `UPDATE users
+    SET bio = $1
+    WHERE id = $2;`;
+
+    let params = [bio || null, id];
+    return db.query(q, params);
+};
+
 //((((((((((((((((((((((((((((((((((((((((((     LOGIN     ))))))))))))))))))))))))))))))))))))))))))
 
 exports.getPassword = function getPassword(email) {

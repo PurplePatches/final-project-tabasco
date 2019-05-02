@@ -64,9 +64,10 @@ app.use(function(req, res, next) {
 //---------      UPLOADER     --------------//
 
 app.post("/uploader", uploader.single("file"), s3.upload, function(req, res) {
-    console.log("req.file: ", req.file);
     const url = config.s3Url + req.file.filename;
     let userid = req.session.userId;
+    let bio = req.body.bio;
+    console.log("bio", bio);
 
     db.updateUsers(url, userid)
         .then(result => {
@@ -75,9 +76,15 @@ app.post("/uploader", uploader.single("file"), s3.upload, function(req, res) {
         .catch(err => {
             console.log("error in update users", err);
         });
+    db.updateUsersBio(bio, userid)
+        .then(result => {
+            console.log("result in update users bio", result);
+        })
+        .catch(err => {
+            console.log("error in updare users bio");
+        });
     db.insertImage(url, userid)
         .then(function(results) {
-            console.log("results in insert image", results);
             res.json(results.rows);
         })
         .catch(function(err) {
@@ -126,6 +133,22 @@ app.post("/register", (req, res) => {
         });
 });
 
+//-----------        BIO         -----------------//
+
+app.post("/bio", function(req, res) {
+    let userid = req.session.userId;
+    let bio = req.body.bio;
+    console.log("bio", bio);
+
+    db.updateUsersBio(bio, userid)
+        .then(result => {
+            console.log("result in update users bio", result);
+        })
+        .catch(err => {
+            console.log("error in updare users bio");
+        });
+});
+
 //-----------         USERS       ----------------//
 
 app.get("/users", (req, res) => {
@@ -162,9 +185,7 @@ app.get("/welcome", (req, res) => {
 
 app.post("/login", async (req, res) => {
     let email = req.body.email;
-    console.log("EMAIL in Login", email);
     let newpassword = req.body.newpassword;
-    console.log("newpassword in Login", newpassword);
 
     let password = await db
         .getPassword(email)
@@ -208,6 +229,8 @@ app.get("*", (req, res) => {
         res.sendFile(__dirname + "/index.html");
     }
 });
+
+//---------------------------------------//
 
 app.listen(8080, function() {
     chalkAnimation.neon("L I S T E N I N G . . .");
