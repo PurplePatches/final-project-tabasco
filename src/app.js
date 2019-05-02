@@ -45,7 +45,7 @@ export default class App extends React.Component {
                             <Route
                                 exact
                                 path="/"
-                                render={props => {
+                                render={() => {
                                     return (
                                         <Profile
                                             first={this.state.first_name}
@@ -81,6 +81,7 @@ export default class App extends React.Component {
                                 path="/user/:id"
                                 render={props => (
                                     <OtherProfile
+                                        loggedId={this.state.id}
                                         key={props.match.url}
                                         match={props.match}
                                         history={props.history}

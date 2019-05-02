@@ -43,6 +43,7 @@ span#profilepic {
     width: 60%;
     align-self: center;
     justify-self: center;
+    padding-bottom: 80px;
 }
 #userdata span {
     background: beige;
@@ -51,6 +52,7 @@ span#profilepic {
     padding: 8px;
     box-sizing: border-box;
     display: flex;
+    flex-direction: column;
     width: 150px;
     height: 150px;
 }
@@ -189,6 +191,13 @@ button {
     cursor: pointer;
     transition: 800ms ease all;
     outline: none;
+}
+button.friendbutton {
+    font-size: 13px;
+    padding: 0;
+    margin-top: 20px;
+    height: 40px;
+    min-width: 100%;
 }
 button:hover {
     background: #fff;

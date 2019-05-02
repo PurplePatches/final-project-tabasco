@@ -158,7 +158,7 @@ app.get("/user", (request, response) => {
     }
 });
 app.get("/user/:id/json", (request, response) => {
-    console.log(request.params.id, request.session.userId);
+    // console.log(request.params.id, request.session.userId);
     if (request.params.id != request.session.userId) {
         db.getUser(request.params.id)
             .then(({ rows }) => {
@@ -175,6 +175,57 @@ app.get("/user/:id/json", (request, response) => {
         });
     }
 });
+
+app.get("/friendship/status/:id", (request, response) => {
+    console.log(
+        "the id i'm making the request with is ",
+        request.params.id,
+        request.session.userId
+    );
+    db.friendshipStatus(request.session.userId, request.params.id)
+        .then(({ rows }) => {
+            response.json(rows[0]);
+            console.log("This is what i get when i check it", rows);
+        })
+        .catch(err => console.log("Can't get the friendship status", err));
+});
+app.post("/friendship/send/:id", (request, response) => {
+    console.log(
+        "Friendship request sent",
+        request.session.userId,
+        request.params.id
+    );
+    db.sendFriendshipRequest(request.session.userId, request.params.id).then(
+        ({ rows }) => {
+            response.json(rows);
+        }
+    );
+});
+app.post("/friendship/delete/:id", (request, response) => {
+    console.log(
+        "Friendship request DELETED",
+        request.session.userId,
+        request.params.id
+    );
+    db.deleteFriendshipRequest(request.session.userId, request.params.id).then(
+        ({ rows }) => {
+            response.json(rows);
+        }
+    );
+});
+app.post("/friendship/accept/:id", (request, response) => {
+    console.log(
+        "Friendship request ACCEPTED",
+        request.session.userId,
+        request.params.id
+    );
+    db.acceptFriendshipRequest(request.session.userId, request.params.id).then(
+        ({ rows }) => {
+            response.json(rows);
+        }
+    );
+});
+
 app.get("*", (request, response) => {
     if (!request.session.userId && request.url != "/welcome") {
         response.redirect("/welcome");

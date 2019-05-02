@@ -63,6 +63,43 @@ exports.newPicHistory = function newPicHistory(url, userId) {
     let params = [url, userId];
     return db.query(q, params);
 };
+
+/////FriendshipStatus
+exports.friendshipStatus = function friendshipStatus(userId, profileId) {
+    let q = `SELECT * from friendships where
+            (id_sender=$1 AND id_recepient=$2)
+            OR(id_sender=$2 AND id_recepient=$1);`;
+    let params = [userId, profileId];
+    return db.query(q, params);
+};
+exports.sendFriendshipRequest = function sendFriendshipRequest(
+    userId,
+    profileId
+) {
+    let q =
+        "INSERT INTO friendships (id_sender, id_recepient, status) VALUES ($1, $2, false) RETURNING * ";
+    let params = [userId, profileId];
+    return db.query(q, params);
+};
+exports.deleteFriendshipRequest = function deleteFriendshipRequest(
+    userId,
+    profileId
+) {
+    let q =
+        "DELETE FROM friendships WHERE (id_sender = $1 AND id_recepient = $2) OR (id_sender = $2 AND id_recepient = $1) RETURNING * ";
+    let params = [userId, profileId];
+    return db.query(q, params);
+};
+
+exports.acceptFriendshipRequest = function acceptFriendshipRequest(
+    userId,
+    profileId
+) {
+    let q =
+        "UPDATE friendships SET status = true WHERE id_sender = $2 AND id_recepient = $1 RETURNING * ";
+    let params = [userId, profileId];
+    return db.query(q, params);
+};
 /////LOGIN
 exports.userPassword = function userPassword(email) {
     let q = "SELECT * FROM users WHERE email = $1;";

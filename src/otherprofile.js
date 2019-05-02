@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "./axios";
+import FriendButton from "./friendbutton";
 export default class OtherProfile extends React.Component {
     constructor(props) {
         super(props);
@@ -14,7 +15,7 @@ export default class OtherProfile extends React.Component {
                 this.props.history.push("/");
             }
 
-            console.log("Component OtherProfile has mounted", this.state);
+            console.log("Component OtherProfile has mounted", this.props);
         });
     }
     render() {
@@ -25,6 +26,10 @@ export default class OtherProfile extends React.Component {
                         <img
                             src={this.state.image_url || "/img/default.png"}
                             alt=""
+                        />
+                        <FriendButton
+                            loggedId={this.props.loggedId}
+                            id={this.props.match.params.id}
                         />
                     </span>
                     <article>
