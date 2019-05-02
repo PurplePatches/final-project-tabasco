@@ -48,7 +48,7 @@ export default class Uploader extends React.Component {
             <React.Fragment>
                 <div className="outer-modal" onClick={this.closeModal}>
                     <div className="inner-modal">
-                        <p>Would you like to change your profile picture?</p>
+                        <h3>Would you like to change your profile picture?</h3>
                         <input
                             onChange={this.saveFileToState}
                             type="file"
@@ -56,12 +56,20 @@ export default class Uploader extends React.Component {
                             accept="image/*"
                             id="browse-button"
                         />
-                        <button onClick={this.uploadFile} id="upload-button">
-                            Upload
-                        </button>
-                        <button onClick={this.closeModal} id="cancel-button">
-                            Cancel
-                        </button>
+                        <div className="upload-buttons">
+                            <button
+                                onClick={this.uploadFile}
+                                id="upload-button"
+                            >
+                                Upload
+                            </button>
+                            <button
+                                onClick={this.closeModal}
+                                id="cancel-button"
+                            >
+                                Cancel
+                            </button>
+                        </div>
                     </div>
                 </div>
             </React.Fragment>
@@ -70,4 +78,3 @@ export default class Uploader extends React.Component {
 }
 
 // TO DO:
-// uploadFile() not working

@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "./axios";
 import ProfilePic from "./profilepic";
+import Profile from "./profile";
 import Uploader from "./uploader";
 
 export default class App extends React.Component {
@@ -12,11 +13,13 @@ export default class App extends React.Component {
         this.logOut = this.logOut.bind(this);
         this.updatePicture = this.updatePicture.bind(this);
     }
+
     componentDidMount() {
         axios.get("/user").then(({ data }) => {
             this.setState(data[0]);
         });
     }
+
     logOut() {
         axios.get("/logout").then(() => {
             location.replace("/welcome");
@@ -48,6 +51,7 @@ export default class App extends React.Component {
                         }
                     />
                 </nav>
+                <Profile />
                 {this.state.isUploaderVisible && (
                     <Uploader
                         setUploaderVisible={() => {
@@ -60,3 +64,6 @@ export default class App extends React.Component {
         );
     }
 }
+
+// TO DO:
+// how to add and remove blur Profile
