@@ -197,15 +197,13 @@ app.post("/friends", (req, res) => {
         ) {
             console.log(rows[0].sender_id, "SENDER ID!");
             console.log("REQUEST SENT BY ME! not accepted yet");
-            rows[0].friendship = false;
-            rows[0];
-            console.log(rows[0].friendship, "friendship after assig");
+
             res.json({
                 friendship: false,
                 requestOwner: true,
                 unknown: false
             });
-        } else if (rows[0].accepted) {
+        } else if (rows[0].accepted == true) {
             res.json({
                 friendship: true
             });
@@ -226,6 +224,14 @@ app.post("/delete", (req, res) => {
         console.log("RESULT AFTER DELETING FRIEND", rows[0]);
         res.json(rows[0]);
     });
+});
+
+app.post("/accept", (req, res) => {
+    db.acceptFriend(req.session.userId, req.body.otherId, true).then(
+        ({ rows }) => {
+            res.json(rows[0]);
+        }
+    );
 });
 
 app.get("*", function(req, res) {

@@ -22,9 +22,17 @@ export default class FriendsButton extends React.Component {
         });
     }
     acceptFriend() {
-        axios.post("/accept", {
-            otherId: this.props.otherId
-        });
+        axios
+            .post("/accept", {
+                otherId: this.props.otherId
+            })
+            .then(({ data }) => {
+                this.setState({
+                    friendship: data.friendship,
+                    requestOwner: data.requestOwner,
+                    unknown: data.unknown
+                });
+            });
     }
     componentDidMount() {
         console.log(this.props.otherId, "OTHER ID OK?");

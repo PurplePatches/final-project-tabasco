@@ -59,7 +59,7 @@ exports.deleteFriend = function deleteFriend(userId, otherId) {
 };
 exports.acceptFriend = function acceptFriend(userId, otherId, boolean) {
     let q = `UPDATE friendship SET accepted = $3 WHERE (recipient_id = $1 AND sender_id = $2)
-    OR (recipient_id = $2 AND sender_id = $1) RETURNING accepted`;
+    OR (recipient_id = $2 AND sender_id = $1) RETURNING *`;
     let params = [userId, otherId, boolean];
     return db.query(q, params);
 };
