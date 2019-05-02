@@ -10,7 +10,13 @@ export default class Bio extends React.Component {
         };
         this.submit = this.submit.bind(this);
         // this.handleInput = this.handleInput.bind(this);
-
+        if (this.props.bio == null) {
+            this.state = {
+                showform: true,
+                showBio: false,
+                showlink: false
+            };
+        }
         console.log("In Bio:", this.props);
     }
 
@@ -56,7 +62,7 @@ export default class Bio extends React.Component {
                 {this.state.showform && (
                     <form>
                         <label htmlFor="">
-                            Bio
+                            Update Bio
                             <textarea onInput={handleInput} name="bio">
                                 {this.state.bio || this.props.bio}
                             </textarea>
@@ -66,7 +72,7 @@ export default class Bio extends React.Component {
                             Save the Bio
                         </button>
                     </form>
-                )}{" "}
+                )}
             </div>
         );
     }

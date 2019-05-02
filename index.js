@@ -157,6 +157,24 @@ app.get("/user", (request, response) => {
         });
     }
 });
+app.get("/user/:id/json", (request, response) => {
+    console.log(request.params.id, request.session.userId);
+    if (request.params.id != request.session.userId) {
+        db.getUser(request.params.id)
+            .then(({ rows }) => {
+                console.log("Rows in the user are", rows);
+                response.json(rows);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    } else {
+        console.log("here i am in the else");
+        response.json({
+            user: true
+        });
+    }
+});
 app.get("*", (request, response) => {
     if (!request.session.userId && request.url != "/welcome") {
         response.redirect("/welcome");
