@@ -16,7 +16,7 @@ export default function ProfilePic({
             <img
                 className="test"
                 src={profilePic || "../default.jpg"}
-                alt={(first, last, email)}
+                alt={first + " " + last}
                 onClick={clickHandler}
             />
 

@@ -154,8 +154,76 @@ app.get("/user", (req, res) => {
     }
 });
 
+app.get("/user/:id/nope", function(req, res) {
+    if (req.params.id == req.session.userId) {
+        res.json({
+            redirect: true
+        });
+    } else {
+        db.retrieveUser(req.params.id)
+            .then(({ rows }) => {
+                console.log(rows, "CHECKING /user/ID route");
+                console.log(rows[0].id, "ROWS ID");
+                res.json(rows[0]);
+            })
+
+            .catch(() => {
+                res.json({
+                    redirect: true
+                });
+            });
+    }
+}); //.json because must be named differently
+
 app.post("/bioedit", (req, res) => {
     db.updateBio(req.session.userId, req.body.bio).then(({ rows }) => {
+        res.json(rows[0]);
+    });
+});
+
+//FRIENDSHIP//
+app.post("/friends", (req, res) => {
+    console.log(req.body.otherId, "OTHER ID");
+    db.checkFriend(req.session.userId, req.body.otherId).then(({ rows }) => {
+        console.log("ROWS!", rows[0]);
+        if (rows[0] == undefined) {
+            console.log("nothing here, no friends");
+            res.json({
+                unknown: true
+            });
+        } else if (
+            !rows[0].accepted &&
+            rows[0].sender_id == req.session.userId
+        ) {
+            console.log(rows[0].sender_id, "SENDER ID!");
+            console.log("REQUEST SENT BY ME! not accepted yet");
+            rows[0].friendship = false;
+            rows[0];
+            console.log(rows[0].friendship, "friendship after assig");
+            res.json({
+                friendship: false,
+                requestOwner: true,
+                unknown: false
+            });
+        } else if (rows[0].accepted) {
+            res.json({
+                friendship: true
+            });
+        }
+    });
+});
+app.post("/ask", (req, res) => {
+    db.askFriend(req.session.userId, req.body.otherId, false).then(
+        ({ rows }) => {
+            console.log("RESULT AFTER ASKING FRIEND", rows[0]);
+            res.json(rows[0]);
+        }
+    );
+});
+
+app.post("/delete", (req, res) => {
+    db.deleteFriend(req.session.userId, req.body.otherId).then(({ rows }) => {
+        console.log("RESULT AFTER DELETING FRIEND", rows[0]);
         res.json(rows[0]);
     });
 });

@@ -36,3 +36,30 @@ exports.updateBio = function updateBio(id, bio) {
     let params = [id, bio];
     return db.query(q, params);
 };
+
+exports.askFriend = function askFriend(userId, otherId, boolean) {
+    let q = `INSERT INTO friendship (sender_id, recipient_id, accepted) VALUES ($1, $2, $3) returning *`;
+    let params = [userId, otherId, boolean];
+    return db.query(q, params);
+};
+
+exports.checkFriend = function checkFriend(userId, otherId) {
+    let q = `SELECT * FROM friendship
+WHERE (recipient_id = $1 AND sender_id = $2)
+OR (recipient_id = $2 AND sender_id = $1)`;
+    let params = [userId, otherId];
+    return db.query(q, params);
+};
+
+exports.deleteFriend = function deleteFriend(userId, otherId) {
+    let q = `DELETE FROM friendship WHERE (recipient_id = $1 AND sender_id = $2)
+    OR (recipient_id = $2 AND sender_id = $1)`;
+    let params = [userId, otherId];
+    return db.query(q, params);
+};
+exports.acceptFriend = function acceptFriend(userId, otherId, boolean) {
+    let q = `UPDATE friendship SET accepted = $3 WHERE (recipient_id = $1 AND sender_id = $2)
+    OR (recipient_id = $2 AND sender_id = $1) RETURNING accepted`;
+    let params = [userId, otherId, boolean];
+    return db.query(q, params);
+};

@@ -32,10 +32,10 @@ export default class BioEditor extends React.Component {
                                     <mark className="mb0">
                                         {this.props.bio}
                                     </mark>
-                                    <footer className="blockquote-footer">
-                                        by <cite>{this.props.first}</cite>
-                                    </footer>
                                 </p>
+                                <div className="blockquote-footer">
+                                    by <cite>{this.props.first}</cite>
+                                </div>
                             </blockquote>
                             <button
                                 className="btn btn-dark btn-lg hvr-icon-wobble-horizontal"
@@ -66,9 +66,11 @@ export default class BioEditor extends React.Component {
                 {this.state.inEditMode && (
                     <div className="edit-container">
                         <p className="text-muted">Edit your bio text below</p>
-                        <textarea name="bio" onChange={handleInput}>
-                            TEST
-                        </textarea>
+                        <textarea
+                            name="bio"
+                            onChange={handleInput}
+                            placeholder="Type your new bio here"
+                        />
                         <button
                             className="btn btn-dark btn-lg hvr-icon-wobble-horizontal"
                             onClick={() => this.submit()}

@@ -18,6 +18,13 @@ h2 {
     font-family: "Inconsolata", monospace;
     font-weight: 900;
 }
+.btn {
+    word-break: break-word;
+    white-space: normal;
+    max-w: ;
+    max-width: 269px;
+    margin: 1rem;
+}
 .spinner {
     display: grid;
 
@@ -38,6 +45,9 @@ mark {
     grid-area: auto / span 2;
     width: -webkit-fill-available;
     text-align: center;
+    background: white;
+    margin-bottom: 1rem;
+    padding: 1rem;
 }
 .title {
     font-family: ;
@@ -86,6 +96,7 @@ mark {
     width: min-content;
     padding: 5%;
 }
+
 .profile {
     display: grid;
     background: white;
