@@ -33,14 +33,14 @@ export default class Login extends React.Component {
         return (
             <div id="login">
                 {this.state.error && <div className="error">Ooops</div>}
-                <p className="inputtitle">E-mail:</p>
+
                 <input
                     onChange={handleInput}
                     type="email"
                     name="email"
                     placeholder="e-mail"
                 />
-                <p className="inputtitle">Password:</p>
+
                 <input
                     onChange={handleInput}
                     type="password"

@@ -8,11 +8,8 @@ export default class Welcome extends React.Component {
     render() {
         return (
             <div>
-                <img
-                    className="logo"
-                    src="https://media.giphy.com/media/l0K4kWJir91VEoa1W/source.gif"
-                />
-                <h1>SOCIAL NETWORK WELCOME</h1>
+                <img className="logo" src="et.jpg" />
+                <h1>SPACED</h1>
                 <div>
                     <HashRouter>
                         <div id="boxregister">
