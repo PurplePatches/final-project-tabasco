@@ -4,23 +4,23 @@ import axios from "./axios";
 export default class Uploader extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            file: {}
+        };
         this.uploadFile = this.uploadFile.bind(this);
         this.closeModal = this.closeModal.bind(this);
+        this.saveFileToState = this.saveFileToState.bind(this);
     }
 
     // WORK IN PROGRESS:
     uploadFile() {
-        console.log("uploadFile() fires");
         const formData = new FormData();
-        formData.append("file", this.form.file);
-        var app = this;
+        formData.append("file", this.state.file[0]);
         axios
             .post("/upload", formData)
-            .then(function(response) {
-                app.images.unshift({
-                    url: response.data[0].url
-                });
+            .then(response => {
+                this.props.updatePicture(response.data[0].user_picture);
+                this.props.setUploaderVisible();
             })
             .catch(err => {
                 console.log("uploadeFile() POST /upload error: ", err);
@@ -32,12 +32,14 @@ export default class Uploader extends React.Component {
             e.target.className == "outer-modal" ||
             e.target.id == "cancel-button"
         ) {
-            console.log("outer modal OR cancel button clicked");
             this.props.setUploaderVisible();
         } else if (e.target.id == "upload-button") {
-            console.log("upload button clicked");
             return null;
         }
+    }
+
+    saveFileToState(e) {
+        this.setState({ file: e.target.files });
     }
 
     // WORK IN PROGRESS:
@@ -48,6 +50,7 @@ export default class Uploader extends React.Component {
                     <div className="inner-modal">
                         <p>Would you like to change your profile picture?</p>
                         <input
+                            onChange={this.saveFileToState}
                             type="file"
                             name="file"
                             accept="image/*"

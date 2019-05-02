@@ -15,7 +15,7 @@
 
     const diskStorage = multer.diskStorage({
         destination: function(req, file, callback) {
-            callback(null, __dirname + "/uploads");
+            callback(null, path.join(__dirname, "../uploads"));
         },
         filename: function(req, file, callback) {
             uidSafe(24).then(function(uid) {
@@ -35,17 +35,9 @@
         }
     });
 
-    // copied from imageboard, not conifgured yet
-
     app.post("/upload", uploader.single("file"), s3.upload, function(req, res) {
-        console.log("POST request in upload.js");
         const url = config.s3Url + req.file.filename;
-        db.uploadPicture(
-            req.body.title,
-            req.body.description,
-            req.body.username,
-            url
-        ).then(data => {
+        db.uploadPicture(req.session.userId, url).then(data => {
             res.json(data.rows);
         });
     });

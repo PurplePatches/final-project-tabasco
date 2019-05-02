@@ -10,6 +10,7 @@ export default class App extends React.Component {
             isUploaderVisible: false
         };
         this.logOut = this.logOut.bind(this);
+        this.updatePicture = this.updatePicture.bind(this);
     }
     componentDidMount() {
         axios.get("/user").then(({ data }) => {
@@ -22,10 +23,11 @@ export default class App extends React.Component {
         });
     }
 
+    updatePicture(image) {
+        this.setState({ user_picture: image });
+    }
+
     render() {
-        // if (!this.state.id) {
-        //     return null;
-        // }
         return (
             <React.Fragment>
                 <nav className="navigation">
@@ -48,10 +50,10 @@ export default class App extends React.Component {
                 </nav>
                 {this.state.isUploaderVisible && (
                     <Uploader
-                        setImage={image => this.setState({ image })}
                         setUploaderVisible={() => {
                             this.setState({ isUploaderVisible: false });
                         }}
+                        updatePicture={this.updatePicture}
                     />
                 )}
             </React.Fragment>

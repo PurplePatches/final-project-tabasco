@@ -39,12 +39,12 @@
         return db.query(query, parameters);
     };
 
-    exports.uploadPicture = function uploadPicture(id, url) {
+    exports.uploadPicture = function uploadPicture(id, user_picture) {
         let query = `UPDATE users
-        SET url = $2
+        SET user_picture = $2
         WHERE id = $1
         RETURNING *`;
-        let parameters = [id || null, url || null];
+        let parameters = [id || null, user_picture || null];
         return db.query(query, parameters);
     };
 
