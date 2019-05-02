@@ -18,9 +18,22 @@ exports.login = function(email) {
     return db.query(q, [email]);
 };
 
+exports.getUserInfo = function(id) {
+    let q = `SELECT * FROM users
+    WHERE id = $1`;
+    return db.query(q, [id]);
+};
+
 exports.uploadImage = function(image, id) {
     let q = `UPDATE users SET image = $1
     WHERE id = $2`;
     let params = [image, id];
+    return db.query(q, params);
+};
+
+exports.uploadBio = function(bio, id) {
+    let q = `UPDATE users SET bio = $1
+    WHERE id = $2`;
+    let params = [bio, id];
     return db.query(q, params);
 };

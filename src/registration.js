@@ -10,7 +10,7 @@ export default class Registration extends React.Component {
         this.saveData = this.saveData.bind(this);
     }
     saveInput(e) {
-        console.log(e.target.value);
+        // console.log(e.target.value);
         this.setState({
             [e.target.name]: e.target.value
         });
@@ -33,7 +33,7 @@ export default class Registration extends React.Component {
     }
 
     render() {
-        console.log("show me this.state: ", this.state);
+        // console.log("show me this.state: ", this.state);
         return (
             <div id="form">
                 <p className="pleaseRegister">Register to enter our site</p>

@@ -10,7 +10,10 @@ import { BrowserRouter } from "react-router-dom";
 export default class App extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            isUploaderVisible: false,
+            mode: ""
+        };
     }
 
     componentDidMount() {
@@ -23,7 +26,13 @@ export default class App extends React.Component {
                 alert(err);
             });
     }
+
+    updateBio(bio) {
+        this.setState({ mode: edit });
+    }
+
     render() {
+        console.log("state:", this.state);
         if (!this.state.id) {
             return (
                 <div>
@@ -31,32 +40,30 @@ export default class App extends React.Component {
                 </div>
             );
         }
-        const { id, firstName, lastName, image, bio } = this.state;
+        const { firstName, lastName, image, bio } = this.state;
 
         return (
             <div>
-                <Logo />
-                <ProfilePic
+                <div className="test">
+                    <Logo />
+                    <ProfilePic
+                        firstName={firstName}
+                        lastName={lastName}
+                        image={image}
+                        clickHandler={() => {
+                            this.setState({ isUploaderVisible: true });
+                        }}
+                    />
+                </div>
+                <Profile
                     firstName={firstName}
                     lastName={lastName}
                     image={image}
                     clickHandler={() => {
-                        this.setState({ isUploaderVisible: true });
+                        this.setState({ isUploaderVisible: true, bio: bio });
                     }}
                 />
-                <Profile
-                    firstName={firstName}
-                    lastName={lastName}
-                    profilePic={
-                        <ProfilePic
-                            id={id}
-                            firstName={firstName}
-                            lastName={lastName}
-                            image={image}
-                            onClick={this.showUploader}
-                        />
-                    }
-                />
+
                 {this.state.isUploaderVisible && (
                     <Uploader
                         setUrl={image =>
@@ -65,9 +72,6 @@ export default class App extends React.Component {
                                 isUploaderVisible: false
                             })
                         }
-                        clickHandler={() => {
-                            this.setState({ isUploaderVisible: false });
-                        }}
                     />
                 )}
             </div>

@@ -1,10 +1,55 @@
 import React from "react";
+import axios from "./axios";
 
-export default function BioEditor(props) {
-    return (
-        <div>
-            <p>This is the bioEditor</p>
-            <textarea value="" />
-        </div>
-    );
+export default class BioEditor extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { mode: "" };
+        this.editBio = this.editBio.bind(this);
+        this.switchMode = this.switchMode.bind(this);
+        this.saveInput = this.saveInput.bind(this);
+    }
+
+    saveInput(e) {
+        this.setState({
+            [e.target.name]: e.target.value
+        });
+    }
+
+    editBio() {
+        this.setState({ mode: "" });
+        console.log("I want to see this.state: ", this.state.bio);
+        axios
+            .post("/bio", {
+                bio: this.state.bio
+            })
+            .then(({ data }) => {
+                console.log("show me data in POST/editBio: ", data);
+            });
+    }
+
+    switchMode() {
+        this.setState({ mode: "edit" });
+    }
+    render() {
+        if (!this.state.mode) {
+            return (
+                <div className="bioAdd">
+                    <p>Tell others about yourself</p>
+                    <button onClick={this.switchMode}>Add</button>
+                </div>
+            );
+        } else {
+            return (
+                <div className="bioEdit">
+                    <textarea
+                        defaultValue="This is the bioEditor"
+                        name="bio"
+                        onChange={e => this.saveInput(e)}
+                    />
+                    <button onClick={this.editBio}>Save</button>
+                </div>
+            );
+        }
+    }
 }

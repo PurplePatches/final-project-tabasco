@@ -1,6 +1,7 @@
 import React from "react";
 
 export default function ProfilePic(props) {
+    console.log("props:", props);
     return (
         <img
             className="profilePic"

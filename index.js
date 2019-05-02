@@ -100,6 +100,7 @@ app.post("/login", (req, res) => {
                     req.session.firstName = user.rows[0].first_name;
                     req.session.lastName = user.rows[0].last_name;
                     req.session.image = user.rows[0].image;
+                    req.session.bio = user.rows[0].bio;
                     if (isAuthorized == true) {
                         res.json({
                             success: true
@@ -126,11 +127,13 @@ app.post("/login", (req, res) => {
 });
 
 app.get("/user", (req, res) => {
+    // console.log("POST/user: ", req.session);
     res.json({
         id: req.session.userId,
         firstName: req.session.firstName,
-        lastName: req.session.lastName
-        // image: req.session.image
+        lastName: req.session.lastName,
+        image: req.session.image,
+        bio: req.session.bio
     });
 });
 
@@ -148,7 +151,26 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
             }
         })
         .catch(err => {
-            console.log(err);
+            console.log("error in server upload", err);
+        });
+});
+
+app.post("/bio", (req, res) => {
+    const bio = req.body.bio;
+    console.log("show me req.body: ", req.session, req.body);
+    db.uploadBio(bio, req.session.userId)
+        .then(results => {
+            if (results.rowCount == 1) {
+                res.json({
+                    success: true,
+                    bio: bio
+                });
+            } else {
+                res.json({ err: true });
+            }
+        })
+        .catch(err => {
+            console.log("error in server upload", err);
         });
 });
 

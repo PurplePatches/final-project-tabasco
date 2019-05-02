@@ -19,6 +19,7 @@ export default class Uploader extends React.Component {
         var formData = new FormData();
         formData.append("file", this.state.file);
         axios.post("/upload", formData).then(({ data }) => {
+            console.log("data", data);
             this.props.setUrl(data.url);
         });
     }
