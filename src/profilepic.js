@@ -1,13 +1,12 @@
 import React from "react";
-// import axios from "./axios";
 
 export default function ProfilePic(props) {
     return (
-        <div className="headerPic">
+        <div className="profilePic">
             <img
                 onClick={props.toggleUploader}
-                className="profilepic"
-                src={props.image || "/default.png"}
+                className="profileImage"
+                src={props.picture || "/default.png"}
             />
         </div>
     );

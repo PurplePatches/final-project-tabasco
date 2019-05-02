@@ -48,3 +48,13 @@ app.post("/uploadpic", uploader.single("file"), s3.upload, (req, res) => {
             console.log(err);
         });
 });
+
+app.post("/editbio", (req, res) => {
+    db.editBio(req.session.userId, req.body.bio)
+        .then(({ rows }) => {
+            res.json(rows[0]);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+});

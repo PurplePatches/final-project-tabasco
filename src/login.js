@@ -30,7 +30,7 @@ export default class Login extends React.Component {
     }
     render() {
         return (
-            <div>
+            <div className="login">
                 {this.state.error && (
                     <div className="error">
                         Oooops, something broke, YOU BROKE ITTTT!!!
@@ -52,7 +52,8 @@ export default class Login extends React.Component {
                     />
                     <button onClick={this.login}>Login</button>
                 </form>
-                <Link to="/">Click here to register!</Link>
+                <p>Don{"'"}t have an account yet?</p>
+                <Link to="/">Register!</Link>
             </div>
         );
     }

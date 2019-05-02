@@ -32,7 +32,7 @@ export default class Register extends React.Component {
     }
     render() {
         return (
-            <div>
+            <div className="register">
                 {this.state.error && (
                     <div className="error">
                         Oooops, something broke, YOU BROKE ITTTT!!!
@@ -66,7 +66,8 @@ export default class Register extends React.Component {
                     />
                     <button onClick={this.register}>Submit</button>
                 </form>
-                <Link to="/login">Click here to Log in!</Link>
+                <p>Already have an account?</p>
+                <Link to="/login">Log in!</Link>
             </div>
         );
     }

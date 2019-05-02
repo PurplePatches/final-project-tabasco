@@ -15,7 +15,10 @@ export default class Header extends React.Component {
         return (
             <div className="header">
                 <img className="logo" src="/logo.png" />
-                <button onClick={this.logout}>Logout</button>
+                <button id="logout" onClick={this.logout}>
+                    Logout
+                </button>
+                {this.props.ProfilePic}
             </div>
         );
     }

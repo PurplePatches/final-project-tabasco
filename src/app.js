@@ -5,6 +5,8 @@ import axios from "./axios";
 import Header from "./header";
 import ProfilePic from "./profilepic";
 import Uploader from "./uploader";
+import Profile from "./profile";
+import BioEditor from "./bioeditor";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -14,6 +16,7 @@ export default class App extends React.Component {
         };
         this.toggleUploader = this.toggleUploader.bind(this);
         this.profilePicUrl = this.profilePicUrl.bind(this);
+        this.changeBio = this.changeBio.bind(this);
     }
     componentDidMount() {
         axios.get("/user").then(({ data }) => {
@@ -35,23 +38,48 @@ export default class App extends React.Component {
         this.setState({ picture });
         this.setState({ uploaderVisible: false });
     }
+    changeBio(bio) {
+        this.setState({ bio });
+    }
     render() {
         return (
-            <div>
-                <Header />
-                <ProfilePic
-                    firstName={this.state.firstName}
-                    lastName={this.state.lastName}
-                    image={this.state.picture}
-                    toggleUploader={this.toggleUploader}
+            <div className="app">
+                <Header
+                    ProfilePic={
+                        <ProfilePic
+                            firstName={this.state.firstName}
+                            lastName={this.state.lastName}
+                            picture={this.state.picture}
+                            toggleUploader={this.toggleUploader}
+                        />
+                    }
                 />
+
                 {this.state.uploaderVisible && (
                     <Uploader
                         toggleUploader={this.toggleUploader}
                         profilePicUrl={this.profilePicUrl}
                     />
                 )}
-                <div>Welcome to anti-social network</div>
+
+                <Profile
+                    firstName={this.state.firstName}
+                    lastName={this.state.lastName}
+                    ProfilePic={
+                        <ProfilePic
+                            firstName={this.state.firstName}
+                            lastName={this.state.lastName}
+                            picture={this.state.picture}
+                            toggleUploader={this.toggleUploader}
+                        />
+                    }
+                    BioEditor={
+                        <BioEditor
+                            bio={this.state.bio}
+                            changeBio={this.changeBio}
+                        />
+                    }
+                />
             </div>
         );
     }

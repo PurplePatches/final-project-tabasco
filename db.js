@@ -37,10 +37,17 @@ function changePic(id, picture) {
     return db.query(q, params);
 }
 
+function editBio(id, bio) {
+    let q = "UPDATE users SET bio = $2 WHERE id = $1 RETURNING bio;";
+    let params = [id, bio];
+    return db.query(q, params);
+}
+
 module.exports = {
     checkEmail,
     addUser,
     getPass,
     getUserData,
-    changePic
+    changePic,
+    editBio
 };
