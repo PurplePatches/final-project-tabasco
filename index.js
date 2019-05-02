@@ -1,10 +1,19 @@
+const express = require("express");
 const app = express();
-const bodyParser = require("body-parser");
 const compression = require("compression");
-const config = require("./config");
 const cookieSession = require("cookie-session");
-const csurf = require("csurf");
+const passwords = require("./passwords");
 const db = require("./db");
+const bodyParser = require("body-parser");
+const csurf = require("csurf");
+const multer = require("multer");
+const uidSafe = require("uid-safe");
+const s3 = require("./s3");
+const config = require("./config.json");
+const path = require("path");
+
+app.use(compression());
+
 const diskStorage = multer.diskStorage({
     destination: function(req, file, callback) {
         callback(null, __dirname + "/uploads");
@@ -15,27 +24,13 @@ const diskStorage = multer.diskStorage({
         });
     }
 });
-const express = require("express");
-const multer = require("multer");
-const passwords = require("./passwords");
-const path = require("path");
-const s3 = require("./s3");
-const uidSafe = require("uid-safe");
+
 const uploader = multer({
     storage: diskStorage,
     limits: {
         fileSize: 2097152
     }
 });
-
-app.use(compression());
-
-app.use(
-    cookieSession({
-        secret: "10 reason why you should quit social media.",
-        maxAge: 1000 * 60 * 60 * 24 * 7 * 6
-    })
-);
 
 if (process.env.NODE_ENV != "production") {
     app.use(
@@ -48,7 +43,15 @@ if (process.env.NODE_ENV != "production") {
     app.use("/bundle.js", (req, res) => res.sendFile(`${__dirname}/bundle.js`));
 }
 
+app.use(
+    cookieSession({
+        secret: "10 reason why you should quit social media.",
+        maxAge: 1000 * 60 * 60 * 24 * 7 * 6
+    })
+);
+
 app.use(csurf());
+
 app.use(function(req, res, next) {
     res.cookie("mytoken", req.csrfToken());
     next();
@@ -120,12 +123,24 @@ app.get("/user", (req, res) => {
     });
 });
 
+app.get("/user/:id/json", (req, res) => {
+    console.log(req.params.id);
+    db.loadUserProfile(req.params.id)
+        .then(results => {
+            console.log(results);
+            res.json(results.rows[0]);
+        })
+        .catch(err => {
+            console.log("ERROR in loading profile", err);
+        });
+});
+
 app.post("/uploadProfilePic", uploader.single("file"), s3.upload, function(
     req,
     res
 ) {
     const url = config.s3Url + req.file.filename;
-    db.addImage(url)
+    db.addAvatar(req.session.userId, url)
         .then(newImage => {
             res.json(newImage.rows[0]);
         })
@@ -134,16 +149,10 @@ app.post("/uploadProfilePic", uploader.single("file"), s3.upload, function(
         });
 });
 
-app.get("/uploadProfilePic", (req, res) => {
-    db.getImage(req.params.pageSize).then(image => {
-        res.json(image.rows);
-    });
-});
-
-app.get("/logout", (req, res) => {
-    req.session = null;
-    res.redirect("/welcome");
-});
+// app.get("/logout", (req, res) => {
+//     req.session = null;
+//     res.JSON(val);
+// });
 
 app.get("/welcome", (req, res) => {
     if (req.session.userId) {
@@ -151,6 +160,12 @@ app.get("/welcome", (req, res) => {
     } else {
         res.sendFile(__dirname + "/index.html");
     }
+});
+
+app.post("/bioedit", (req, res) => {
+    db.updateBio(req.session.userId, req.body.bio).then(({ rows }) => {
+        res.json(rows[0]);
+    });
 });
 
 app.get("*", (req, res) => {

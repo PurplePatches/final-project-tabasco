@@ -28,10 +28,11 @@ exports.loadUserProfile = function(id) {
     return db.query(q, params);
 };
 
-exports.addImages = function addImage(url) {
-    let q = `INSERT INTO users (useravatar)
-            VALUES ($1)
-            RETURNING *`;
-    let params = [url];
+exports.addAvatar = function addImage(id, url) {
+    let q = `UPDATE users
+            SET useravatar = $2
+            WHERE id = $1
+            RETURNING useravatar`;
+    let params = [id, url];
     return db.query(q, params);
 };

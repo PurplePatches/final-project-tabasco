@@ -1,13 +1,15 @@
 import Bioeditor from "./bioEditor";
+import ProfilePic from "./profilepic";
+import React from "react";
 
 export default function(props) {
     return (
         <div>
-            <ProfilePic
-                image={props.image}
-                first={props.first}
-                clickHandler={props.clickHandler}
-            />
+            {props.profilePic}
+            <h1>
+                {props.firstname} {props.lastname}
+            </h1>
+            <Bioeditor />
         </div>
     );
 }

@@ -4,14 +4,11 @@ export default function ProfilePic(props) {
     return (
         <div>
             <img
-                className="profilePic"
+                className="userAvatar"
                 src={props.useravatar || "assets/image-wireframe.png"}
-                alt={props.firstname}
+                alt={props.firstname + props.lastname}
                 onClick={props.clickHandler}
             />
         </div>
     );
 }
-
-//
-//
