@@ -7,11 +7,11 @@ export default class Registration extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            error: false
+            error: false,
+            usedEmail: false
         };
     }
     submit() {
-        console.log(this.firstname, this.password);
         axios
             .post("/register", {
                 firstname: this.firstname,
@@ -20,10 +20,14 @@ export default class Registration extends React.Component {
                 password: this.password
             })
             .then(({ data }) => {
-                location.replace("/");
+                if (data.id) {
+                    location.replace("/");
+                } else {
+                    this.setState({ usedEmail: true });
+                }
             })
-            .catch(err => {
-                location.replace("/");
+            .catch(() => {
+                this.setState({ error: true });
             });
     }
     render() {
@@ -51,7 +55,15 @@ export default class Registration extends React.Component {
                         name="lastname"
                         required
                     />
-                    <p className="input-field">E-mail Adress</p>
+                    <p className="input-field">
+                        E-mail Adress{" "}
+                        {this.state.usedEmail && (
+                            <span className="error">
+                                The e-mail adress you selected is already linked
+                                to an existing account.
+                            </span>
+                        )}
+                    </p>
                     <input
                         className="input"
                         onChange={handleInput}
@@ -68,7 +80,7 @@ export default class Registration extends React.Component {
                     />
                     <button
                         className="registration-button"
-                        onClick={e => this.submit()}
+                        onClick={() => this.submit()}
                     >
                         Join up
                     </button>

@@ -31,7 +31,7 @@ export default class Login extends React.Component {
                     location.replace("/");
                 }
             })
-            .catch(err => {
+            .catch(() => {
                 this.setState({
                     error: true,
                     wrongEmail: false,
@@ -79,7 +79,7 @@ export default class Login extends React.Component {
                     />
                     <button
                         className="registration-button"
-                        onClick={e => this.submit()}
+                        onClick={() => this.submit()}
                     >
                         Log In
                     </button>

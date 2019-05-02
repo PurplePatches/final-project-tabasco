@@ -79,12 +79,16 @@ app.post("/register", (req, res) => {
                 req.body.lastname,
                 req.body.email,
                 hashedPassword
-            ).then(id => {
-                req.session.userId = id.rows[0].id;
-                res.json(id.rows[0]);
-            });
+            )
+                .then(id => {
+                    req.session.userId = id.rows[0].id;
+                    res.json(id.rows[0]);
+                })
+                .catch(() => {
+                    res.json({ usedEmail: true });
+                });
         })
-        .catch(err => {
+        .catch(() => {
             res.json({ error: true });
         });
 });
@@ -103,7 +107,7 @@ app.post("/login", (req, res) => {
                     }
                 });
         })
-        .catch(err => {
+        .catch(() => {
             res.json({ wrongEmail: true });
         });
 });
@@ -113,7 +117,7 @@ app.get("/user", (req, res) => {
         .then(userData => {
             res.json(userData.rows[0]);
         })
-        .catch(err => {
+        .catch(() => {
             res.json({ error: true });
         });
 });
@@ -124,11 +128,105 @@ app.post("/uploadPic", uploader.single("file"), s3.upload, function(req, res) {
         .then(newImage => {
             res.json(newImage.rows[0]);
         })
-        .catch(err => {
+        .catch(() => {
             res.json({ error: true });
         });
 });
 
+app.post("/updateBio", (req, res) => {
+    db.updateBio(req.body.bio, req.session.userId).then(results => {
+        res.json(results.rows[0]);
+    });
+});
+
+app.get("/api/user/:id", (req, res) => {
+    db.getOtherUser(req.params.id)
+        .then(({ rows }) => {
+            if (rows[0].id == req.session.userId) {
+                res.json({ redirect: true });
+            } else {
+                res.json(rows[0]);
+            }
+        })
+        .catch(() => {
+            res.json({ redirect: true });
+        });
+});
+
+app.get("/:id/friend-button", (req, res) => {
+    console.log(req.session.userId, req.params.id);
+    db.getFriendStatus(req.params.id, req.session.userId)
+        .then(({ rows }) => {
+            console.log(rows[0]);
+            if (rows[0].status == "friends") {
+                res.json({ friends: true });
+            } else if (
+                rows[0].status == "pending" &&
+                rows[0].sender_id == req.session.userId
+            ) {
+                res.json({ sentFriendRequest: true });
+            } else if (
+                rows[0].status == "pending" &&
+                rows[0].sender_id == req.params.id
+            ) {
+                res.json({ receivedFriendRequest: true });
+            }
+        })
+        .catch(() => {
+            res.json({ notFriends: true });
+        });
+});
+
+app.post("/:id/friend-button", (req, res) => {
+    db.getFriendStatus(req.params.id, req.session.userId)
+        .then(({ rows }) => {
+            if (
+                rows[0].status == "pending" &&
+                rows[0].sender_id == req.session.userId
+            ) {
+                db.deleteFriendStatus(req.session.userId, req.params.id).then(
+                    () => {
+                        res.json({
+                            friends: false,
+                            notFriends: true,
+                            receivedFriendRequest: false,
+                            sentFriendRequest: false
+                        });
+                    }
+                );
+            } else if (
+                rows[0].status == "pending" &&
+                rows[0].sender_id == req.params.id
+            ) {
+                db.updateFriendStatus(
+                    req.session.userId,
+                    req.body.recipient_id,
+                    req.body.status
+                ).then(() => {
+                    res.json({
+                        friends: true,
+                        notFriends: false,
+                        receivedFriendRequest: false,
+                        sentFriendRequest: false
+                    });
+                });
+            }
+        })
+        .catch(() => {
+            db.createFriendStatus(
+                req.session.userId,
+                req.params.id,
+                "pending"
+            ).then(() => {
+                res.json({
+                    friends: false,
+                    notFriends: false,
+                    receivedFriendRequest: false,
+                    sentFriendRequest: true
+                });
+            });
+        });
+});
 /////////LAST PART///////////////////////////
 app.get("*", (req, res) => {
     if (!req.session.userId) {

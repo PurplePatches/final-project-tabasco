@@ -9,6 +9,7 @@ export default function ProfilePic({
     const fullName = `${firstname}  ${lastname}`;
     return (
         <img
+            className="editPic"
             onClick={clickHandler}
             src={image || "/default.png"}
             alt={fullName}

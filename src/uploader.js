@@ -12,8 +12,7 @@ export default class Uploader extends React.Component {
         axios
             .post("/uploadPic", formData)
             .then(({ data }) => {
-                let image = data.image;
-                this.props.handleImage(image);
+                this.props.handleImage(data.image);
             })
             .catch(err => {
                 console.log(err);
@@ -37,7 +36,7 @@ export default class Uploader extends React.Component {
                     name="profilePic"
                     required
                 />
-                <button onClick={e => this.submit()}>Submit</button>
+                <button onClick={() => this.submit()}>Submit</button>
             </div>
         );
     }
