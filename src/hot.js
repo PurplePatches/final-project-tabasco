@@ -1,7 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { makeNot, receiveUsers } from './actions';
 
 class Hot extends React.Component {
+    componentDidMount() {
+        !this.props.users && this.props.dispatch(receiveUsers());
+    }
     render() {
         const { users } = this.props;
         if (!users) {
@@ -10,10 +15,10 @@ class Hot extends React.Component {
         const hotUsers = (
             <div className="users">
                 {users.map(user => (
-                    <div className="user">
+                    <div className="user" key={user.id}>
                         <img src={user.image} />
                         <div className="buttons">
-                            <button>Not</button>
+                            <button onClick={e => this.props.dispatch(makeNot(user.id))}>Not</button>
                         </div>
                     </div>
                 ))}
@@ -31,3 +36,11 @@ class Hot extends React.Component {
         );
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        users: state.users && state.users.filter(user => user.hot)
+    }
+}
+
+export default connect(mapStateToProps)(Hot);

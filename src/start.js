@@ -8,8 +8,13 @@ import reducer from './reducers';
 import HotOrNot from './hotornot';
 import Hot from './hot';
 import Not from './not';
+import { composeWithDevTools } from 'redux-devtools-extension';
 
-const store = createStore(reducer, applyMiddleware(reduxPromise));
+const store = createStore(reducer, composeWithDevTools(
+    applyMiddleware(
+        reduxPromise
+    )
+));
 
 const elem = (
     <Provider store={store}>
@@ -25,6 +30,7 @@ function App() {
             <HashRouter>
                 <div>
                     <Route exact path="/" component={HotOrNot} />
+                    <Route exact path="/hot" component={Hot} />
                 </div>
             </HashRouter>
         </div>

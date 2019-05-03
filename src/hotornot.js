@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { receiveUsers } from './actions';
+import { receiveUsers, makeHot, makeNot } from './actions';
 
 class HotOrNot extends React.Component {
     componentDidMount() {
@@ -16,8 +16,8 @@ class HotOrNot extends React.Component {
             <div className="user">
                 <img src={users[0].image} />
                 <div className="buttons">
-                    <button>Hot</button>
-                    <button>Not</button>
+                    <button onClick={e => this.props.dispatch(makeHot(users[0].id))}>Hot</button>
+                    <button onClick={e => this.props.dispatch(makeNot(users[0].id))}>Not</button>
                 </div>
             </div>
         );
