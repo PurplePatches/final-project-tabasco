@@ -18,7 +18,7 @@ export default class BioEditor extends React.Component {
 
     editBio() {
         this.setState({ mode: "" });
-        console.log("I want to see this.state: ", this.state.bio);
+        // console.log("I want to see this.state: ", this.state.bio);
         axios
             .post("/bio", {
                 bio: this.state.bio

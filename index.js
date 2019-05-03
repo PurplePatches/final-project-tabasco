@@ -68,7 +68,7 @@ app.get("/welcome", (req, res) => {
 
 app.post("/registration", (req, res) => {
     bc.hashPassword(req.body.password).then(hash => {
-        console.log("show me req.body: ", req.body);
+        // console.log("show me req.body: ", req.body);
         return db
             .register(
                 // req.body.id,
@@ -126,11 +126,11 @@ app.post("/login", (req, res) => {
     });
 });
 
-app.get("/api/user", (req, res) => {
+app.get("/user", (req, res) => {
     // console.log("POST/user session: ", req.body);
     db.getUserInfo(req.session.userId).then(results => {
         if (results) {
-            console.log("results", results);
+            // console.log("results", results);
             res.json(results.rows[0]);
         } else {
             res.json({ success: false });
@@ -138,7 +138,7 @@ app.get("/api/user", (req, res) => {
     });
 });
 
-app.post("/api/upload", uploader.single("file"), s3.upload, (req, res) => {
+app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
     const image = config.s3Url + req.file.filename;
     db.uploadImage(image, req.session.userId)
         .then(results => {
@@ -156,7 +156,7 @@ app.post("/api/upload", uploader.single("file"), s3.upload, (req, res) => {
         });
 });
 
-app.post("/api/bio", (req, res) => {
+app.post("/bio", (req, res) => {
     const bio = req.body.bio;
     console.log("show me req.body: ", req.session, req.body);
     db.uploadBio(bio, req.session.userId)
@@ -175,7 +175,22 @@ app.post("/api/bio", (req, res) => {
         });
 });
 
-app.get("/api/logout", (req, res) => {
+app.get("/api/user/:id", (req, res) => {
+    console.log("now we're here at GET/user:id");
+
+    const first = req.body.first_name;
+    db.getUserInfo(req.params.id).then(results => {
+        console.log("now we're here at GET/user:id", results);
+        if (req.params.id == req.session.userId) {
+            res.json({
+                redirect: true,
+                firstName: first
+            });
+        }
+    });
+});
+
+app.get("/logout", (req, res) => {
     req.session = null;
     res.redirect("/welcome");
 });
@@ -192,7 +207,7 @@ app.get("*", (req, res) => {
     if (!req.session.userId) {
         res.redirect("/welcome");
     } else {
-        res.redirect("/");
+        res.sendFile(__dirname + "/index.html");
     }
 });
 
