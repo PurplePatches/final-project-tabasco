@@ -5,18 +5,23 @@ export default class BioEditor extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            editorOn: false
+            editorOn: false,
+            bio: ""
         };
-        this.bio = "";
+        this.submit = this.submit.bind(this);
     }
+
     submit() {
-        console.log(this.bio);
+        console.log("BIOOO", this.bio);
         axios
             .post("/bio", {
                 bio: this.bio
             })
             .then(({ data }) => {
-                console.log(data);
+                console.log("SET BIOOOOOO");
+                this.setState({ editorOn: false });
+                console.log("bio state", this.bio);
+                this.props.setBio(this.bio);
             })
             .catch(err => {
                 console.log("error in bio editor", err);
@@ -26,10 +31,11 @@ export default class BioEditor extends React.Component {
         const handleInput = e => {
             this[e.target.name] = e.target.value;
         };
-        console.log("this.bio", this.bio);
+        console.log("this.props", this.props);
         if (!this.state.editorOn) {
             return (
                 <div>
+                    <p>{this.props.bio}</p>
                     <div>
                         <button
                             onClick={() => {
@@ -38,14 +44,13 @@ export default class BioEditor extends React.Component {
                         >
                             EDIT BIO
                         </button>
-
-                        <p id="log">{this.props.bio}</p>
                     </div>
                 </div>
             );
         } else {
             return (
                 <div>
+                    <p>{this.props.bio}</p>
                     <div>
                         <textarea
                             name="bio"
@@ -53,8 +58,13 @@ export default class BioEditor extends React.Component {
                             onChange={handleInput}
                         />
                         <button onClick={e => this.submit()}>OK</button>
-
-                        <p id="log">{this.props.bio}</p>
+                        <button
+                            onClick={() => {
+                                this.setState({ editorOn: false });
+                            }}
+                        >
+                            Cancel
+                        </button>
                     </div>
                 </div>
             );

@@ -30,15 +30,6 @@ export default class Uploader extends React.Component {
         return (
             <div id="wrapuploader">
                 <div className="uploader">
-                    <img
-                        onClick={() =>
-                            this.setState({
-                                isUploaderVisible: false
-                            })
-                        }
-                        className="logo"
-                        src="et.jpg"
-                    />
                     <form id="form">
                         <p>Change your Profile Picture?</p>
                         <input
@@ -54,6 +45,15 @@ export default class Uploader extends React.Component {
                         />
                         <button onClick={e => this.uploadFile(e)}>
                             upload
+                        </button>
+                        <button
+                            clickHandler={() =>
+                                this.setState({
+                                    isUploaderVisible: false
+                                })
+                            }
+                        >
+                            Close
                         </button>
                     </form>
                 </div>

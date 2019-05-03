@@ -1,15 +1,47 @@
 import React from "react";
 import axios from "./axios";
-import { Router, Link } from "react-router-dom";
+import { Route } from "react-router-dom";
 
-class OtherProfile extends React.Component {
+export default class OtherProfile extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {};
+        console.log("Okkkkkk babyy");
+    }
+
     componentDidMount() {
-        const id = this.props.match.params.id;
-        axios.get("/users/" + id).then(({ data }) => {
-            if (data.redirect) {
-                this.props.history.push("/");
-            }
-        });
+        let self = this;
+        const id = self.props.match.params.id;
+        console.log("id", id);
+        axios
+            .get("/api/users/" + id)
+            .then(({ data }) => {
+                console.log("DATA IN OTHER PROFILES", data);
+                if (data.redirect) {
+                    self.props.history.push("/");
+                } else {
+                    self.setState({
+                        firstname: data.firstname,
+                        lastname: data.lastname,
+                        url: data.url,
+                        bio: data.bio
+                    });
+                }
+            })
+            .catch(err => {
+                console.log("error in axios get otherprofile", err);
+            });
+    }
+    render() {
+        return (
+            <div>
+                <h2>
+                    {this.state.firstname} {this.state.lastname}
+                </h2>
+                <img src={this.state.url} />
+                <p>{this.state.bio}</p>
+            </div>
+        );
     }
 }
 

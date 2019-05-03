@@ -143,6 +143,7 @@ app.post("/bio", function(req, res) {
     db.updateUsersBio(bio, userid)
         .then(result => {
             console.log("result in update users bio", result);
+            res.json({ success: true });
         })
         .catch(err => {
             console.log("error in updare users bio");
@@ -150,7 +151,7 @@ app.post("/bio", function(req, res) {
 });
 
 //-----------         USERS       ----------------//
-
+//
 app.get("/users", (req, res) => {
     let id = req.session.userId;
     db.getUsersInformation(id)
@@ -163,12 +164,23 @@ app.get("/users", (req, res) => {
         });
 });
 
-app.get("/users/:id.json", (req, res) => {
+app.get("/api/users/:id", (req, res) => {
+    console.log("GET IN USERS");
+    let userId = req.params.id;
     if (req.params.id == req.session.userId) {
         res.json({
             redirect: true
         });
     }
+    db.getUsersInformation(userId)
+        .then(results => {
+            let data = results.rows[0];
+            console.log(data);
+            res.json(data);
+        })
+        .catch(err => {
+            console.log("error in users get", err);
+        });
 });
 
 //-------------       WELCOME     ------------//
