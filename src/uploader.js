@@ -12,7 +12,6 @@ export default class Uploader extends React.Component {
         this.saveFileToState = this.saveFileToState.bind(this);
     }
 
-    // WORK IN PROGRESS:
     uploadFile() {
         const formData = new FormData();
         formData.append("file", this.state.file[0]);

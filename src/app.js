@@ -51,15 +51,22 @@ export default class App extends React.Component {
                         }
                     />
                 </nav>
-                <Profile />
-                {this.state.isUploaderVisible && (
-                    <Uploader
-                        setUploaderVisible={() => {
-                            this.setState({ isUploaderVisible: false });
-                        }}
-                        updatePicture={this.updatePicture}
+                <div className="profile-container">
+                    <Profile
+                        image={this.state.user_picture}
+                        first={this.state.first_name}
+                        last={this.state.last_name}
+                        isUploaderVisible={this.state.isUploaderVisible}
                     />
-                )}
+                    {this.state.isUploaderVisible && (
+                        <Uploader
+                            setUploaderVisible={() => {
+                                this.setState({ isUploaderVisible: false });
+                            }}
+                            updatePicture={this.updatePicture}
+                        />
+                    )}
+                </div>
             </React.Fragment>
         );
     }

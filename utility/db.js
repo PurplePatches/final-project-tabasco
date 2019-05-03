@@ -55,4 +55,13 @@
         let parameters = [id || null];
         return db.query(query, parameters);
     };
+
+    exports.updateBio = function updateBio(id, bio) {
+        let query = `UPDATE users
+        SET bio = $2
+        WHERE id = $1
+        RETURNING bio;`;
+        let parameters = [id || null, bio || null];
+        return db.query(query, parameters);
+    };
 })();

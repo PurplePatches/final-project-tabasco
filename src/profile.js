@@ -1,18 +1,12 @@
 import React from "react";
-import axios from "./axios";
 import ProfilePic from "./profilepic";
+import BioEditor from "./bioeditor";
 
 export default class Profile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
         this.updatePicture = this.updatePicture.bind(this);
-    }
-
-    componentDidMount() {
-        axios.get("/user").then(({ data }) => {
-            this.setState(data[0]);
-        });
     }
 
     updatePicture(image) {
@@ -22,14 +16,23 @@ export default class Profile extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <div className="flex-container-profile">
+                <div
+                    className={
+                        this.props.isUploaderVisible
+                            ? "flex-container-profile blur"
+                            : "flex-container-profile"
+                    }
+                >
                     <ProfilePic
-                        image={this.state.user_picture}
-                        first={this.state.first_name}
+                        image={this.props.image}
+                        first={this.props.first}
                     />
-                    <h1>
-                        {this.state.first_name} {this.state.last_name}
-                    </h1>
+                    <div className="text-bio-container">
+                        <h1>
+                            {this.props.first} {this.props.last}
+                        </h1>
+                        <BioEditor />
+                    </div>
                 </div>
             </React.Fragment>
         );
@@ -37,4 +40,4 @@ export default class Profile extends React.Component {
 }
 
 // TO DO:
-// picture won't change after upload
+// ease in for modal
