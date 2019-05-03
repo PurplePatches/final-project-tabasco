@@ -7,14 +7,15 @@ export default class BioEditor extends React.Component {
         this.state = {
             bio: {}
         };
-        this.updateBioInDatabase = this.updateBioInDatabase.bind(this);
+        this.updateBio = this.updateBio.bind(this);
         this.saveBioToState = this.saveBioToState.bind(this);
     }
 
-    updateBioInDatabase() {
+    updateBio() {
+        console.log("data send to database: ", this.state.bio);
         axios.post("/edit", this.state.bio).then(data => {
-            this.props.updateBioInDatabase(data).catch(err => {
-                console.log("updateBioInDatabase() POST /edit ERROR: ", err);
+            this.props.updateBio(data).catch(err => {
+                console.log("updateBio() POST /edit ERROR: ", err);
             });
         });
     }
@@ -35,7 +36,11 @@ export default class BioEditor extends React.Component {
                         cols="33"
                         maxLength="140"
                     />
-                    <button onClick={this.updateBioInDatabase} id="save-button">
+                    <button
+                        type="submit"
+                        onClick={this.updateBio}
+                        id="save-button"
+                    >
                         Save
                     </button>
                 </div>
@@ -43,3 +48,8 @@ export default class BioEditor extends React.Component {
         );
     }
 }
+
+// TO DO:
+
+// do POST request when "Save" button was clicked and save input to database
+// close textarea after succesfull request and call function to update bio

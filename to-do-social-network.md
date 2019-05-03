@@ -10,3 +10,4 @@ TODAY:
 - Do POST request when "Save" button was clicked and save input to database
 - close textarea after succesfull request and call function to update bio
 - ~~save textarea input in state~~
+

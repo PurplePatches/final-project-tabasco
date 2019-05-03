@@ -40,4 +40,8 @@ export default class Profile extends React.Component {
 }
 
 // TO DO:
-// ease in for modal
+
+// show "Add bio" button if bio text is undefined or null
+// show "Edit bio" button if bio text is NOT undefined or null
+// show BioEditor when clicking "Add bio" or "Edit bio" button
+// add transition for modal
