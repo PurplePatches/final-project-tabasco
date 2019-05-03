@@ -41,7 +41,6 @@ export default class Uploader extends React.Component {
         this.setState({ file: e.target.files });
     }
 
-    // WORK IN PROGRESS:
     render() {
         return (
             <React.Fragment>
@@ -75,5 +74,3 @@ export default class Uploader extends React.Component {
         );
     }
 }
-
-// TO DO:

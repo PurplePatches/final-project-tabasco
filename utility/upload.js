@@ -35,7 +35,7 @@
         }
     });
 
-    app.post("/upload", uploader.single("file"), s3.upload, function(req, res) {
+    app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
         const url = config.s3Url + req.file.filename;
         db.uploadPicture(req.session.userId, url).then(data => {
             res.json(data.rows);

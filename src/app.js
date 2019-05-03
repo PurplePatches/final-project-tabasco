@@ -57,6 +57,10 @@ export default class App extends React.Component {
                         first={this.state.first_name}
                         last={this.state.last_name}
                         isUploaderVisible={this.state.isUploaderVisible}
+                        bio={this.state.bio}
+                        changeBio={() => {
+                            this.setState;
+                        }}
                     />
                     {this.state.isUploaderVisible && (
                         <Uploader
@@ -71,6 +75,3 @@ export default class App extends React.Component {
         );
     }
 }
-
-// TO DO:
-// how to add and remove blur Profile

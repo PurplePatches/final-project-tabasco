@@ -31,7 +31,8 @@ export default class Profile extends React.Component {
                         <h1>
                             {this.props.first} {this.props.last}
                         </h1>
-                        <BioEditor />
+                        <p>{this.props.bio}</p>
+                        <BioEditor changeBio={this.props.changeBio} />
                     </div>
                 </div>
             </React.Fragment>
@@ -41,6 +42,7 @@ export default class Profile extends React.Component {
 
 // TO DO:
 
+// bio only updates after refresh
 // show "Add bio" button if bio text is undefined or null
 // show "Edit bio" button if bio text is NOT undefined or null
 // show BioEditor when clicking "Add bio" or "Edit bio" button
