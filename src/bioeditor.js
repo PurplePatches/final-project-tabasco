@@ -24,7 +24,8 @@ export default class BioEditor extends React.Component {
                 bio: this.state.bio
             })
             .then(({ data }) => {
-                console.log("show me data in POST/editBio: ", data);
+                console.log(data);
+                this.props.updateBio(this.state.bio);
             });
     }
 
@@ -36,12 +37,13 @@ export default class BioEditor extends React.Component {
             return (
                 <div className="bioAdd">
                     <p>Tell others about yourself</p>
+                    <p>{this.props.bio}</p>
                     <button onClick={this.switchMode}>Add</button>
                 </div>
             );
         } else {
             return (
-                <div className="bioEdit">
+                <div className="bioEditor">
                     <textarea
                         defaultValue="This is the bioEditor"
                         name="bio"

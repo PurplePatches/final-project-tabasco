@@ -126,18 +126,19 @@ app.post("/login", (req, res) => {
     });
 });
 
-app.get("/user", (req, res) => {
-    // console.log("POST/user: ", req.session);
-    res.json({
-        id: req.session.userId,
-        firstName: req.session.firstName,
-        lastName: req.session.lastName,
-        image: req.session.image,
-        bio: req.session.bio
+app.get("/api/user", (req, res) => {
+    // console.log("POST/user session: ", req.body);
+    db.getUserInfo(req.session.userId).then(results => {
+        if (results) {
+            console.log("results", results);
+            res.json(results.rows[0]);
+        } else {
+            res.json({ success: false });
+        }
     });
 });
 
-app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
+app.post("/api/upload", uploader.single("file"), s3.upload, (req, res) => {
     const image = config.s3Url + req.file.filename;
     db.uploadImage(image, req.session.userId)
         .then(results => {
@@ -155,7 +156,7 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
         });
 });
 
-app.post("/bio", (req, res) => {
+app.post("/api/bio", (req, res) => {
     const bio = req.body.bio;
     console.log("show me req.body: ", req.session, req.body);
     db.uploadBio(bio, req.session.userId)
@@ -174,7 +175,7 @@ app.post("/bio", (req, res) => {
         });
 });
 
-app.get("/logout", (req, res) => {
+app.get("/api/logout", (req, res) => {
     req.session = null;
     res.redirect("/welcome");
 });

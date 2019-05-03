@@ -4,7 +4,6 @@ import Logo from "./logo";
 import Profile from "./profile";
 import ProfilePic from "./profilePic";
 import Uploader from "./uploader";
-import BioEditor from "./bioEditor";
 import { BrowserRouter } from "react-router-dom";
 
 export default class App extends React.Component {
@@ -14,6 +13,7 @@ export default class App extends React.Component {
             isUploaderVisible: false,
             mode: ""
         };
+        this.updateBio = this.updateBio.bind(this);
     }
 
     componentDidMount() {
@@ -27,8 +27,9 @@ export default class App extends React.Component {
             });
     }
 
-    updateBio(bio) {
-        this.setState({ mode: edit });
+    updateBio(newBio) {
+        console.log("made it to here");
+        this.setState({ bio: newBio });
     }
 
     render() {
@@ -40,15 +41,15 @@ export default class App extends React.Component {
                 </div>
             );
         }
-        const { firstName, lastName, image, bio } = this.state;
+        const { first_name, last_name, image, bio } = this.state;
 
         return (
             <div>
                 <div className="test">
                     <Logo />
                     <ProfilePic
-                        firstName={firstName}
-                        lastName={lastName}
+                        firstName={first_name}
+                        lastName={last_name}
                         image={image}
                         clickHandler={() => {
                             this.setState({ isUploaderVisible: true });
@@ -56,11 +57,13 @@ export default class App extends React.Component {
                     />
                 </div>
                 <Profile
-                    firstName={firstName}
-                    lastName={lastName}
+                    firstName={first_name}
+                    lastName={last_name}
                     image={image}
+                    bio={bio}
+                    updateBio={this.updateBio}
                     clickHandler={() => {
-                        this.setState({ isUploaderVisible: true, bio: bio });
+                        this.setState({ isUploaderVisible: true });
                     }}
                 />
 

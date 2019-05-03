@@ -14,7 +14,9 @@ export default function Profile(props) {
                 />
             </div>
 
-            <div id="bioEditor">{<BioEditor textarea={props.bio} />}</div>
+            <div id="bioEditor">
+                {<BioEditor bio={props.bio} updateBio={props.updateBio} />}
+            </div>
         </div>
     );
 }
