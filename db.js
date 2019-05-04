@@ -45,6 +45,22 @@ exports.getImages = function (userid) {
   return db.query(`SELECT * FROM images WHERE userid = ${userid}`)
 }
 
+exports.setFriendStatus = (requester, requested) => {
+  const created_at = Date.now()
+  return db.query(`INSERT INTO relations (requester, requested, created_at, friends) VALUES
+    (${requester}, ${requested}, ${created_at}, FALSE)
+    `)
+}
+
+exports.getFriendStatus = (requester, requested) => {
+  console.log(requester, requested);
+  
+  return db.query(`SELECT * FROM relations 
+    WHERE (requester = ${requester} AND requested = ${requested})
+    OR (requested = ${requester} AND requester = ${requested})
+    `)
+}
+
 exports.updatePasswordEmail = function (userid, email, password) {
   if(password){
       const q = `UPDATE

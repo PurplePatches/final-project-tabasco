@@ -8,6 +8,7 @@ import axios from './utils/axios'
 import Dropdown from './dropdown';
 import Settings from './settings';
 import Cover from './cover';
+import BrowseProfile from './browseprofile'
 
 export default class App extends Component {
   constructor(props) {
@@ -20,7 +21,7 @@ export default class App extends Component {
         dogname: '',
         dogbreed: '',
         location: '',
-        profilePic: '',
+        images: [],
         showSaved: " ",
         showSettingsModal: false,
     }
@@ -28,10 +29,7 @@ export default class App extends Component {
   }
 
   componentDidMount () {
-    axios.get('/profile.json').then(({data}) => {
-      this.setState({...data})
-      this.dbProfile = {...data}
-    })
+    this.getProfile()
     document.addEventListener('mousemove', (e) => {
       const dropdown = document.getElementById('dropdown')
       if(!dropdown.classList.contains('show') && e.target.classList.contains('header-profile')){
@@ -51,7 +49,7 @@ export default class App extends Component {
         const formToSubmit = new FormData();    
         formToSubmit.append('file', document.getElementById('pic-select').files[0])
         axios.post('/picture', formToSubmit)
-          .then(({data}) => this.setState({profilePic: data.url}))
+          .then(() => this.getProfile())
           .catch(err => console.log(err))
     }else{
       this.setState({[e.target.name]: e.target.value});
@@ -90,33 +88,51 @@ export default class App extends Component {
     }
   }
 
+  getProfile(){
+    axios.get('/api/profile/me').then(({data}) => {
+      this.setState({...data})
+      this.dbProfile = {...data}
+    })
+  }
+
   render() {
     return (
       <BrowserRouter>
       <>
         {this.state.showSettingsModal ? <Cover coverClicked={e => this.clickHandler(e)}/> : null}
-        <Header profilePic={this.state.profilePic} dogname={this.state.dogname} />
+        <Header profilePic={this.state.images.length > 0 ? this.state.images[0].url : './uploads/dogprofile.jpg'} dogname={this.state.dogname} />
         <Dropdown clickHandler={e => this.clickHandler(e)}/>
           {this.state.showSettingsModal ? <Settings exitSettings={() => this.setState({showSettingsModal: false})} email={this.state.email} handleChange={e => this.handleChange(e)}/> : null}
         <Route exact path='/' component={Home} />
-        <Route  exact path='/profile' render={() => (
+        <Route exact path='/profile' render={() => (
           <>
             <Profile 
-            first={this.state.first}
-            last={this.state.last} 
-            dogname={this.state.dogname} 
-            dogbreed={this.state.dogbreed} 
-            bio={this.state.bio}
-            location={this.state.location}
-            profilePic={this.state.profilePic}
-            handleChange={(e) => this.handleChange(e)} 
-            saveData={e => this.saveData(e)}
-            handleClick={() => this.changePhoto()}
-            showSaved={this.state.showSaved}
+              first={this.state.first}
+              last={this.state.last} 
+              dogname={this.state.dogname} 
+              dogbreed={this.state.dogbreed} 
+              bio={this.state.bio}
+              location={this.state.location}
+              images={this.state.images}
+              handleChange={(e) => this.handleChange(e)} 
+              saveData={e => this.saveData(e)}
+              handleClick={() => this.changePhoto()}
+              showSaved={this.state.showSaved}
+              getProfile={() => this.getProfile()}
             />
             <input onChange={(e) => this.handleChange(e)} type="file" name="picture" id='pic-select' style={{display: 'none'}} autoComplete="off" />
           </>
         )} />
+        <Route 
+          path='/profile/:id' 
+          render={props => (
+            <BrowseProfile
+              key={props.match.url}
+              match={props.match}
+              history={props.history}
+            />
+          )} 
+        />
 
       
       </>

@@ -53,6 +53,11 @@ header * {
   margin-left: 1rem;
 }
 
+header * :hover {
+  cursor: pointer;
+
+}
+
 header .header-profile.outer{
   right: 0;
   position: absolute;
@@ -60,6 +65,7 @@ header .header-profile.outer{
   padding: 0;
   display: flex;
   justify-content: end;
+  align-items: center;
 }
 
 
@@ -76,7 +82,6 @@ header .header-profile img{
 
 .header-item {
   text-align: center;
-  vertical-align: middle;
   line-height: 90px; 
 }
 
@@ -123,45 +128,47 @@ form .error {
   display: none;
 }
 
-.editProfile {
+.profile {
   display: flex;
   justify-content: center;
 }
 
-.editProfile .left {
- display: flex; 
+.profile .left {
+ display: flex;
+ flex-direction: column; 
  padding: 2rem;
 }
 
-.editProfile .right {
+.profile .right {
+  margin-top: 2rem;
   display: grid;
   grid-template-columns: 1fr 2fr;
   width: 30rem;
 }
  
- .editProfile .right *{
+ .profile .right *{
   padding: 1rem;
  }
 
- .editProfile .right .title{
+ .profile .right .title{
   text-align: right;
-  border-right: 2px solid grey;noe 
+  border-right: 2px solid grey;
  }
 
- .editProfile .right input{
+ .profile .right input{
   padding: 0;
   margin: 1rem;
  }
 
 
-.editProfile img {
+.profile img {
 border: 1rem aliceblue solid;
 height: 15rem;
 width: 13rem;
 object-fit: cover;
 }
 
-.editProfile .editprofilepic {
+.profile .profilepic {
   position: relative;
   text-align: center;
   color: aliceblue;
@@ -169,12 +176,12 @@ object-fit: cover;
   width: 13rem;
 }
 
-.editprofilepic p {
+.profilepic p {
   display: none;
 }
 
 
-.editprofilepic:hover p {
+.profilepic:hover p {
   display: inherit;
   position: absolute;
   top: 50%;
@@ -184,8 +191,23 @@ object-fit: cover;
   font-size: 2rem;
 }
 
-.editprofilepic:hover img{
+.profilepic:hover img{
   opacity: .5;
+}
+
+.preview-images {
+  display: flex;
+  justify-content: flex-start;
+  width: 13rem;
+  overflow: hidden;
+}
+
+img.preview {
+  height: 3rem;
+  width: 2.5rem;
+  object-fit: cover;
+  border: 0;
+  margin: .3rem;
 }
 
 .form-line-title {
@@ -208,6 +230,10 @@ object-fit: cover;
   padding: 1rem;
   transform: translateY(-100%);
   transition: transform 0.3s;
+}
+
+#dropdown *:hover {
+  cursor: pointer;
 }
 
 #dropdown.show {
@@ -237,4 +263,23 @@ object-fit: cover;
   left: 0;
   right: 0;
   z-index: 20;
+}
+
+#browse-profile {
+  font-size: 1.5rem;
+  display: grid;
+  margin: 1rem;
+  max-height: 
+}
+
+
+#browse-profile .image{
+  justify-self: center;
+  height: 40rem;
+
+}
+
+#browse-profile .imagenote{
+  justify-self: center;
+  height: 40rem;
 }

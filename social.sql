@@ -25,3 +25,13 @@ CREATE TABLE images(
     created_at BIGINT,
     isProfile BOOLEAN
 );
+
+DROP TABLE IF EXISTS relations;
+
+CREATE TABLE relations(
+    relationid SERIAL PRIMARY KEY,
+    requester SERIAL REFERENCES users(userid) ON DELETE CASCADE NOT NULL,
+    requested SERIAL REFERENCES users(userid) ON DELETE CASCADE NOT NULL,
+    friends BOOLEAN,
+    created_at BIGINT
+);

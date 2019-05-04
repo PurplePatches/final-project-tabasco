@@ -27,7 +27,7 @@ if (process.env.NODE_ENV != 'production') {
     app.use('/bundle.js', (req, res) => res.sendFile(`${__dirname}/bundle.js`));
 }
 
-app.use(express.static('./src'))
+app.use(express.static(__dirname + '/src'))
 
 app.use(cookieSession({
     secret: 'life is like a box of chocolate',
@@ -48,7 +48,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.post('/logout', (req, res) => {
+app.post('/api/logout', (req, res) => {
     req.session = null;
     res.redirect('/welcome')
 });
@@ -157,19 +157,40 @@ app.post('/passwordemail', (req, res) => {
     }    
 })
 
-app.get('/profile.json', (req, res) => {
+app.get('/api/profile/:id', (req, res) => {
+    const id = req.params.id === 'me' ?  req.session.userid : req.params.id
     Promise.all([
-        db.getProfile(req.session.userid),
-        db.getImages(req.session.userid)
+        db.getProfile(id),
+        db.getImages(id)
     ])
     .then(data => {
         for (const prop in data[0].rows[0]){
             if(data[0].rows[0][prop] === null) data[0].rows[0][prop] = ''
         }
         const {email, bio, dogname, dogbreed, first, last, location} = data[0].rows[0]
-        const profilePic = data[1].rows.length > 0 ? data[1].rows[0].url : ''
-        res.json({email, bio, dogname, dogbreed, first, last, location, profilePic})  
+        const images = data[1].rows.length > 0 ? data[1].rows : []
+        res.json({email, bio, dogname, dogbreed, first, last, location, images})  
     })
+    .catch(err => console.log(err))
+});
+
+app.get('/api/friendStatus/:id', (req, res) => {
+    const requestingId = req.session.userid
+    const requestedId = req.params.id
+    console.log('im here');
+    if(+requestingId === +requestedId) res.json({friends: null, canReject: null})
+    db.getFriendStatus(+requestingId, +requestedId)
+        .then(({rows}) => {
+            const resData = {
+                friends: false,
+                canReject: null,
+            }
+            if(rows.length === 1){
+                if(rows[0].friends === true) resData.friends = true
+                resData.canReject = +rows[0].requested === +requestedId ? false : true
+            }
+            res.json(resData)  
+        })
     .catch(err => console.log(err))
 });
 
