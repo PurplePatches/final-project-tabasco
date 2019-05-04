@@ -61,6 +61,9 @@ export default class App extends React.Component {
                         changeBio={() => {
                             this.setState;
                         }}
+                        passUpdatedBio={update => {
+                            this.setState(update);
+                        }}
                     />
                     {this.state.isUploaderVisible && (
                         <Uploader

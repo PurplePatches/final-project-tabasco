@@ -5,12 +5,20 @@ import BioEditor from "./bioeditor";
 export default class Profile extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            bio: {},
+            isBioVisible: false
+        };
         this.updatePicture = this.updatePicture.bind(this);
+        this.toggleBio = this.toggleBio.bind(this);
     }
 
     updatePicture(image) {
         this.setState({ user_picture: image });
+    }
+
+    toggleBio() {
+        this.setState({ isBioVisible: true });
     }
 
     render() {
@@ -31,8 +39,33 @@ export default class Profile extends React.Component {
                         <h1>
                             {this.props.first} {this.props.last}
                         </h1>
-                        <p>{this.props.bio}</p>
-                        <BioEditor changeBio={this.props.changeBio} />
+
+                        {this.props.bio &&
+                        Object.keys(this.props.bio).length > 0 ? (
+                                <p>{this.props.bio}</p>
+                            ) : (
+                                <p>no bio yet</p>
+                            )}
+
+                        {this.props.bio &&
+                        Object.keys(this.props.bio).length > 0 ? (
+                                <button onClick={this.toggleBio}>Edit bio</button>
+                            ) : (
+                                <button onClick={this.toggleBio}>Add bio</button>
+                            )}
+
+                        {this.state.isBioVisible && (
+                            <BioEditor
+                                changeBio={this.props.changeBio}
+                                passUpdatedBio={update => {
+                                    this.props.passUpdatedBio(update);
+                                }}
+                                isBioVisible={this.state.isBioVisible}
+                                closeTextarea={() => {
+                                    this.setState({ isBioVisible: false });
+                                }}
+                            />
+                        )}
                     </div>
                 </div>
             </React.Fragment>
@@ -42,8 +75,4 @@ export default class Profile extends React.Component {
 
 // TO DO:
 
-// bio only updates after refresh
-// show "Add bio" button if bio text is undefined or null
-// show "Edit bio" button if bio text is NOT undefined or null
-// show BioEditor when clicking "Add bio" or "Edit bio" button
 // add transition for modal

@@ -5,14 +5,15 @@ export default class BioEditor extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isBioVisible: false,
             bio: {}
         };
         this.updateBio = this.updateBio.bind(this);
         this.saveBioToState = this.saveBioToState.bind(this);
+        this.closeTextarea = this.closeTextarea.bind(this);
     }
 
     updateBio() {
+        this.props.passUpdatedBio({ bio: this.state.bio });
         axios
             .post("/edit", { bio: this.state.bio })
             .then(() => {
@@ -21,10 +22,15 @@ export default class BioEditor extends React.Component {
             .catch(err => {
                 console.log("updateBio() POST /edit ERROR: ", err);
             });
+        this.props.closeTextarea();
     }
 
     saveBioToState(e) {
         this.setState({ bio: e.target.value });
+    }
+
+    closeTextarea() {
+        this.props.closeTextarea();
     }
 
     render() {
@@ -33,25 +39,16 @@ export default class BioEditor extends React.Component {
                 <div className="bio-container">
                     <textarea
                         onChange={this.saveBioToState}
-                        id="story"
-                        name="story"
                         rows="4"
-                        cols="33"
+                        cols="30"
                         maxLength="140"
                     />
-                    <button
-                        type="submit"
-                        onClick={this.updateBio}
-                        id="save-button"
-                    >
-                        Save
-                    </button>
+                    <div className="bio-buttons">
+                        <button onClick={this.updateBio}>Save</button>
+                        <button onClick={this.closeTextarea}>Cancel</button>
+                    </div>
                 </div>
             </React.Fragment>
         );
     }
 }
-
-// TO DO:
-
-// close textarea after succesfull request and call function to update bio
