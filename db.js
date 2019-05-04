@@ -43,11 +43,18 @@ function editBio(id, bio) {
     return db.query(q, params);
 }
 
+function getOtherDetails(id) {
+    const q = "SELECT * FROM users WHERE id=$1;";
+    const params = [id];
+    return db.query(q, params);
+}
+
 module.exports = {
     checkEmail,
     addUser,
     getPass,
     getUserData,
     changePic,
-    editBio
+    editBio,
+    getOtherDetails
 };

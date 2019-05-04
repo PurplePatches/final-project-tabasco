@@ -1,12 +1,13 @@
 import React from "react";
 import axios from "./axios";
-// import { HashRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Link } from "react-router-dom";
 
 import Header from "./header";
 import ProfilePic from "./profilepic";
 import Uploader from "./uploader";
 import Profile from "./profile";
 import BioEditor from "./bioeditor";
+import OtherProfile from "./otherprofile";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -43,44 +44,63 @@ export default class App extends React.Component {
     }
     render() {
         return (
-            <div className="app">
-                <Header
-                    ProfilePic={
-                        <ProfilePic
-                            firstName={this.state.firstName}
-                            lastName={this.state.lastName}
-                            picture={this.state.picture}
-                            toggleUploader={this.toggleUploader}
-                        />
-                    }
-                />
-
-                {this.state.uploaderVisible && (
-                    <Uploader
-                        toggleUploader={this.toggleUploader}
-                        profilePicUrl={this.profilePicUrl}
+            <BrowserRouter>
+                <div className="app">
+                    <Header
+                        ProfilePic={
+                            <ProfilePic
+                                firstName={this.state.firstName}
+                                lastName={this.state.lastName}
+                                picture={this.state.picture}
+                                toggleUploader={this.toggleUploader}
+                            />
+                        }
                     />
-                )}
 
-                <Profile
-                    firstName={this.state.firstName}
-                    lastName={this.state.lastName}
-                    ProfilePic={
-                        <ProfilePic
-                            firstName={this.state.firstName}
-                            lastName={this.state.lastName}
-                            picture={this.state.picture}
+                    {this.state.uploaderVisible && (
+                        <Uploader
                             toggleUploader={this.toggleUploader}
+                            profilePicUrl={this.profilePicUrl}
                         />
-                    }
-                    BioEditor={
-                        <BioEditor
-                            bio={this.state.bio}
-                            changeBio={this.changeBio}
-                        />
-                    }
-                />
-            </div>
+                    )}
+
+                    <Route
+                        exact
+                        path="/"
+                        render={() => (
+                            <Profile
+                                firstName={this.state.firstName}
+                                lastName={this.state.lastName}
+                                ProfilePic={
+                                    <ProfilePic
+                                        firstName={this.state.firstName}
+                                        lastName={this.state.lastName}
+                                        picture={this.state.picture}
+                                        toggleUploader={this.toggleUploader}
+                                    />
+                                }
+                                BioEditor={
+                                    <BioEditor
+                                        bio={this.state.bio}
+                                        changeBio={this.changeBio}
+                                    />
+                                }
+                            />
+                        )}
+                    />
+
+                    <Route
+                        path="/user/:id"
+                        render={props => (
+                            <OtherProfile
+                                key={props.match.url}
+                                match={props.match}
+                                history={props.history}
+                            />
+                        )}
+                    />
+                </div>
+            </BrowserRouter>
         );
     }
 }
