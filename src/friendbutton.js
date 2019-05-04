@@ -11,8 +11,12 @@ export default class FriendButton extends Component {
   }
 
   handleClick (e) {
-    console.log(e.target.textContent);
-    
+    const id = this.props.id
+    axios.post('/api/friendStatus/'+id,{action: e.target.innerText}).then(({data}) => {
+      console.log(data);
+      this.setState({...data})
+
+    })    
   }  
 
   componentDidMount () {
@@ -24,11 +28,6 @@ export default class FriendButton extends Component {
     })
   }
   render() {
-    const friendsButton = <div>unfriend</div>
-    const noFriendRequest = <div>request friend</div>
-    const canReject = <div>reject</div>
-    const canRevoke = <div>revoke</div>
-    
     if(this.state.canReject){
       this.button = 'reject'
     }else if(this.state.canReject === false){
@@ -39,7 +38,7 @@ export default class FriendButton extends Component {
       this.button = 'request friendship'
     }
     return (
-      <div onClick={(e) => this.handleClick(e)}>
+      <div className='friend-button' onClick={(e) => this.handleClick(e)}>
         {this.button}
       </div>
     )

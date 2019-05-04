@@ -45,11 +45,30 @@ exports.getImages = function (userid) {
   return db.query(`SELECT * FROM images WHERE userid = ${userid}`)
 }
 
-exports.setFriendStatus = (requester, requested) => {
+exports.newFriendRequest = (requester, requested) => {
   const created_at = Date.now()
-  return db.query(`INSERT INTO relations (requester, requested, created_at, friends) VALUES
-    (${requester}, ${requested}, ${created_at}, FALSE)
-    `)
+  const q = `INSERT INTO relations (requester, requested, created_at, friends) 
+    VALUES ($1, $2, $3, $4)
+    RETURNING relationid
+    `
+  const params = [ requester, requested, created_at, false];
+  return db.query(q, params)
+}
+
+exports.revokeFriendRequest = (requester, requested) => {
+  const created_at = Date.now()
+  const q = `DELETE FROM relations WHERE requester = $1 AND requested = $2
+    `
+  const params = [ requester, requested];
+  return db.query(q, params)
+}
+
+exports.acceptFriendRequest = (requester, requested) => {
+  const q = `UPDATE relations (friends) VALUES ($3)
+    WHERE requester = $1 AND requested = $2
+    `
+const params = [ requester, requested, true];
+return db.query(q, params)
 }
 
 exports.getFriendStatus = (requester, requested) => {

@@ -177,7 +177,6 @@ app.get('/api/profile/:id', (req, res) => {
 app.get('/api/friendStatus/:id', (req, res) => {
     const requestingId = req.session.userid
     const requestedId = req.params.id
-    console.log('im here');
     if(+requestingId === +requestedId) res.json({friends: null, canReject: null})
     db.getFriendStatus(+requestingId, +requestedId)
         .then(({rows}) => {
@@ -192,6 +191,34 @@ app.get('/api/friendStatus/:id', (req, res) => {
             res.json(resData)  
         })
     .catch(err => console.log(err))
+});
+
+app.post('/api/friendStatus/:id', (req, res) => {
+    const userid = req.session.userid
+    const friendid = req.params.id
+    console.log(req.body);
+    if(req.body.action === 'request friendship'){
+        db.newFriendRequest(userid,friendid).then(({rows}) => res.json({friends: false, canReject: false}))
+    }else if(req.body.action === 'revoke'){
+        db.revokeFriendRequest(userid,friendid).then(data => res.json({friends: false, canReject: null}))
+    }else if(req.body.action === 'reject'){
+        db.revokeFriendRequest(friendid, userid).then(data => res.json({friends: false, canReject: null}))
+    }
+    
+    // if(+requestingId === +requestedId) res.json({friends: null, canReject: null})
+    // db.getFriendStatus(+requestingId, +requestedId)
+    //     .then(({rows}) => {
+    //         const resData = {
+    //             friends: false,
+    //             canReject: null,
+    //         }
+    //         if(rows.length === 1){
+    //             if(rows[0].friends === true) resData.friends = true
+    //             resData.canReject = +rows[0].requested === +requestedId ? false : true
+    //         }
+    //         res.json(resData)  
+    //     })
+    // .catch(err => console.log(err))
 });
 
 

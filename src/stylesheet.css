@@ -269,7 +269,6 @@ img.preview {
   font-size: 1.5rem;
   display: grid;
   margin: 1rem;
-  max-height: 
 }
 
 
@@ -282,4 +281,16 @@ img.preview {
 #browse-profile .imagenote{
   justify-self: center;
   height: 40rem;
+}
+
+.friend-button {
+  background: khaki;
+  margin: .5rem;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.friend-button:hover {
+  background: gold;
+  cursor: pointer;
 }
