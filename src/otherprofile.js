@@ -2,6 +2,7 @@ import React from "react";
 import axios from "./axios";
 
 import ProfilePic from "./profilepic";
+import FriendButton from "./friendbutton";
 
 export default class OtherProfile extends React.Component {
     constructor(props) {
@@ -20,6 +21,7 @@ export default class OtherProfile extends React.Component {
             const lastName = data.last_name;
             const picture = data.picture;
             const bio = data.bio;
+
             this.setState({ firstName, lastName, picture, bio });
         });
     }
@@ -30,7 +32,8 @@ export default class OtherProfile extends React.Component {
                     <h2>
                         {this.state.firstName} {this.state.lastName}
                     </h2>
-                    <ProfilePic src={this.state.picture} />
+                    <ProfilePic picture={this.state.picture} />
+                    <FriendButton match={this.props.match} />
                 </div>
                 <div className="currentBio">
                     <p>{this.state.bio}</p>

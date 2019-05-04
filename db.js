@@ -44,8 +44,37 @@ function editBio(id, bio) {
 }
 
 function getOtherDetails(id) {
-    const q = "SELECT * FROM users WHERE id=$1;";
+    const q =
+        "SELECT first_name, last_name, picture, bio FROM users WHERE id=$1;";
     const params = [id];
+    return db.query(q, params);
+}
+
+function getFriendship(currentUser, otherUser) {
+    const q =
+        "SELECT * FROM friends WHERE requester=$1 AND receiver=$2 OR requester=$2 AND receiver=$1;";
+    const params = [currentUser, otherUser];
+    return db.query(q, params);
+}
+
+function friendRequest(currentUser, otherUser) {
+    const q =
+        "INSERT INTO friends (requester, receiver, status) VALUES ($1, $2, false);";
+    const params = [currentUser, otherUser];
+    return db.query(q, params);
+}
+
+function friendAccept(currentUser, otherUser) {
+    const q =
+        "UPDATE friends SET status=true WHERE requester=$1 AND receiver=$2 OR requester=$2 AND receiver=$1;";
+    const params = [currentUser, otherUser];
+    return db.query(q, params);
+}
+
+function unfriend(currentUser, otherUser) {
+    const q =
+        "DELETE FROM friends WHERE requester=$1 AND receiver=$2 OR requester=$2 AND receiver=$1;";
+    const params = [currentUser, otherUser];
     return db.query(q, params);
 }
 
@@ -56,5 +85,9 @@ module.exports = {
     getUserData,
     changePic,
     editBio,
-    getOtherDetails
+    getOtherDetails,
+    getFriendship,
+    friendRequest,
+    friendAccept,
+    unfriend
 };
