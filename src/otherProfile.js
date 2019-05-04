@@ -8,11 +8,12 @@ export default class OtherProfile extends React.Component {
     }
     componentDidMount() {
         const id = this.props.match.params.id;
-
+        console.log("Am i reaching here?");
         axios
             .get("/api/user/" + id)
             .then(({ data }) => {
-                console.log(data);
+                console.log("whose data am i am seeing here?", data);
+                this.setState(data[0]);
             })
             .catch(err => {
                 console.log("error", err);
@@ -20,14 +21,14 @@ export default class OtherProfile extends React.Component {
     }
 
     render() {
-        console.log("state for OtherProfile: ", this.props);
+        const { first_name, last_name, image, bio } = this.state;
         return (
-            <div>
+            <div className="showOtherProfile">
                 <p>
-                    {this.props.first_name} {this.props.last_name}
+                    {first_name} {last_name}
                 </p>
-                <p>{this.props.bio}</p>
-                <img src={this.props.image || "default"} />
+                <p>{bio || "This user has not entered a bio"}</p>
+                <img src={image || "default"} />
             </div>
         );
     }

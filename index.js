@@ -148,7 +148,7 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
                     url: image
                 });
             } else {
-                res.json({ success: false });
+                res.json(req.session.firstName);
             }
         })
         .catch(err => {
@@ -176,18 +176,20 @@ app.post("/bio", (req, res) => {
 });
 
 app.get("/api/user/:id", (req, res) => {
-    console.log("now we're here at GET/user:id");
-
-    const first = req.body.first_name;
-    db.getUserInfo(req.params.id).then(results => {
-        console.log("now we're here at GET/user:id", results);
-        if (req.params.id == req.session.userId) {
-            res.json({
-                redirect: true,
-                firstName: first
-            });
-        }
-    });
+    db.getUserInfo(req.params.id)
+        .then(({ rows }) => {
+            console.log("now we're here at GET/user:id", rows);
+            if (req.params.id == req.session.userId) {
+                res.json({
+                    redirect: true
+                });
+            } else {
+                res.json(rows);
+            }
+        })
+        .catch(err => {
+            console.log("error in server upload", err);
+        });
 });
 
 app.get("/logout", (req, res) => {

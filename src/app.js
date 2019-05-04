@@ -89,6 +89,7 @@ export default class App extends React.Component {
                                         lastName={last_name}
                                         image={image}
                                         bio={bio}
+                                        user={this.user}
                                     />
                                 );
                             }}
