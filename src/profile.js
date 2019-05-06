@@ -1,5 +1,4 @@
 import Bioeditor from "./bioEditor";
-import ProfilePic from "./profilepic";
 import React from "react";
 
 export default function(props) {
