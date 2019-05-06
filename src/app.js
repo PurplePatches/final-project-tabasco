@@ -3,6 +3,8 @@ import axios from "./axios";
 import ProfilePic from "./profilepic";
 import Profile from "./profile";
 import Uploader from "./uploader";
+import OtherProfile from "./otherprofile";
+import { BrowserRouter, Route } from "react-router-dom";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -51,30 +53,54 @@ export default class App extends React.Component {
                         }
                     />
                 </nav>
-                <div className="profile-container">
-                    <Profile
-                        image={this.state.user_picture}
-                        first={this.state.first_name}
-                        last={this.state.last_name}
-                        isUploaderVisible={this.state.isUploaderVisible}
-                        bio={this.state.bio}
-                        changeBio={() => {
-                            this.setState;
-                        }}
-                        passUpdatedBio={update => {
-                            this.setState(update);
-                        }}
-                    />
-                    {this.state.isUploaderVisible && (
-                        <Uploader
-                            setUploaderVisible={() => {
-                                this.setState({ isUploaderVisible: false });
-                            }}
-                            updatePicture={this.updatePicture}
+
+                <BrowserRouter>
+                    <div className="profile-container">
+                        <Route
+                            exact
+                            path="/"
+                            render={() => (
+                                <Profile
+                                    image={this.state.user_picture}
+                                    first={this.state.first_name}
+                                    last={this.state.last_name}
+                                    isUploaderVisible={
+                                        this.state.isUploaderVisible
+                                    }
+                                    bio={this.state.bio}
+                                    changeBio={() => {
+                                        this.setState;
+                                    }}
+                                    passUpdatedBio={update => {
+                                        this.setState(update);
+                                    }}
+                                />
+                            )}
                         />
-                    )}
-                </div>
+
+                        <Route
+                            path="/user/:id"
+                            render={props => (
+                                <OtherProfile
+                                    key={props.match.url}
+                                    match={props.match}
+                                    history={props.history}
+                                />
+                            )}
+                        />
+                    </div>
+                </BrowserRouter>
+
+                {this.state.isUploaderVisible && (
+                    <Uploader
+                        setUploaderVisible={() => {
+                            this.setState({ isUploaderVisible: false });
+                        }}
+                        updatePicture={this.updatePicture}
+                    />
+                )}
             </React.Fragment>
         );
     }
 }
+// <Route path="/user/:id" component={OtherProfile} />

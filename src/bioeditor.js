@@ -41,7 +41,7 @@ export default class BioEditor extends React.Component {
                         onChange={this.saveBioToState}
                         rows="4"
                         cols="30"
-                        maxLength="140"
+                        maxLength="280"
                     />
                     <div className="bio-buttons">
                         <button onClick={this.updateBio}>Save</button>
