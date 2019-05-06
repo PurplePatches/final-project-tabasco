@@ -52,7 +52,7 @@ export default class FriendsButton extends React.Component {
         console.log(this.props.otherId, "OTHER ID OK?");
 
         axios
-            .post("/friends", {
+            .post("/getprofile", {
                 otherId: this.props.otherId
             })
             .then(({ data }) => {
@@ -68,7 +68,7 @@ export default class FriendsButton extends React.Component {
     }
     render() {
         return (
-            <div className="container">
+            <div className="container-sm">
                 {this.state.unknown && (
                     <button
                         className="btn btn-dark btn-lg hvr-icon-wobble-horizontal"

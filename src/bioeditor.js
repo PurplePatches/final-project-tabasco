@@ -21,7 +21,7 @@ export default class BioEditor extends React.Component {
             this[e.target.name] = e.target.value; //key value pair [name of the input field
         };
         return (
-            <div className="container">
+            <div className="container-sm">
                 {this.props.bio && (
                     <div>
                         <div className="edit-container">

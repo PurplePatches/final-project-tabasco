@@ -14,7 +14,7 @@ export default function ProfilePic({
     return (
         <div className="profile-container">
             <img
-                className="test"
+                className="profile-pic"
                 src={profilePic || "../default.jpg"}
                 alt={first + " " + last}
                 onClick={clickHandler}

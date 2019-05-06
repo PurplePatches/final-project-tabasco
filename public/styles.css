@@ -4,10 +4,10 @@
 }
 
 body {
-    background: url("./bg.png");
+    /* background: url("./bg.png"); */
 
     object-fit: scale-down;
-    background-size: 400px;
+    /* background-size: 213%; */
 }
 
 main {
@@ -42,12 +42,19 @@ mark {
     background-color: blue;
 }
 .container {
-    grid-area: auto / span 2;
     width: -webkit-fill-available;
     text-align: center;
-    background: white;
+    background: #ffffff94;
     margin-bottom: 1rem;
     padding: 1rem;
+    max-width: 48vw;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    object-fit: contain;
+}
+
+.container-sm {
+    background: none;
+    box-shadow: none;
 }
 .title {
     font-family: ;
@@ -110,8 +117,7 @@ mark {
     word-break: break-word;
 }
 
-.profile-container > img,
-.test {
+.profile-container > img {
     max-width: -webkit-fill-available;
     object-fit: scale-down;
     width: 100px;
@@ -129,7 +135,6 @@ mark {
 .profile-container p {
     width: 100%;
     text-align: center;
-    background: white;
     height: 100%;
     padding: 0.5rem;
 }
@@ -163,6 +168,12 @@ mark {
     text-align: center;
 }
 
+.img-container img {
+    width: 100%;
+    object-fit: scale-down;
+    height: 100%;
+}
+
 /*HOVER CSS EFFECTS */
 
 /*HOVER GROW*/
@@ -184,7 +195,7 @@ mark {
     transform: scale(1.1);
 }
 
-@media (max-width: 500px) {
+@media (max-width: 600px) {
     .profile {
         display: flex;
         background: white;
@@ -201,9 +212,12 @@ mark {
         text-align: center;
     }
     .profile-container > img,
-    .test {
+    .img-container {
         position: inherit;
         display: flex;
+    }
+    .container {
+        max-width: 100%;
     }
 }
 

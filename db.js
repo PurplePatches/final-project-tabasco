@@ -51,6 +51,20 @@ OR (recipient_id = $2 AND sender_id = $1)`;
     return db.query(q, params);
 };
 
+exports.retrieveFriends = function retrieveFriends(userId) {
+    const q = `
+        SELECT users.id, first, last, url, accepted
+        FROM friendship
+        JOIN users
+        ON (accepted = false AND recipient_id = $1 AND sender_id = users.id)
+        OR (accepted = true AND recipient_id = $1 AND sender_id = users.id)
+        OR (accepted = false AND sender_id = $1 AND recipient_id = users.id)
+        OR (accepted = true AND sender_id = users.id AND recipient_id = $1)
+    `;
+    let params = [userId];
+    return db.query(q, params);
+};
+
 exports.deleteFriend = function deleteFriend(userId, otherId) {
     let q = `DELETE FROM friendship WHERE (recipient_id = $1 AND sender_id = $2)
     OR (recipient_id = $2 AND sender_id = $1)`;

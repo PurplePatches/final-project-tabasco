@@ -37,8 +37,8 @@ export default class OtherProfile extends React.Component {
                     {" "}
                     Profile of {this.state.otherFirst} {this.state.otherLast}
                 </h1>
-                <img src={this.state.otherImage} />
                 {this.state.otherBio}
+                <img src={this.state.otherImage} />
                 <FriendsButton otherId={this.props.match.params.id} />
             </div>
         );

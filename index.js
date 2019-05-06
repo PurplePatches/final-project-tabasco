@@ -13,6 +13,8 @@ const config = require("./config");
 var path = require("path");
 const s3 = require("./s3");
 
+//REDUX
+
 var diskStorage = multer.diskStorage({
     destination: function(req, file, callback) {
         callback(null, __dirname + "/uploads"); //file should be stored locally in uploads folder
@@ -184,7 +186,7 @@ app.post("/bioedit", (req, res) => {
 //FRIENDSHIP//
 
 //ORIGINAL REQUEST TO CHECK FRIENDS STATUS
-app.post("/friends", (req, res) => {
+app.post("/getprofile", (req, res) => {
     console.log(req.body.otherId, "OTHER ID");
     db.checkFriend(req.session.userId, req.body.otherId).then(({ rows }) => {
         console.log("ROWS!", rows[0]);
@@ -263,6 +265,13 @@ app.post("/accept", (req, res) => {
             res.json(rows[0]);
         }
     );
+});
+//FRIENDS LIST
+app.get("/friends/a", (req, res) => {
+    db.retrieveFriends(req.session.userId).then(({ rows }) => {
+        console.log(rows, "ROWS FRIENDS!");
+        res.json(rows);
+    });
 });
 
 app.get("*", function(req, res) {

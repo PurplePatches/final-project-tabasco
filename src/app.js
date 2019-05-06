@@ -8,6 +8,7 @@ import Uploader from "./uploader";
 import Profile from "./profile";
 import BioEditor from "./bioeditor";
 import OtherProfile from "./otherprofile";
+import Friends from "./friends";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -38,9 +39,6 @@ export default class App extends React.Component {
             // image: data.image || default
             // // })
         });
-
-        //the then... destructuring > check online
-        //what we need to send back json:
     }
     render() {
         console.log(this.state, "state of appjs");
@@ -55,6 +53,13 @@ export default class App extends React.Component {
             <BrowserRouter>
                 <div>
                     <img className="logo" src="../logo.png" />
+                    <nav>
+                        <ul className="nav justify-content-center grey lighten-4 py-4">
+                            <li>
+                                <a href="/friends">Friends</a>
+                            </li>
+                        </ul>
+                    </nav>
                     <Route
                         path="/user/:id"
                         render={props => (
@@ -64,6 +69,10 @@ export default class App extends React.Component {
                                 history={props.history}
                             />
                         )}
+                    />
+                    <Route
+                        path="/friends"
+                        render={props => <Friends id={this.state.id} />}
                     />
                     <Route
                         path="/"
@@ -110,6 +119,7 @@ export default class App extends React.Component {
                     )}
                 </div>
             </BrowserRouter>
+
             // {this.state.isUploaderVisible && <Uploader setImage={image => this.setState({image})} />}
             // PUT BEFORE THE DIV ENDING
             // {this is a //

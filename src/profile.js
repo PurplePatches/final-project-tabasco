@@ -20,9 +20,6 @@ export default class Profile extends React.Component {
                     </div>
                     {this.props.bioEditor}
 
-                    {/*<p>THE BIO props.bio : {props.bio}</p>
-
-                {props.first} {props.last}*/}
                     <a className="grid" href="/logout">
                         Logout
                     </a>
