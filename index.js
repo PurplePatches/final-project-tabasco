@@ -201,8 +201,6 @@ app.get('/api/relations', (req, res) => {
                 db.getProfiles(neededFriendDataIds.join(',')),
                 db.getImages(neededFriendDataIds.join(','))
             ]).then((data) => {
-                console.log(data[0]);
-                
             res.json({
                 id: req.session.userid,
                 profData: data[0].rows,
@@ -216,31 +214,31 @@ app.get('/api/relations', (req, res) => {
 app.post('/api/friendStatus/:id', (req, res) => {
     const userid = req.session.userid
     const friendid = req.params.id
-    console.log(req.body);
+    console.log(req.body.action);
+    
     if(req.body.action === 'request friendship'){
         db.newFriendRequest(userid,friendid).then(({rows}) => res.json({friends: false, canReject: false}))
-    }else if(req.body.action === 'revoke'){
+    }else if(req.body.action === 'revoke' || req.body.action === 'reject' || req.body.action === 'unfriend'){
         db.revokeFriendRequest(userid,friendid).then(data => res.json({friends: false, canReject: null}))
-    }else if(req.body.action === 'reject'){
-        db.revokeFriendRequest(friendid, userid).then(data => res.json({friends: false, canReject: null}))
+    }else if(req.body.action === 'accept'){
+        db.acceptFriendRequest(friendid, userid).then(data => res.json({friends: true, canReject: null}))
     }
-    
-    // if(+requestingId === +requestedId) res.json({friends: null, canReject: null})
-    // db.getFriendStatus(+requestingId, +requestedId)
-    //     .then(({rows}) => {
-    //         const resData = {
-    //             friends: false,
-    //             canReject: null,
-    //         }
-    //         if(rows.length === 1){
-    //             if(rows[0].friends === true) resData.friends = true
-    //             resData.canReject = +rows[0].requested === +requestedId ? false : true
-    //         }
-    //         res.json(resData)  
-    //     })
-    // .catch(err => console.log(err))
 });
 
+app.post('/api/setProfilePicture/:id', (req, res) => {
+    const userid = req.session.userid
+    const imageid = req.params.id
+    db.unsetProfilePicture(userid)
+        .then(() => db.setProfilePicture(imageid, userid))
+        .then(() => res.json({succes: true}))
+        .catch(err => res.json({succes: err}))
+});
+
+app.post('/api/deletePicture/:id', (req, res) => {
+    const userid = req.session.userid
+    const imageid = req.params.id
+    db.deletePicture(imageid, userid).then(res.json({succes: true})).catch(err => res.json({succes: err}))
+});
 
 app.post('/login', (req, res) => {
     let {email, password} = req.body; 
@@ -254,7 +252,6 @@ app.post('/login', (req, res) => {
             return checkPassword(password, data.rows[0].password)
         })
         .then(authorized => {
-         
             if(authorized){
                 req.session.userid = userid;
                 res.json({status: 'valid'})

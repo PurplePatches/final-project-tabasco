@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import Map from './map'
 import Input from './input';
+import WideImage from './wideimage';
+import Cover from './cover';
 
 
 export default class Profile extends Component {
@@ -11,7 +13,9 @@ export default class Profile extends Component {
       last: false,
       dogname: false,
       dogbreed: false,
-      bio: false
+      bio: false,
+      imageModal: false,
+      imageModalStart: 0,
     }
     this.profileItems = [{
       name: 'first',
@@ -42,6 +46,12 @@ export default class Profile extends Component {
     }
   }
 
+  handleClick(e){
+    this.setState({imageModal: true})
+    console.log(e);
+    console.log(e.target.id);
+  }
+
   render() {
     const mappedProfile = this.profileItems
       .map((el,index,arr) => (
@@ -59,18 +69,29 @@ export default class Profile extends Component {
         ))
     const previewImages = this.props.images
         .map((el, index) => (
-          <img className='preview' key={index} src={el.url} />
+          <img id={index} className='preview' key={index} src={el.url}  onClick={(e) => this.handleClick(e)}/>
         ))
     return (
       <>
+      {this.state.imageModal && this.props.images.length > 0 &&
+        <>
+          <Cover coverClicked={() => this.setState({imageModal: false})}/>
+          <WideImage 
+            start={this.state.imageModalStart}
+            profileimage={0}
+            images={this.props.images}
+            clickHandler={(e) => this.props.handleClick(e)}
+          />
+        </>}
       <div className='profile top'>
         <div className='left'>
-          <div className='profilepic' onClick={this.props.handleClick}>
-            <img src={this.props.images.length > 0 ? this.props.images[0].url : './uploads/dogprofile.jpg'} />
+          <div className='profilepic'>
+            <img id='main' src={this.props.images.length > 0 ? this.props.images[0].url : './uploads/dogprofile.jpg'}  onClick={(e) => this.handleClick(e)}/>
             <p>Change picture</p>
             <div className='preview-images'>
               {previewImages}
             </div>
+            <div className='button'>UPLOAD</div>
           </div>
         </div>
         <form className='right'>

@@ -27,18 +27,25 @@ export default class FriendButton extends Component {
 
     })
   }
+
+  
+
   render() {
-    if(this.state.canReject){
-      this.button = 'reject'
-    }else if(this.state.canReject === false){
-      this.button = 'revoke'
-    }else if(this.state.friends){
+    if(this.state.friends){
       this.button = 'unfriend'
+    }
+    else if(this.state.canReject){
+      return (<>
+          <div className='button' onClick={(e) => this.handleClick(e)} >accept</div>
+          <div className='button' onClick={(e) => this.handleClick(e)} >reject</div>
+      </>)
+    }else if(this.state.canReject === false){
+      return <div className='button' onClick={(e) => this.handleClick(e)} >revoke</div>
     }else if (this.state.friends === false) {
       this.button = 'request friendship'
     }
     return (
-      <div className='friend-button' onClick={(e) => this.handleClick(e)}>
+      <div className='button' onClick={(e) => this.handleClick(e)}>
         {this.button}
       </div>
     )

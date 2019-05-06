@@ -86,6 +86,22 @@ export default class App extends Component {
       this.setState({showSettingsModal: true})
     }else if(e.target.id === 'coverdiv'){
       this.setState({showSettingsModal: false})
+    }else if(e.target.id === 'upload'){
+      document.getElementById('pic-select').click()
+    }else if(e.target.id === 'make-profile'){
+      const imageid = e.target.parentElement.parentElement.id
+      axios.post('/api/setProfilePicture/'+imageid).then(console.log)
+    }else if(e.target.id === 'delete'){
+      const imageid = e.target.parentElement.parentElement.id
+      axios.post('/api/deletePicture/'+imageid).then(console.log)
+    }else if(e.target.id === 'description'){
+      console.log(e);
+      console.log(e.target.parentElement.parentElement.id);
+    }else{
+      console.log(e);
+      console.log(e.target.parentElement.parentElement.id);
+      
+      
     }
   }
 
@@ -118,7 +134,7 @@ export default class App extends Component {
               images={this.state.images}
               handleChange={(e) => this.handleChange(e)} 
               saveData={e => this.saveData(e)}
-              handleClick={() => this.changePhoto()}
+              handleClick={(e) => this.clickHandler(e)}
               showSaved={this.state.showSaved}
               getProfile={() => this.getProfile()}
             />

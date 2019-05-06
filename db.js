@@ -51,6 +51,34 @@ exports.getImages = function (userid, profileOnly = false) {
   return db.query(q)
 }
 
+exports.unsetProfilePicture = (userid) => {
+  console.log('unset ', userid);
+  
+  const q = `UPDATE images SET isprofile = 'f'
+    WHERE userid = $1
+    `
+const params = [ userid ];
+return db.query(q, params)
+}
+
+exports.setProfilePicture = (imageid, userid) => {
+  console.log('set ', imageid,' ' ,userid);
+
+  const q = `UPDATE images SET isprofile = true
+    WHERE imageid = $1 AND userid = $2
+    `
+const params = [ imageid, userid ];
+return db.query(q, params)
+}
+
+exports.deletePicture = (imageid, userid) => {
+  const q = `DELETE FROM images
+    WHERE imageid = $1 AND userid = $2
+    `
+const params = [ imageid, userid ];
+return db.query(q, params)
+}
+
 exports.newFriendRequest = (requester, requested) => {
   const created_at = Date.now()
   const q = `INSERT INTO relations (requester, requested, created_at, friends) 
@@ -62,15 +90,13 @@ exports.newFriendRequest = (requester, requested) => {
 }
 
 exports.revokeFriendRequest = (requester, requested) => {
-  const created_at = Date.now()
-  const q = `DELETE FROM relations WHERE requester = $1 AND requested = $2
-    `
+  const q = `DELETE FROM relations WHERE (requester = $1 AND requested = $2) OR (requester = $2 AND requested = $1)`
   const params = [ requester, requested];
   return db.query(q, params)
 }
 
 exports.acceptFriendRequest = (requester, requested) => {
-  const q = `UPDATE relations (friends) VALUES ($3)
+  const q = `UPDATE relations SET friends = $3
     WHERE requester = $1 AND requested = $2
     `
 const params = [ requester, requested, true];
@@ -78,8 +104,6 @@ return db.query(q, params)
 }
 
 exports.getFriendStatus = (requester, requested) => {
-  console.log(requester, requested);
-  
   return db.query(`SELECT * FROM relations 
     WHERE (requester = ${requester} AND requested = ${requested})
     OR (requested = ${requester} AND requester = ${requested})

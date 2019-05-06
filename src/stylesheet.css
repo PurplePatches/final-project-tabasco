@@ -168,6 +168,13 @@ width: 13rem;
 object-fit: cover;
 }
 
+.profile img:h {
+  border: 1rem aliceblue solid;
+  height: 15rem;
+  width: 13rem;
+  object-fit: cover;
+  }
+
 .profile .profilepic {
   position: relative;
   text-align: center;
@@ -181,7 +188,8 @@ object-fit: cover;
 }
 
 
-.profilepic:hover p {
+/* .profilepic:hover p {
+  
   display: inherit;
   position: absolute;
   top: 50%;
@@ -189,9 +197,9 @@ object-fit: cover;
   transform: translate(-50%, -50%);
   opacity: 1;
   font-size: 2rem;
-}
+} */
 
-.profilepic:hover img{
+.profilepic img:hover{
   opacity: .5;
 }
 
@@ -256,7 +264,7 @@ img.preview {
 }
 
 #coverdiv {
-  background-color: rgba(0,0,0,0.3);
+  background-color: rgba(0,0,0,0.5);
   position: fixed;
   top: 0;
   bottom: 0;
@@ -283,14 +291,15 @@ img.preview {
   height: 40rem;
 }
 
-.friend-button {
+.button {
+  color: black;
   background: khaki;
   margin: .5rem;
   border-radius: 5px;
   text-align: center;
 }
 
-.friend-button:hover {
+.button:hover {
   background: gold;
   cursor: pointer;
 }
@@ -308,8 +317,92 @@ img.preview {
   margin: 1rem;
 }
 
+.card:hover {
+  cursor: pointer;
+}
+
 .card img{
   height: 10rem;
   width: 9rem;
   object-fit: cover;
+}
+
+.wide-image {
+  z-index: 30;
+  height: 600px;
+  width: 100%;
+  position: absolute;
+
+}
+
+.wide-image img {
+  z-index: 31;
+  display: block;
+  position: absolute;
+  margin-left: 10%;
+  object-fit: cover;
+  width: 80%;
+  height: 100%;
+  transform: translateX(120%);
+  transition: 1s;
+
+}
+
+.wide-image img.show {
+  transform: translateX(0);
+  transition: 1s;
+}
+
+.wide-image img.exit {
+  transform: translateX(-120%);
+  transition: 1s;
+
+}
+
+.image-buttons {
+  top: 80%;
+  display: flex;
+  font-size: 2rem;
+  justify-content: center;
+  position: fixed;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+}
+
+
+
+.arrow-left {
+  position: absolute;
+  left: 5%;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: 0;
+  height: 0;
+  border-top: 6rem solid transparent;
+  border-bottom: 6rem solid transparent;
+  border-right: 3rem solid rgba(0,0,0,.5);
+}
+
+.arrow-right {
+  position: absolute;
+  right: 5%;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: 0;
+  height: 0;
+  border-top: 6rem solid transparent;
+  border-bottom: 6rem solid transparent;
+  border-left: 3rem solid rgba(0,0,0,.5);
+}
+
+.arrow-left:hover {
+  border-right: 3rem solid rgba(0,0,0,1);
+}
+
+.arrow-right:hover {
+  border-left: 3rem solid rgba(0,0,0,1);
 }

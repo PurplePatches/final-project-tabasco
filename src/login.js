@@ -1,55 +1,3 @@
-// import React from 'react'
-// import axios from 'axios';
-
-
-// export default function Login(props) {
-//   let loggingIn = false
-//   const details = {}
-//   const login = e => {
-//     if (loggingIn) {
-//       console.log('Logging in in-progress, please wait');
-//     }
-//     loggingIn = true
-//     axios.post('/login', {
-//       email: details.email,
-//       password: details.password,
-//     })
-//       .then(data => {
-//         console.log(data);
-//         loggingIn = false
-//         if(data.status === 200) {
-//           document.location.replace('/')
-//         }else{
-//           console.log('something went wrong');
-//         }
-//       })
-//       .catch(err => {
-//         loggingIn = false
-//         console.log(err);
-//       })
-    
-//   }
-//   return (
-//     <>
-//       <h1>Log in</h1>
-//       <div className='form'>
-//         <div className='error hidden'>something went wrong</div>
-//         <div className='form-line'>
-//           <p>Email</p> <input type='email' name='email' onChange={e => details[e.target.name] = e.target.value}/>
-//         </div>
-//         <div className='form-line'>
-//           <p>Password</p> <input type='password' name='password' onChange={e => details[e.target.name] = e.target.value}/>
-//         </div>
-//       {/* <input type="hidden" name="_csrf" value="{csrfToken}" /> */}
-//       <input type='submit' onClick={submit} value='Log in'/>
-//     </div>
-//     <div>
-//       <p style={{textAlign: 'center'}}>No account yet? <a onClick={props.switchScreen}>Register here for free!</a></p>
-//     </div>
-//   </>
-//   )
-// }
-
 import React, { Component } from 'react'
 import axios from './utils/axios';
 import { Link } from 'react-router-dom';
@@ -66,7 +14,6 @@ export default class Login extends Component {
   }
 
     login () {
-      e.preventDefault()
       if (this.loggingIn) {
         return console.log('Logging in in-progress, please wait');
       }
