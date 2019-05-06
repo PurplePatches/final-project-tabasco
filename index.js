@@ -183,6 +183,22 @@ app.get("/api/users/:id", (req, res) => {
         });
 });
 
+app.post("/api/users/:id", (req, res) => {
+    console.log("POST IN USERS");
+
+    let recipient_id = req.params.id;
+    console.log("recipient_id", recipient_id);
+    let requester_id = req.session.userId;
+    console.log("requester_id", requester_id);
+    let status = "Request Sended";
+
+    db.sendRequest(requester_id, recipient_id, status).then(results => {
+        console.log("results in send request", results);
+        let status = results.rows[0];
+        res.json(status);
+    });
+});
+
 //-------------       WELCOME     ------------//
 
 app.get("/welcome", (req, res) => {

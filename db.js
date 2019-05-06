@@ -61,3 +61,23 @@ exports.insertImage = function insertImage(url, userid) {
     let params = [url, userid];
     return db.query(q, params);
 };
+
+//((((((((((((((((((((((((((((((((((((((((((     PROFILE     ))))))))))))))))))))))))))))))))))))))))))
+
+exports.sendRequest = function sendRequest(requester_id, recipient_id, status) {
+    let q = `INSERT INTO friendship (requester_id, recipient_id, status) VALUES ($1, $2, $3) RETURNING *;`;
+    let params = [requester_id, recipient_id, status];
+    return db.query(q, params);
+};
+
+exports.friendship = function friendship() {
+    let q = `
+    SELECT users.id, firstname, lastname, url, accepted
+    FROM friendships
+    JOIN users
+    ON (accepted = false AND recipient_id = $1 AND requester_id = users.id)
+    OR (accepted = true AND recipient_id = $1 AND requester_id = users.id)
+    OR (accepted = true AND requester_id = $1 AND recipient_id = users.id)`;
+    let params = [];
+    return db.query(q, params);
+};

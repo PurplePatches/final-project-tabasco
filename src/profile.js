@@ -12,7 +12,7 @@ export default class Profile extends React.Component {
 
     render() {
         return (
-            <div>
+            <div id="wrap-profile">
                 <h1>PROFILE</h1>
                 <div>
                     <p id="nameprofile">

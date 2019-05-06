@@ -1,20 +1,20 @@
 import React from "react";
 import axios from "./axios";
 import { Route } from "react-router-dom";
+import FriendButton from "./friendbutton";
 
 export default class OtherProfile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
-        console.log("Okkkkkk babyy");
     }
 
     componentDidMount() {
         let self = this;
-        const id = self.props.match.params.id;
-        console.log("id", id);
+        const otherId = self.props.match.params.id;
+        console.log("otherId", otherId);
         axios
-            .get("/api/users/" + id)
+            .get("/api/users/" + otherId)
             .then(({ data }) => {
                 console.log("DATA IN OTHER PROFILES", data);
                 if (data.redirect) {
@@ -24,7 +24,8 @@ export default class OtherProfile extends React.Component {
                         firstname: data.firstname,
                         lastname: data.lastname,
                         url: data.url,
-                        bio: data.bio
+                        bio: data.bio,
+                        otherId: otherId
                     });
                 }
             })
@@ -34,12 +35,14 @@ export default class OtherProfile extends React.Component {
     }
     render() {
         return (
-            <div>
+            <div id="wrap-otherprofile">
                 <h2>
                     {this.state.firstname} {this.state.lastname}
                 </h2>
                 <img src={this.state.url} />
                 <p>{this.state.bio}</p>
+
+                <FriendButton />
             </div>
         );
     }

@@ -44,10 +44,10 @@ export default class Uploader extends React.Component {
                             }}
                         />
                         <button onClick={e => this.uploadFile(e)}>
-                            upload
+                            Upload
                         </button>
                         <button
-                            clickHandler={() =>
+                            onClick={() =>
                                 this.setState({
                                     isUploaderVisible: false
                                 })

@@ -40,59 +40,62 @@ export default class App extends React.Component {
         }
         return (
             <div>
-                <img
-                    className="logo"
-                    src="https://media.giphy.com/media/65Tr7aW4HJYdCHN082/source.gif"
-                />
+                <div id="header">
+                    <div className="logo">
+                        <p className="logoname">CONECT</p>
+                    </div>
 
-                <ProfilePic
-                    url={this.state.url}
-                    firstname={this.state.firstname}
-                    clickHandler={() =>
-                        this.setState({
-                            isUploaderVisible: true
-                        })
-                    }
-                />
-                <BrowserRouter>
-                    <div>
+                    <ProfilePic
+                        url={this.state.url}
+                        firstname={this.state.firstname}
+                        clickHandler={() =>
+                            this.setState({
+                                isUploaderVisible: true
+                            })
+                        }
+                    />
+                </div>
+                <div id="content">
+                    <BrowserRouter>
                         <div>
+                            <div>
+                                <Route
+                                    exact
+                                    path="/"
+                                    render={props => {
+                                        return (
+                                            <Profile
+                                                firstname={this.state.firstname}
+                                                lastname={this.state.lastname}
+                                                imageurl={this.state.url}
+                                                id={this.state.userId}
+                                                onClick={this.showU}
+                                                bio={this.state.bio}
+                                                setBio={this.setBio}
+                                            />
+                                        );
+                                    }}
+                                />
+                            </div>
+
                             <Route
-                                exact
-                                path="/"
-                                render={props => {
-                                    return (
-                                        <Profile
-                                            firstname={this.state.firstname}
-                                            lastname={this.state.lastname}
-                                            imageurl={this.state.url}
-                                            id={this.state.userId}
-                                            onClick={this.showU}
-                                            bio={this.state.bio}
-                                            setBio={this.setBio}
-                                        />
-                                    );
-                                }}
+                                path="/users/:id"
+                                render={props => (
+                                    <OtherProfile
+                                        key={props.match.url}
+                                        match={props.match}
+                                        history={props.history}
+                                    />
+                                )}
                             />
                         </div>
-
-                        <Route
-                            path="/users/:id"
-                            render={props => (
-                                <OtherProfile
-                                    key={props.match.url}
-                                    match={props.match}
-                                    history={props.history}
-                                />
-                            )}
+                    </BrowserRouter>
+                    {this.state.isUploaderVisible && (
+                        <Uploader
+                            setImage={image => this.setState({ url: image })}
                         />
-                    </div>
-                </BrowserRouter>
-                {this.state.isUploaderVisible && (
-                    <Uploader
-                        setImage={image => this.setState({ url: image })}
-                    />
-                )}
+                    )}
+                </div>
             </div>
         );
     }

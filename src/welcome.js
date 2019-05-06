@@ -7,9 +7,10 @@ import Login from "./login";
 export default class Welcome extends React.Component {
     render() {
         return (
-            <div>
-                <img className="logo" src="et.jpg" />
-                <h1>SPACED</h1>
+            <div id="welcome">
+                <div className="logo">
+                    <p className="logoname">CONECT</p>
+                </div>
                 <div>
                     <HashRouter>
                         <div id="boxregister">
