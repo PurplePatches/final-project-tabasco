@@ -9,18 +9,23 @@
             .then(({ rows }) => {
                 res.json(rows);
             })
-            .catch(e => {
-                console.log("GET /user getUserInformation: ", e);
+            .catch(() => {
+                res.sendStatus(404);
             });
     });
 
-    app.get("/user/:id", (req, res) => {
-        db.getUserInformation(req.session.userId)
-            .then(({ rows }) => {
-                res.json(rows);
+    app.get("/api/user/:id", (req, res) => {
+        if (req.session.userId == req.params.id) {
+            return res.status(400).json({ error: "Access denied." });
+        }
+        db.getUserInformation(req.params.id)
+            .then(data => {
+                data.rows[0]
+                    ? res.json(data.rows[0])
+                    : res.json({ redirect: true });
             })
-            .catch(e => {
-                console.log("GET /user getUserInformation: ", e);
+            .catch(() => {
+                res.sendStatus(404);
             });
     });
 })();

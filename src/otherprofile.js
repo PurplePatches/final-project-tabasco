@@ -5,20 +5,24 @@ export default class OtherProfile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            bio: {},
-            isBioVisible: false
+            bio: {}
         };
-        this.updatePicture = this.updatePicture.bind(this);
     }
 
-    componentDidMount(this.props.match.params.id;) {
-        axios.get("/api/user/:id").then(({ data }) => {
-
-        });
+    componentDidMount() {
+        axios
+            .get(`/api/user/${this.props.match.params.id}`)
+            .then(({ data }) => {
+                data.redirect
+                    ? this.props.history.push("/")
+                    : this.setState({ ...data });
+            })
+            .catch(e => {
+                if (e.response.status === 400) {
+                    this.props.history.push("/");
+                }
+            });
     }
-
-    // how to incorporate this.props.history.push('/');
-    // use this to prevent looking at other profiles then your own
 
     render() {
         return (
@@ -30,18 +34,14 @@ export default class OtherProfile extends React.Component {
                             : "flex-container-profile"
                     }
                 >
-                    {/* show image */}
-                    <img src={this.props.image} />
-
+                    <img src={this.state.user_picture} />
                     <div className="text-bio-container">
-                        {/* show name */}
                         <h1>
-                            {this.props.first} {this.props.last}
+                            {this.state.first_name} {this.state.last_name}
                         </h1>
-                        {/* show bio (if available) */}
-                        {this.props.bio &&
-                        Object.keys(this.props.bio).length > 0 ? (
-                                <p>{this.props.bio}</p>
+                        {this.state.bio &&
+                        Object.keys(this.state.bio).length > 0 ? (
+                                <p>{this.state.bio}</p>
                             ) : (
                                 <p>no bio yet</p>
                             )}

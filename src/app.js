@@ -33,6 +33,9 @@ export default class App extends React.Component {
     }
 
     render() {
+        if (!this.state.id) {
+            return null;
+        }
         return (
             <React.Fragment>
                 <nav className="navigation">
@@ -85,6 +88,9 @@ export default class App extends React.Component {
                                     key={props.match.url}
                                     match={props.match}
                                     history={props.history}
+                                    isUploaderVisible={
+                                        this.state.isUploaderVisible
+                                    }
                                 />
                             )}
                         />
@@ -103,4 +109,3 @@ export default class App extends React.Component {
         );
     }
 }
-// <Route path="/user/:id" component={OtherProfile} />
