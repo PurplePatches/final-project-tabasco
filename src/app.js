@@ -9,6 +9,7 @@ import Dropdown from './dropdown';
 import Settings from './settings';
 import Cover from './cover';
 import BrowseProfile from './browseprofile'
+import Friends from './friends'
 
 export default class App extends Component {
   constructor(props) {
@@ -104,6 +105,7 @@ export default class App extends Component {
         <Dropdown clickHandler={e => this.clickHandler(e)}/>
           {this.state.showSettingsModal ? <Settings exitSettings={() => this.setState({showSettingsModal: false})} email={this.state.email} handleChange={e => this.handleChange(e)}/> : null}
         <Route exact path='/' component={Home} />
+        <Route exact path='/friends' component={Friends} />
         <Route exact path='/profile' render={() => (
           <>
             <Profile 

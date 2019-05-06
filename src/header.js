@@ -12,6 +12,8 @@ export default function Header(props) {
     
         <Link to='/profile' className='header-item'>PROFILE</Link>
         <div className='header-item'>FIND FRIENDS</div>
+        <Link to='/friends' className='header-item'>FRIEND LIST</Link>
+
       </div>
      <div className='header-profile outer'>
         <div className='header-profile header-item'>

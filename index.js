@@ -193,6 +193,23 @@ app.get('/api/friendStatus/:id', (req, res) => {
     .catch(err => console.log(err))
 });
 
+app.get('/api/relations', (req, res) => {
+    db.getRelations(req.session.userid)
+        .then(friendData => {
+            const neededFriendDataIds = friendData.rows.map(el => el.requester === req.session.userid ? el.requested : el.requester)
+            Promise.all([
+                db.getProfiles(neededFriendDataIds.join(',')),
+                db.getImages(neededFriendDataIds.join(','))
+            ]).then((data) => {
+            res.json({
+                profData: data[0].rows,
+                friendData: friendData.rows,
+                images:  data[1].rows,
+            })
+        })
+    })
+})
+
 app.post('/api/friendStatus/:id', (req, res) => {
     const userid = req.session.userid
     const friendid = req.params.id

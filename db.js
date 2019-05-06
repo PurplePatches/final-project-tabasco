@@ -31,7 +31,11 @@ WHERE
 }
 
 exports.getProfile = function (userid) {
-  return db.query(`SELECT * FROM users WHERE userid = ${userid}`)
+  return db.query(`SELECT * FROM users WHERE userid IN (${userid})`)
+}
+
+exports.getProfiles = function (userid) {
+  return db.query(`SELECT (userid, bio, dogname, dogbreed, first, last, location) FROM users WHERE userid IN (${userid})`)
 }
 
 exports.saveImage = function (url, userid) {
@@ -41,8 +45,10 @@ exports.saveImage = function (url, userid) {
   return db.query(q, params)
 }
 
-exports.getImages = function (userid) {
-  return db.query(`SELECT * FROM images WHERE userid = ${userid}`)
+exports.getImages = function (userid, profileOnly = false) {
+  const q = `SELECT * FROM images WHERE userid IN (${userid})`
+  if(profileOnly) q += ` AND isProfile IS true`
+  return db.query(q)
 }
 
 exports.newFriendRequest = (requester, requested) => {
@@ -77,6 +83,13 @@ exports.getFriendStatus = (requester, requested) => {
   return db.query(`SELECT * FROM relations 
     WHERE (requester = ${requester} AND requested = ${requested})
     OR (requested = ${requester} AND requester = ${requested})
+    `)
+}
+
+exports.getRelations = (id) => {
+  return db.query(`SELECT * FROM relations 
+    WHERE (requester = ${id})
+    OR (requested = ${id})
     `)
 }
 
