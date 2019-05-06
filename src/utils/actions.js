@@ -14,6 +14,7 @@ export async function receiveRelations() {
     
     return {
         type: 'RECEIVE_RELATIONS',
+        id: data.id,
         profiles: data.profData,
         relations: data.friendData,
         images: data.images,

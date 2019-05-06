@@ -294,3 +294,22 @@ img.preview {
   background: gold;
   cursor: pointer;
 }
+
+.friend-list {
+  display: flex;
+  margin: 3rem;
+}
+
+.card {
+  height: 15rem;
+  width: 10rem;
+  font-size: 1.5rem;
+  background: lightpink;
+  margin: 1rem;
+}
+
+.card img{
+  height: 10rem;
+  width: 9rem;
+  object-fit: cover;
+}

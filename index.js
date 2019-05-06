@@ -201,7 +201,10 @@ app.get('/api/relations', (req, res) => {
                 db.getProfiles(neededFriendDataIds.join(',')),
                 db.getImages(neededFriendDataIds.join(','))
             ]).then((data) => {
+                console.log(data[0]);
+                
             res.json({
+                id: req.session.userid,
                 profData: data[0].rows,
                 friendData: friendData.rows,
                 images:  data[1].rows,

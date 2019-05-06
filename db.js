@@ -35,7 +35,7 @@ exports.getProfile = function (userid) {
 }
 
 exports.getProfiles = function (userid) {
-  return db.query(`SELECT (userid, bio, dogname, dogbreed, first, last, location) FROM users WHERE userid IN (${userid})`)
+  return db.query(`SELECT userid, bio, dogname, dogbreed, first, last, location FROM users WHERE userid IN (${userid})`)
 }
 
 exports.saveImage = function (url, userid) {
