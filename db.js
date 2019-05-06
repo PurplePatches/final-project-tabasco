@@ -78,6 +78,13 @@ function unfriend(currentUser, otherUser) {
     return db.query(q, params);
 }
 
+function getFriends(currentUser) {
+    const q =
+        "SELECT users.id, first_name, last_name, picture, status FROM friends JOIN users ON (status = false AND receiver = $1 AND requester = users.id) OR (status = true AND receiver = $1 AND requester = users.id) OR (status = true AND requester = $1 AND receiver = users.id);";
+    const params = [currentUser];
+    return db.query(q, params);
+}
+
 module.exports = {
     checkEmail,
     addUser,
@@ -89,5 +96,6 @@ module.exports = {
     getFriendship,
     friendRequest,
     friendAccept,
-    unfriend
+    unfriend,
+    getFriends
 };

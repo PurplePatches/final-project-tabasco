@@ -73,3 +73,9 @@ app.post("/friendship/:option/:id", (req, res) => {
         res.json({ error: true });
     }
 });
+
+app.get("/api/friends", (req, res) => {
+    db.getFriends(req.session.userId).then(({ rows }) => {
+        res.json({ friends: rows });
+    });
+});
