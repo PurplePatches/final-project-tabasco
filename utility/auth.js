@@ -5,6 +5,10 @@
     const db = require("./db");
     const bcrypt = require("../src/bcrypt.js");
 
+    module.exports = {
+        userIsLoggedIn
+    };
+
     /////////////////////
     // REGISTER ROUTE //
     ///////////////////
@@ -75,6 +79,18 @@
         req.session = null;
         res.sendStatus(200);
     });
+
+    ///////////////////////////
+    // AUTHENTICATION CHECK //
+    /////////////////////////
+
+    function userIsLoggedIn(req, res, next) {
+        if (req.session.userId) {
+            next();
+        } else {
+            res.sendStatus(401);
+        }
+    }
 })();
 
 // TO DO:

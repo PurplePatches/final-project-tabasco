@@ -17,9 +17,15 @@ export default class FriendButton extends React.Component {
         });
     }
 
+    // NOT WORKING:
     send() {
         console.log("SEND REQUEST");
-        this.setState({ requestAccepted: false });
+        axios.post(`/api/friend/${this.props.recipient}/send`).then(() => {
+            this.setState({
+                requestAccepted: false,
+                id_recipient: this.props.recipient
+            });
+        });
     }
 
     unfriend() {
@@ -41,8 +47,6 @@ export default class FriendButton extends React.Component {
         if (this.state.requestAccepted === undefined) {
             return (
                 <React.Fragment>
-                    {/* check for request between profile viewer and profile owner */}
-                    {/* if undefined: send() */}
                     <button onClick={this.send} className="wide-button">
                         Send friend request
                     </button>
@@ -51,8 +55,6 @@ export default class FriendButton extends React.Component {
         } else if (this.state.requestAccepted) {
             return (
                 <React.Fragment>
-                    {/* if true: is requestAccepted true? */}
-                    {/* if true: unfriend() */}
                     <button onClick={this.unfriend} className="wide-button">
                         End friendship
                     </button>
@@ -61,8 +63,6 @@ export default class FriendButton extends React.Component {
         } else if (this.state.id_recipient === this.props.recipient) {
             return (
                 <React.Fragment>
-                    {/* if false: is profile owner === recipient? */}
-                    {/* if true: cancel() */}
                     <button onClick={this.cancel} className="wide-button">
                         Cancel friend request
                     </button>
@@ -71,7 +71,6 @@ export default class FriendButton extends React.Component {
         } else {
             return (
                 <React.Fragment>
-                    {/* if false: accept() */}
                     <button onClick={this.accept} className="wide-button">
                         Accept friend request
                     </button>

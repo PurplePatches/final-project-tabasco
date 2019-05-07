@@ -8,6 +8,7 @@
     const multer = require("multer");
     const uidSafe = require("uid-safe");
     const path = require("path");
+    const { userIsLoggedIn } = require("./auth");
 
     /////////////
     // MULTER //
@@ -35,10 +36,16 @@
         }
     });
 
-    app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
-        const url = config.s3Url + req.file.filename;
-        db.uploadPicture(req.session.userId, url).then(data => {
-            res.json(data.rows);
-        });
-    });
+    app.post(
+        "/upload",
+        uploader.single("file"),
+        s3.upload,
+        userIsLoggedIn,
+        (req, res) => {
+            const url = config.s3Url + req.file.filename;
+            db.uploadPicture(req.session.userId, url).then(data => {
+                res.json(data.rows);
+            });
+        }
+    );
 })();

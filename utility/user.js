@@ -3,8 +3,9 @@
 
     const { app } = require("../index");
     const db = require("./db");
+    const { userIsLoggedIn } = require("./auth");
 
-    app.get("/user", (req, res) => {
+    app.get("/user", userIsLoggedIn, (req, res) => {
         db.getUserInformation(req.session.userId)
             .then(({ rows }) => {
                 res.json(rows);
@@ -14,7 +15,7 @@
             });
     });
 
-    app.get("/api/user/:id", (req, res) => {
+    app.get("/api/user/:id", userIsLoggedIn, (req, res) => {
         if (req.session.userId == req.params.id) {
             return res.status(400).json({ error: "Access denied." });
         }
