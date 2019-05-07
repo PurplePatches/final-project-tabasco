@@ -1,10 +1,8 @@
 import React from "react";
-import axios from "./axios";
+// import axios from "./axios";
 
 import { connect } from "react-redux";
-import { receiveFriends } from "./actions";
-
-import FriendButton from "./friendbutton";
+import { receiveFriends, acceptFriend, unfriend } from "./actions";
 
 class Friends extends React.Component {
     constructor(props) {
@@ -19,6 +17,7 @@ class Friends extends React.Component {
 
         return (
             <div className="friendsList">
+                <h2> Friends </h2>
                 <div className="friends">
                     {this.props.friends &&
                         this.props.friends.map(friend => {
@@ -28,12 +27,21 @@ class Friends extends React.Component {
                                     <h3>
                                         {friend.first_name} {friend.last_name}
                                     </h3>
-                                    <FriendButton friendId={friend.id} />
+                                    <button
+                                        onClick={() =>
+                                            this.props.dispatch(
+                                                unfriend(friend.id)
+                                            )
+                                        }
+                                    >
+                                        unfriend
+                                    </button>
                                 </div>
                             );
                         })}
                 </div>
                 <div className="wannabes">
+                    <h2> Wannabes </h2>
                     {this.props.wannabes &&
                         this.props.wannabes.map(wannabe => {
                             return (
@@ -42,7 +50,15 @@ class Friends extends React.Component {
                                     <h3>
                                         {wannabe.first_name} {wannabe.last_name}
                                     </h3>
-                                    <FriendButton friendId={wannabe.id} />
+                                    <button
+                                        onClick={e =>
+                                            this.props.dispatch(
+                                                acceptFriend(wannabe.id)
+                                            )
+                                        }
+                                    >
+                                        accept
+                                    </button>
                                 </div>
                             );
                         })}
