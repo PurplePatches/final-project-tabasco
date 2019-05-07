@@ -187,7 +187,7 @@ button {
     background-color: #4e4e4e;
     color: #fff;
     font-weight: 700;
-    height: 25px;
+    height: 30px;
     width: 8em;
     font-size: 1em;
     margin: 20px;
@@ -228,11 +228,15 @@ button {
     background-color: #4e4e4e;
     color: #fff;
     font-weight: lighter;
-    height: 25px;
+    height: 30px;
     width: 8em;
     font-size: 1em;
     margin: 20px;
     text-align: center;
+}
+
+.text-bio-container .wide-button {
+    width: 12em;
 }
 
 .text-bio-container button:hover {
@@ -257,7 +261,7 @@ textarea {
     background-color: #4e4e4e;
     color: #fff;
     font-weight: lighter;
-    height: 25px;
+    height: 30px;
     width: 8em;
     font-size: 1em;
     margin: 20px;
