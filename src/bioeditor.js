@@ -12,15 +12,13 @@ export default class BioEditor extends React.Component {
     }
 
     submit() {
-        console.log("BIOOO", this.bio);
         axios
             .post("/bio", {
                 bio: this.bio
             })
             .then(({ data }) => {
-                console.log("SET BIOOOOOO");
                 this.setState({ editorOn: false });
-                console.log("bio state", this.bio);
+
                 this.props.setBio(this.bio);
             })
             .catch(err => {

@@ -6,14 +6,14 @@ export default class Uploader extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
-        this.image = "";
+        this.url = "";
     }
 
     uploadFile(e) {
         e.preventDefault();
 
         var formData = new FormData();
-        formData.append("file", this.image);
+        formData.append("file", this.url);
 
         let self = this;
         axios
@@ -39,8 +39,8 @@ export default class Uploader extends React.Component {
                             accept="image/*"
                             value=""
                             onChange={pic => {
-                                this.image = pic.target.files[0];
-                                console.log("this.image", this.image);
+                                this.url = pic.target.files[0];
+                                console.log("this.image", this.url);
                             }}
                         />
                         <button onClick={e => this.uploadFile(e)}>
@@ -54,6 +54,9 @@ export default class Uploader extends React.Component {
                             }
                         >
                             Close
+                        </button>
+                        <button onClick={() => this.setState({ userId: null })}>
+                            Logout
                         </button>
                     </form>
                 </div>

@@ -64,20 +64,34 @@ exports.insertImage = function insertImage(url, userid) {
 
 //((((((((((((((((((((((((((((((((((((((((((     PROFILE     ))))))))))))))))))))))))))))))))))))))))))
 
-exports.sendRequest = function sendRequest(requester_id, recipient_id, status) {
-    let q = `INSERT INTO friendship (requester_id, recipient_id, status) VALUES ($1, $2, $3) RETURNING *;`;
-    let params = [requester_id, recipient_id, status];
+exports.sendRequest = function sendRequest(
+    requester_id,
+    recipient_id,
+    sentrequest
+) {
+    let q = `INSERT INTO friendship (requester_id, recipient_id, sentrequest) VALUES ($1, $2, $3) RETURNING *;`;
+    let params = [requester_id, recipient_id, sentrequest];
     return db.query(q, params);
 };
 
-exports.friendship = function friendship() {
-    let q = `
-    SELECT users.id, firstname, lastname, url, accepted
-    FROM friendships
-    JOIN users
-    ON (accepted = false AND recipient_id = $1 AND requester_id = users.id)
-    OR (accepted = true AND recipient_id = $1 AND requester_id = users.id)
-    OR (accepted = true AND requester_id = $1 AND recipient_id = users.id)`;
-    let params = [];
+exports.friendship = function friendship(recipient_id) {
+    const q = `SELECT * FROM friendship WHERE recipient_id=$1`;
+    let params = [recipient_id];
     return db.query(q, params);
+};
+
+exports.cancelRequest = function cancelRequest(recipient_id, requester_id) {
+    const q = `
+    DELETE FROM friendship
+    WHERE recipient_id = $1
+    AND requester_id = $2;`;
+    let params = [recipient_id, requester_id];
+    return db.query(q, params);
+};
+
+//((((((((((((((((((((((((((((((((((((((((((((((((((()))))))))))))))))))))))))))))))))))))))))))))))))))
+
+exports.getUsersById = function getUsersByIds(arrayOfIds) {
+    const q = `SELECT id, firstname, lastname, url FROM users WHERE id = ANY($1)`;
+    return db.query(q[arrayOfIds]);
 };

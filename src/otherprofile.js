@@ -12,11 +12,10 @@ export default class OtherProfile extends React.Component {
     componentDidMount() {
         let self = this;
         const otherId = self.props.match.params.id;
-        console.log("otherId", otherId);
+
         axios
             .get("/api/users/" + otherId)
             .then(({ data }) => {
-                console.log("DATA IN OTHER PROFILES", data);
                 if (data.redirect) {
                     self.props.history.push("/");
                 } else {
@@ -25,7 +24,9 @@ export default class OtherProfile extends React.Component {
                         lastname: data.lastname,
                         url: data.url,
                         bio: data.bio,
-                        otherId: otherId
+                        userId: self.props.userId,
+                        id: data.id,
+                        accepted: data.accepted
                     });
                 }
             })
@@ -42,7 +43,15 @@ export default class OtherProfile extends React.Component {
                 <img src={this.state.url} />
                 <p>{this.state.bio}</p>
 
-                <FriendButton />
+                <FriendButton
+                    firstname={this.state.firstname}
+                    lastname={this.state.lastname}
+                    imageurl={this.state.url}
+                    otherId={this.props.match.params.id}
+                    bio={this.state.bio}
+                    userId={this.state.userId}
+                    accepted={this.state.accepted}
+                />
             </div>
         );
     }

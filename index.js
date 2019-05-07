@@ -12,6 +12,8 @@ var uidSafe = require("uid-safe");
 var path = require("path");
 const s3 = require("./s3");
 const config = require("./config");
+const server = require("http").Server(app);
+const io = require("socket.io")(server, { origins: "localhost:8080" });
 
 var diskStorage = multer.diskStorage({
     destination: function(req, file, callback) {
@@ -48,6 +50,11 @@ app.use(express.static("./public"));
 
 app.use(bodyParser.json());
 
+//
+// const cookieSessionMiddleware = cookieSession({
+//     secret: `I'm always angry.`,
+//     maxAge: 1000 * 60 * 60 * 24 * 90
+// });
 app.use(
     cookieSession({
         maxAge: 1000 * 60 * 60 * 24 * 14,
@@ -70,18 +77,22 @@ app.post("/uploader", uploader.single("file"), s3.upload, function(req, res) {
     console.log("bio", bio);
 
     db.updateUsers(url, userid)
-        .then(result => {
-            console.log("results in updateusers", result);
+        .then(results => {
+            console.log("results in updateusers", results);
+            res.json(results.rows);
         })
         .catch(err => {
             console.log("error in update users", err);
+            res.json({
+                success: false
+            });
         });
     db.updateUsersBio(bio, userid)
         .then(result => {
             console.log("result in update users bio", result);
         })
         .catch(err => {
-            console.log("error in updare users bio");
+            console.log("error in updare users bio", err);
         });
     db.insertImage(url, userid)
         .then(function(results) {
@@ -175,7 +186,6 @@ app.get("/api/users/:id", (req, res) => {
     db.getUsersInformation(userId)
         .then(results => {
             let data = results.rows[0];
-            console.log(data);
             res.json(data);
         })
         .catch(err => {
@@ -183,20 +193,53 @@ app.get("/api/users/:id", (req, res) => {
         });
 });
 
+app.get("/api/users/:id/friend", (req, res) => {
+    console.log("GET FRIEND");
+    let recipient_id = req.params.id;
+    if (req.params.id == req.session.userId) {
+        res.json({
+            redirect: true
+        });
+    }
+
+    db.friendship(recipient_id)
+        .then(results => {
+            console.log("RESULTS IN FRIEND", results);
+            let data = results.rows[0];
+
+            res.json(data);
+        })
+        .catch(err => {
+            console.log("error get friendship", err);
+        });
+});
+
 app.post("/api/users/:id", (req, res) => {
     console.log("POST IN USERS");
 
     let recipient_id = req.params.id;
-    console.log("recipient_id", recipient_id);
     let requester_id = req.session.userId;
-    console.log("requester_id", requester_id);
-    let status = "Request Sended";
+    let sentrequest = true;
 
-    db.sendRequest(requester_id, recipient_id, status).then(results => {
-        console.log("results in send request", results);
-        let status = results.rows[0];
-        res.json(status);
+    db.sendRequest(requester_id, recipient_id, sentrequest).then(results => {
+        let data = results.rows[0];
+        res.json(data);
     });
+});
+
+app.post("/api/users/:id/friend", (req, res) => {
+    let recipient_id = req.params.id;
+    let requester_id = req.session.userId;
+
+    db.cancelRequest(recipient_id, requester_id)
+        .then(results => {
+            let data = results.rows[0];
+            console.log(data);
+            res.json(data);
+        })
+        .catch(err => {
+            console.log("error in delete friendship ", err);
+        });
 });
 
 //-------------       WELCOME     ------------//
@@ -260,6 +303,32 @@ app.get("*", (req, res) => {
 
 //---------------------------------------//
 
-app.listen(8080, function() {
-    chalkAnimation.neon("L I S T E N I N G . . .");
+let onlineUsers = {};
+
+io.on("connection", socket => {
+    console.log(`socket with the id ${socket.id} is now connected`);
+    socket.emit("hey", {
+        chicken: "funky"
+    });
+
+    // const userId = socket.request.session.userId;
+    // console.log(userId, "USERID");
+    //
+    // onlineUsers[socket.id] = userId;
+    //     db.getUsersById(Object.values(onlineUsers).then({rows}) {
+    //         socket.emit('onlineUsers', rows)
+    //     }
+    // );
+
+    socket.on("yo", data => console.log(data));
+    socket.broadcast.emit("yo yo!");
+    io.sockets.emit("newConnector", "another one!");
+
+    socket.on("disconnect", () => {
+        console.log(`socket with the id ${socket.id} is now disconnected`);
+    });
+});
+
+server.listen(8080, function() {
+    chalkAnimation.rainbow("L I S T E N I N G . . .");
 });

@@ -21,7 +21,8 @@ export default class App extends React.Component {
                 firstname: data.firstname,
                 lastname: data.lastname,
                 url: data.url,
-                bio: data.bio
+                bio: data.bio,
+                accepted: data.accepted
             });
             console.log("DATA", data);
         });
@@ -85,6 +86,8 @@ export default class App extends React.Component {
                                         key={props.match.url}
                                         match={props.match}
                                         history={props.history}
+                                        userId={this.state.id}
+                                        accepted={this.state.accepted}
                                     />
                                 )}
                             />

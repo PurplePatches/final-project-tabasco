@@ -5,7 +5,8 @@ CREATE TABLE friendship (
     id SERIAL PRIMARY KEY,
     requester_id VARCHAR,
     recipient_id VARCHAR,
-    status VARCHAR,
+    sentrequest BOOLEAN,
+    accepted BOOLEAN,
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

@@ -3,6 +3,6 @@ DROP TABLE IF EXISTS images;
 CREATE TABLE images (
     id SERIAL PRIMARY KEY,
     url VARCHAR,
-    userid INTEGER,
+    userid VARCHAR,
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
