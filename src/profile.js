@@ -8,7 +8,7 @@ export default function(props) {
             <h1>
                 {props.firstname} {props.lastname}
             </h1>
-            <Bioeditor />
+            <Bioeditor bio={props.bio} setBio={props.setBio} />
         </div>
     );
 }

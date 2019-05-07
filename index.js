@@ -67,6 +67,13 @@ app.use(express.static("./public"));
 ///###########################################
 ///###########################################
 ///###########################################
+app.get("/welcome", (req, res) => {
+    if (req.session.userId) {
+        res.redirect("/");
+    } else {
+        res.sendFile(__dirname + "/index.html");
+    }
+});
 
 app.post("/register", (req, res) => {
     const { firstname, lastname, email, password } = req.body;
@@ -117,22 +124,15 @@ app.post("/login", (req, res) => {
         });
 });
 
+// app.get("/logout", (req, res) => {
+//     req.session = null;
+//     res.JSON(val);
+// });
+
 app.get("/user", (req, res) => {
     db.loadUserProfile(req.session.userId).then(results => {
         res.json(results.rows[0]);
     });
-});
-
-app.get("/user/:id/json", (req, res) => {
-    console.log(req.params.id);
-    db.loadUserProfile(req.params.id)
-        .then(results => {
-            console.log(results);
-            res.json(results.rows[0]);
-        })
-        .catch(err => {
-            console.log("ERROR in loading profile", err);
-        });
 });
 
 app.post("/uploadProfilePic", uploader.single("file"), s3.upload, function(
@@ -149,23 +149,93 @@ app.post("/uploadProfilePic", uploader.single("file"), s3.upload, function(
         });
 });
 
-// app.get("/logout", (req, res) => {
-//     req.session = null;
-//     res.JSON(val);
-// });
+app.post("/bio", function(req, res) {
+    let bio = req.body.bio;
 
-app.get("/welcome", (req, res) => {
-    if (req.session.userId) {
-        res.redirect("/");
-    } else {
-        res.sendFile(__dirname + "/index.html");
-    }
+    db.uploadBio(req.session.userId, bio)
+        .then(() => {
+            res.json({ success: true });
+        })
+        .catch(err => {
+            console.log("ERROR in uploading bio", err);
+        });
 });
 
-app.post("/bioedit", (req, res) => {
-    db.updateBio(req.session.userId, req.body.bio).then(({ rows }) => {
-        res.json(rows[0]);
-    });
+app.get("/user/:id/json", (req, res) => {
+    if (req.params.id == req.session.userId) {
+        res.json({ redirect: true });
+        return;
+    }
+    db.loadUserProfile(req.params.id)
+        .then(results => {
+            res.json(results.rows[0]);
+        })
+        .catch(err => {
+            console.log("ERROR in loading profile", err);
+        });
+});
+
+app.get("/user/:id/friendship", (req, res) => {
+    console.log("HELLO LOG", req.params.id);
+    db.friendshipStatusriendship(req.session.userId, req.params.id)
+        .then(results => {
+            if (results.rows[0]) {
+                console.log("TEST TEST TEST !!!");
+                if (results.rows[0].status == true) {
+                    res.json({ friendshipStatus: true });
+                } else if (results.rows[0].status == false) {
+                    console.log("TEST  TEST !!!");
+                    res.json({ friendshipStatus: false });
+                }
+            } else {
+                console.log("TEST  !!!");
+                res.json({ friendshipStatus: undefined });
+            }
+        })
+        .catch(err => {
+            console.log("ERROR in get friend status", err);
+        });
+});
+
+app.post("/user/:id/requestFriendship", (req, res) => {
+    let status = false;
+    db.requestFriendship(req.session.userId, req.params.id, status)
+        .then(() => {
+            res.json({ friendshipStatus: false });
+        })
+        .catch(err => {
+            console.log("ERROR in making friend request", err);
+        });
+});
+
+app.post("/user/:id/deleteFriendship", (req, res) => {
+    db.deleteFriendship(req.session.userId, req.params.id)
+        .then(() => {
+            res.json({ friendshipStatus: undefined });
+        })
+        .catch(err => {
+            console.log("ERROR in deleting friendship", err);
+        });
+});
+
+app.post("/user/:id/acceptFriendship", (req, res) => {
+    db.acceptFriendship(req.session.userId, req.params.id)
+        .then(() => {
+            res.json({ friendshipStatus: true });
+        })
+        .catch(err => {
+            console.log("ERROR in deleting friendship", err);
+        });
+});
+
+app.post("/user/:id/cancelFriendship", (req, res) => {
+    db.cancelFriendship(req.session.userId)
+        .then(() => {
+            res.json({ friendshipStatus: undefined });
+        })
+        .catch(err => {
+            console.log("ERROR in deleting friendship", err);
+        });
 });
 
 app.get("*", (req, res) => {

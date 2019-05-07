@@ -12,19 +12,7 @@ CREATE TABLE users (
 
 CREATE TABLE friendships (
     id SERIAL PRIMARY KEY,
-    recipient_id VARCHAR(100) NOT NULL,
-    sender_id VARCHAR(180) NOT NULL,
-    friendship_status BOOL DEFAULT "f"
+    sender_id VARCHAR(100) NOT NULL,
+    recipient_id VARCHAR(180) NOT NULL,
+    status BOOLEAN
 );
-
--- //id of requester
--- //id of reciepient
--- //boolean (by default is false
---
--- //create INSERT
--- //accept update
--- // cancel request or end request DELETE)
---
--- SELECT * FROM friends
--- WHERE ((recipient_id = $1 AND sender_id = $2)
--- OR (recipient_id = $2 AND sender_id = $1))

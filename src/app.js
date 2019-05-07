@@ -3,6 +3,7 @@ import axios from "./axios";
 import Uploader from "./uploader";
 import ProfilePic from "./profilepic";
 import Profile from "./profile";
+import BioEditor from "./bioEditor";
 import OtherProfile from "./otherProfile";
 import Chat from "./chat";
 import Friends from "./friends";
@@ -15,11 +16,8 @@ export default class App extends React.Component {
             isUploaderVisible: false
         };
         this.closeUploader = this.closeUploader.bind(this);
+        this.setBio = this.setBio.bind(this);
     }
-    // logout() {
-    //     axios.get("/logout").then(() => location.replace("/"));
-    // }
-
     closeUploader() {
         this.setState({
             isUploaderVisible: false
@@ -31,13 +29,20 @@ export default class App extends React.Component {
             isUploaderVisible: false
         });
     }
+    setBio(newBio) {
+        this.setState({
+            bio: newBio
+        });
+    }
     componentDidMount() {
         axios.get("/user").then(({ data }) => {
+            console.log("DATA CDM", data);
             this.setState({
                 id: data.id,
                 firstname: data.firstname,
                 lastname: data.lastname,
-                useravatar: data.useravatar
+                useravatar: data.useravatar,
+                bio: data.bio
             });
         });
     }
@@ -47,7 +52,7 @@ export default class App extends React.Component {
         }
         return (
             <BrowserRouter>
-                <div>
+                <div className="container">
                     <nav className="navbar">
                         <img src="/assets/whiteHatsLogo.png" id="logo" />
                         <ul>
@@ -117,6 +122,8 @@ export default class App extends React.Component {
                                             useravatar={this.state.useravatar}
                                         />
                                     }
+                                    bio={this.state.bio}
+                                    setBio={this.setBio}
                                 />
                             );
                         }}
@@ -141,3 +148,19 @@ export default class App extends React.Component {
         );
     }
 }
+
+// REDUX reducer, must be a pure function, which means that input is not changable outside the function
+// and the function will not change the input, it can only return a new element
+// ------------------------------------
+// function reducer(state={}, action) {
+//     if (action.type = "CHANGE_BIO") {
+//         return {
+//             ...state,
+//             otherUser: {
+//                 ...state.otherUser,
+//                 bio: action.bio
+//             }
+//         };
+//     }
+//     return state;
+// }
