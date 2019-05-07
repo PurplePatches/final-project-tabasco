@@ -5,6 +5,10 @@ export default class FriendButton extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
+        this.send = this.send.bind(this);
+        this.cancel = this.cancel.bind(this);
+        this.accept = this.accept.bind(this);
+        this.unfriend = this.unfriend.bind(this);
     }
 
     componentDidMount() {
@@ -13,22 +17,66 @@ export default class FriendButton extends React.Component {
         });
     }
 
-    send() {}
+    send() {
+        console.log("SEND REQUEST");
+        this.setState({ requestAccepted: false });
+    }
 
-    unfriend() {}
+    unfriend() {
+        console.log("UNFRIEND");
+        this.setState({ requestAccepted: undefined });
+    }
 
-    accept() {}
+    accept() {
+        console.log("ACCEPT REQUEST");
+        this.setState({ requestAccepted: true });
+    }
 
-    cancel() {}
+    cancel() {
+        console.log("CANCEL REQUEST");
+        this.setState({ requestAccepted: undefined });
+    }
 
     render() {
-        return (
-            <React.Fragment>
-                <button className="wide-button">Make friend request</button>
-                <button className="wide-button">Cancel friend request</button>
-                <button className="wide-button">Accept friend request</button>
-                <button className="wide-button">End friendship</button>
-            </React.Fragment>
-        );
+        if (this.state.requestAccepted === undefined) {
+            return (
+                <React.Fragment>
+                    {/* check for request between profile viewer and profile owner */}
+                    {/* if undefined: send() */}
+                    <button onClick={this.send} className="wide-button">
+                        Send friend request
+                    </button>
+                </React.Fragment>
+            );
+        } else if (this.state.requestAccepted) {
+            return (
+                <React.Fragment>
+                    {/* if true: is requestAccepted true? */}
+                    {/* if true: unfriend() */}
+                    <button onClick={this.unfriend} className="wide-button">
+                        End friendship
+                    </button>
+                </React.Fragment>
+            );
+        } else if (this.state.id_recipient === this.props.recipient) {
+            return (
+                <React.Fragment>
+                    {/* if false: is profile owner === recipient? */}
+                    {/* if true: cancel() */}
+                    <button onClick={this.cancel} className="wide-button">
+                        Cancel friend request
+                    </button>
+                </React.Fragment>
+            );
+        } else {
+            return (
+                <React.Fragment>
+                    {/* if false: accept() */}
+                    <button onClick={this.accept} className="wide-button">
+                        Accept friend request
+                    </button>
+                </React.Fragment>
+            );
+        }
     }
 }
