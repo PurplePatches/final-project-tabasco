@@ -25,21 +25,20 @@ server.listen(8080, function() {
     console.log("I'm listening.");
 });
 
+let onlineUsers = {};
 io.on('connection', socket => {
     console.log(`socket with the id ${socket.id} is now connected`);
 
-    socket.emit('hey', {
-        chicken: 'funky'
+    const userId = socket.request.session.userId;
+
+    db.getUsersByIds(
+        Object.values(onlineUsers)
+    ).then(({rows}) {
+        socket.emit('onlineUsers', rows);
     });
 
-    socket.on('yo', data => console.log(data));
+    onlineUsers[socket.id] = userId;
 
-    socket.broadcast.emit('yo yo!');
-    io.sockets.emit('newConnector', 'another one!');
-
-    console.log(
-        io.sockets.sockets
-    )
 
     socket.on('disconnect', () => {
         console.log(`socket with the id ${socket.id} is now disconnected`);

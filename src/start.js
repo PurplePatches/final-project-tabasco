@@ -1,16 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import * as io from 'socket.io-client';
+import {init} from './socket';
 
-const socket = io.connect();
+const store = createStore(reducer, composeWithDevTools(
+    applyMiddleware(
+        reduxPromise
+    )
+));
 
-socket.on('hey', data => {
-    console.log(data);
-    socket.emit('yo', 'cute bunny');
-});
+let elem;
+
+if (location.pathname == '/welcome') {
+    elem = <Welcome />;
+} else {
+    elem = <Provider store={store}><App /></Provider>;
+    init(store);
+}
 
 ReactDOM.render(
-    <HelloWorld />,
+    elem,
     document.querySelector('main')
 );
 
