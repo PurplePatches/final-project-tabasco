@@ -44,8 +44,10 @@ export default class App extends React.Component {
         console.log(this.state, "state of appjs");
         if (!this.state.id) {
             return (
-                <div className="spinner">
-                    <img src="../spinner.gif" />
+                <div className="text-center">
+                    <div className="spinner-border" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </div>
                 </div>
             );
         }
@@ -54,7 +56,10 @@ export default class App extends React.Component {
                 <div>
                     <img className="logo" src="../logo.png" />
                     <nav>
-                        <ul className="nav justify-content-center grey lighten-4 py-4">
+                        <ul className="nav justify-content-center white lighten-4 py-4">
+                            <li>
+                                <a href="/">Home</a>
+                            </li>
                             <li>
                                 <a href="/friends">Friends</a>
                             </li>

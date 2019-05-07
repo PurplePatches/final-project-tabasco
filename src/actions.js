@@ -11,3 +11,24 @@ export async function receiveFriends() {
         users: data
     };
 }
+
+export async function acceptFriend(otherId) {
+    const { data } = await axios.post("/accept", {
+        otherId: otherId
+    });
+    return {
+        type: "ACCEPT_FRIEND_REQUEST",
+        otherId
+    };
+}
+
+export async function unfriend(otherId) {
+    const { data } = await axios.post("/unfriend", {
+        otherId: otherId
+    });
+    return {
+        type: "UNFRIEND",
+        otherId
+    };
+}
+//NEED ONLINEUSERS / USERJOINED / USERLEFT

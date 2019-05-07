@@ -6,15 +6,11 @@
 
 import React from "react";
 import axios from "./axios";
-import { receiveFriends } from "./actions";
+import { Link } from "react-router-dom";
+import { receiveFriends, acceptFriend, unfriend } from "./actions";
 import { connect } from "react-redux";
+import FriendsButton from "./friendsbutton";
 
-const mapStateToProps = function(state) {
-    console.log("global state in friends: ", state);
-    return {
-        result: state.users
-    };
-};
 class Friends extends React.Component {
     constructor(props) {
         super(props);
@@ -23,7 +19,20 @@ class Friends extends React.Component {
     componentDidMount() {
         this.props.dispatch(receiveFriends());
     }
+    acceptFriend(arg) {
+        this.props.dispatch(acceptFriend(arg));
+    }
+    unfriend(arg) {
+        this.props.dispatch(unfriend(arg));
+    }
     render() {
+        const reject = e => {
+            unfriend(e.target.name);
+        };
+        const agree = e => {
+            acceptFriend(e.target.name);
+        };
+
         console.log(this.props.result, "HEERE");
         if (!this.props.result) {
             return null;
@@ -31,18 +40,59 @@ class Friends extends React.Component {
         const users = this.props.result;
         console.log(users, "USERS LABEL");
         const usersList = (
-            <div>
+            <div className="profile-container">
+                <h1>
+                    {" "}
+                    <i className="far fa-list-alt" /> Your friends list:{" "}
+                </h1>
                 {users.map(user => (
-                    <h1>{user.first}</h1>
+                    <div>
+                        {user.sender_id != this.props.id && (
+                            <div>
+                                <h3>
+                                    {user.first} {user.last}
+                                </h3>
+
+                                <Link to={"/user/" + user.id}>
+                                    <div className="view overlay zoom">
+                                        <img
+                                            className="img-fluid z-depth-1"
+                                            alt="zoom"
+                                            src={user.url}
+                                        />
+                                    </div>
+                                </Link>
+                                {user.accepted && (
+                                    <div>
+                                        <button name={user.id} onClick={reject}>
+                                            DELETE YOU!
+                                        </button>
+                                    </div>
+                                )}
+
+                                {!user.accepted && (
+                                    <div>
+                                        <button name={user.id} onClick={agree}>
+                                            Accept
+                                        </button>
+                                        <button name={user.id} onClick={reject}>
+                                            Decline
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
                 ))}
             </div>
         );
-        return (
-            <div>
-                <h1>HEY</h1>
-                <p>{usersList}</p>
-            </div>
-        );
+        return <div className="container">{usersList}</div>;
     }
 }
+const mapStateToProps = function(state) {
+    console.log("global state in friends: ", state);
+    return {
+        result: state.users
+    };
+};
 export default connect(mapStateToProps)(Friends);

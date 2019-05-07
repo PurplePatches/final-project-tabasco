@@ -9,9 +9,11 @@ const body = require("body-parser");
 var multer = require("multer");
 var uidSafe = require("uid-safe");
 const config = require("./config");
-
-var path = require("path");
 const s3 = require("./s3");
+//SOCKETIO:
+const path = require("path");
+const server = require("http").Server(app);
+const io = require("socket.io")(server, { origins: "localhost:8080" }); // your app heroku otherwise
 
 //REDUX
 
@@ -37,12 +39,16 @@ var uploader = multer({
 });
 app.use(compression());
 
-app.use(
-    cookieSession({
-        secret: "blah",
-        maxAge: 1000 * 60 * 60 * 24 * 7 * 6
-    })
-);
+const cookieSessionMiddleware = cookieSession({
+    secret: `blah`,
+    maxAge: 1000 * 60 * 60 * 24 * 90
+});
+
+app.use(cookieSessionMiddleware);
+io.use(function(socket, next) {
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+});
+
 app.use(csurf());
 
 app.use(function(req, res, next) {
@@ -260,6 +266,7 @@ app.post("/delete", (req, res) => {
 
 //ACCEPT FRIEND REQUEST
 app.post("/accept", (req, res) => {
+    console.log(req.body.otherId, "accept other id");
     db.acceptFriend(req.session.userId, req.body.otherId, true).then(
         ({ rows }) => {
             res.json(rows[0]);
@@ -274,6 +281,12 @@ app.get("/friends/a", (req, res) => {
     });
 });
 
+app.post("/unfriend", (req, res) => {
+    db.deleteFriend(req.session.userId, req.body.otherId).then(() => {
+        res.json({ success: true });
+    });
+});
+
 app.get("*", function(req, res) {
     if (!req.session.userId) {
         res.redirect("/welcome");
@@ -282,6 +295,43 @@ app.get("*", function(req, res) {
     }
 });
 
-app.listen(8080, function() {
+server.listen(8080, function() {
     console.log("I'm listening.");
+});
+
+//SOCKET IO STUFF PART 8 :
+let onlineUsers = {};
+
+io.on("connection", function(socket) {
+    console.log(`socket with the id ${socket.id} is now connected`);
+
+    socket.emit("hey", {
+        lol: "mdr",
+        deux: 2
+    });
+    //WHAT I HAVE TO DO FOR ID ARRAY
+
+    //how to delete : delete onlineUsers[socket.id]
+
+    //if array: filter
+
+    const userId = socket.request.session.userId;
+    console.log(socket.request.session.userId, "SOCKET REQ"); //it works, 1!
+
+    // db.getUsersByIds(Object.values(onlineUsers)).then(({ rows }) => {
+    //     socket.emit("onlineUsers", rows);
+    // });
+    // onlineUsers[socket.id] = userId;
+
+    //.values gives the value of the key / value pair
+
+    socket.on("yo", data => console.log(data));
+
+    socket.broadcast.emit("yooo only you!");
+    io.sockets.emit("newConnector", "another");
+    console.log(io.sockets.sockets, "SOCKETS SOCKETS");
+
+    socket.on("disconnect", function() {
+        console.log(`socket with the id ${socket.id} is now disconnected`);
+    });
 });

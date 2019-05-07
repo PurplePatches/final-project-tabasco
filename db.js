@@ -53,13 +53,13 @@ OR (recipient_id = $2 AND sender_id = $1)`;
 
 exports.retrieveFriends = function retrieveFriends(userId) {
     const q = `
-        SELECT users.id, first, last, url, accepted
+        SELECT users.id, first, last, url, recipient_id, sender_id, accepted
         FROM friendship
         JOIN users
         ON (accepted = false AND recipient_id = $1 AND sender_id = users.id)
-        OR (accepted = true AND recipient_id = $1 AND sender_id = users.id)
         OR (accepted = false AND sender_id = $1 AND recipient_id = users.id)
-        OR (accepted = true AND sender_id = users.id AND recipient_id = $1)
+        OR (accepted = true AND recipient_id = $1 AND sender_id = users.id)
+        OR (accepted = true AND sender_id = $1 AND recipient_id = users.id)
     `;
     let params = [userId];
     return db.query(q, params);

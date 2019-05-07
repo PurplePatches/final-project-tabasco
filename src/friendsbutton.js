@@ -71,7 +71,7 @@ export default class FriendsButton extends React.Component {
             <div className="container-sm">
                 {this.state.unknown && (
                     <button
-                        className="btn btn-dark btn-lg hvr-icon-wobble-horizontal"
+                        className="btn btn-outline-dark btn-rounded btn-md hvr-icon-wobble-horizontal"
                         onClick={e => this.askFriend()}
                     >
                         {" "}
@@ -81,7 +81,7 @@ export default class FriendsButton extends React.Component {
                 )}
                 {!this.state.friendship && this.state.requestOwner && (
                     <button
-                        className="btn btn-dark btn-lg hvr-icon-wobble-horizontal"
+                        className="btn btn-outline-dark btn-rounded btn-md hvr-icon-wobble-horizontal"
                         onClick={e => this.deleteFriend()}
                     >
                         {" "}
@@ -94,7 +94,7 @@ export default class FriendsButton extends React.Component {
                     !this.state.unknown && (
                         <div>
                             <button
-                                className="btn btn-dark btn-lg hvr-icon-wobble-horizontal"
+                                className="btn btn-outline-dark btn-rounded btn-md hvr-icon-wobble-horizontal"
                                 onClick={e => this.acceptFriend()}
                             >
                                 {" "}
@@ -102,7 +102,7 @@ export default class FriendsButton extends React.Component {
                                 <i className="fas fa-plus-circle hvr-icon" />
                             </button>
                             <button
-                                className="btn btn-dark btn-lg hvr-icon-wobble-horizontal"
+                                className="btn btn-outline-dark btn-rounded btn-md hvr-icon-wobble-horizontal"
                                 onClick={e => this.deleteFriend()}
                             >
                                 {" "}
@@ -114,7 +114,7 @@ export default class FriendsButton extends React.Component {
 
                 {this.state.friendship && (
                     <button
-                        className="btn btn-dark btn-lg hvr-icon-wobble-horizontal"
+                        className="btn btn-outline-dark btn-rounded waves-effect btn-md hvr-icon-wobble-horizontal"
                         onClick={e => this.deleteFriend()}
                     >
                         {" "}
