@@ -8,7 +8,7 @@ export default class FriendButton extends React.Component {
         this.updateFriendship = this.updateFriendship.bind(this);
     }
     componentDidMount() {
-        const id = this.props.match.params.id;
+        const id = this.props.friendId || this.props.match.params.id;
         this.setState({ id });
 
         axios.get("/friend/status/" + id).then(({ data }) => {
