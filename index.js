@@ -11,6 +11,10 @@ const uidSafe = require("uid-safe");
 const s3 = require("./s3.js");
 const config = require("./config.json");
 const path = require("path");
+const server = require("http").Server(app);
+const io = require("socket.io")(server, {
+    origins: "localhost:8080 yourfunckychickenapp.herokuapp.com:*"
+});
 
 app.use(compression());
 
@@ -154,26 +158,24 @@ app.get("/api/user/:id", (req, res) => {
 });
 
 app.get("/:id/friend-button", (req, res) => {
-    console.log(req.session.userId, req.params.id);
     db.getFriendStatus(req.params.id, req.session.userId)
         .then(({ rows }) => {
-            console.log(rows[0]);
-            if (rows[0].status == "friends") {
-                res.json({ friends: true });
+            if (!rows[0].status) {
+                res.json({ buttonState: "Unfriend" });
             } else if (
                 rows[0].status == "pending" &&
                 rows[0].sender_id == req.session.userId
             ) {
-                res.json({ sentFriendRequest: true });
+                res.json({ buttonState: "Cancel friend request" });
             } else if (
                 rows[0].status == "pending" &&
                 rows[0].sender_id == req.params.id
             ) {
-                res.json({ receivedFriendRequest: true });
+                res.json({ buttonState: "Accept friend request" });
             }
         })
         .catch(() => {
-            res.json({ notFriends: true });
+            res.json({ buttonState: "Send a friend request" });
         });
 });
 
@@ -187,10 +189,7 @@ app.post("/:id/friend-button", (req, res) => {
                 db.deleteFriendStatus(req.session.userId, req.params.id).then(
                     () => {
                         res.json({
-                            friends: false,
-                            notFriends: true,
-                            receivedFriendRequest: false,
-                            sentFriendRequest: false
+                            buttonState: "Send a friend request"
                         });
                     }
                 );
@@ -200,16 +199,22 @@ app.post("/:id/friend-button", (req, res) => {
             ) {
                 db.updateFriendStatus(
                     req.session.userId,
-                    req.body.recipient_id,
-                    req.body.status
-                ).then(() => {
+                    req.params.id,
+                    "done"
+                ).then(({ rows }) => {
+                    console.log(rows);
                     res.json({
-                        friends: true,
-                        notFriends: false,
-                        receivedFriendRequest: false,
-                        sentFriendRequest: false
+                        buttonState: "Unfriend"
                     });
                 });
+            } else if (rows[0].status == "done") {
+                db.deleteFriendStatus(req.session.userId, req.params.id).then(
+                    () => {
+                        res.json({
+                            buttonState: "Send a friend request"
+                        });
+                    }
+                );
             }
         })
         .catch(() => {
@@ -219,14 +224,32 @@ app.post("/:id/friend-button", (req, res) => {
                 "pending"
             ).then(() => {
                 res.json({
-                    friends: false,
-                    notFriends: false,
-                    receivedFriendRequest: false,
-                    sentFriendRequest: true
+                    buttonState: "Cancel friend request"
                 });
             });
         });
 });
+
+app.get("/api/friends", (req, res) => {
+    db.retrieveFriends(req.session.userId).then(({ rows }) => {
+        res.json(rows);
+    });
+});
+
+app.post("/:id/friends/reject", (req, res) => {
+    db.deleteFriendStatus(req.session.userId, req.params.id).then(() => {
+        res.json({ success: true });
+    });
+});
+
+app.post("/:id/friends/accept", (req, res) => {
+    db.updateFriendStatus(req.session.userId, req.params.id, "done").then(
+        () => {
+            res.json({ success: true });
+        }
+    );
+});
+
 /////////LAST PART///////////////////////////
 app.get("*", (req, res) => {
     if (!req.session.userId) {
@@ -236,6 +259,27 @@ app.get("*", (req, res) => {
     }
 });
 
-app.listen(8080, function() {
+server.listen(8080, function() {
     console.log("I'm listening.");
 });
+
+let onlineUsers = {};
+
+// io.on("connection", socket => {
+//     console.log(`socket with the id ${socket.id} is now connected`);
+//     const userId = socket.request.session.userId;
+//     onlineUsers[socket.id] = userId;
+//     db.getUsersbyIds(Object.values(onlineUsers)).then(({ rows }) => {
+//         socket.emit("onlineUsers", rows);
+//     });
+//     socket.on("disconnect", () => {
+//         delete onlineUsers[socket.id];
+//         console.log(`socket with the id ${socket.id} is now disconnected`);
+//     });
+//     socket.emit("hey", {
+//         chicken: "funcky"
+//     });
+//     io.emit("newConnector", "another one!");
+//
+//     socket.broadcast.emit("yo yo");
+// });

@@ -54,7 +54,10 @@ exports.updateFriendStatus = function updateFriendStatus(
     recipient_id,
     status
 ) {
-    let q = `UPDATE friendships SET status = $3 WHERE sender_id = $1 AND recipient_id = $2`;
+    let q = `UPDATE friendships SET status = $3
+             WHERE (sender_id = $1 AND recipient_id = $2)
+             OR (sender_id = $2 AND recipient_id = $1)
+             RETURNING *`;
     let params = [sender_id, recipient_id, status];
     return db.query(q, params);
 };
@@ -77,5 +80,17 @@ exports.deleteFriendStatus = function deleteFriendStatus(
              WHERE sender_id = $1 AND recipient_id = $2
              OR sender_id = $2 AND recipient_id = $1`;
     let params = [sender_id, recipient_id];
+    return db.query(q, params);
+};
+
+exports.retrieveFriends = function retrieveFriends(userId) {
+    let q = `SELECT users.id, firstname, lastname, image, status, sender_id, recipient_id
+            FROM friendships
+            JOIN users
+            ON (status = 'pending' AND recipient_id = $1 AND sender_id = users.id)
+            OR (status = 'done' AND recipient_id = $1 AND sender_id = users.id)
+            OR (status = 'pending' AND sender_id = $1 AND recipient_id = users.id)
+            OR (status = 'done' AND sender_id = $1 AND recipient_id = users.id)`;
+    let params = [userId];
     return db.query(q, params);
 };

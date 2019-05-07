@@ -17,51 +17,35 @@ export default class FriendButton extends React.Component {
         axios
             .post("/" + this.props.recipient_id + "/friend-button")
             .then(({ data }) => {
-                console.log(data);
+                this.setState(data);
+            });
+    }
+    reject() {
+        axios
+            .post("/" + this.props.recipient_id + "/friend-button/reject")
+            .then(({ data }) => {
                 this.setState(data);
             });
     }
     render() {
         return (
             <div>
-                {this.state.friends && (
+                <button
+                    type="submit"
+                    onClick={() => {
+                        this.submit();
+                    }}
+                >
+                    {this.state.buttonState}
+                </button>
+                {this.state.buttonState == "Accept friend request" && (
                     <button
                         type="submit"
                         onClick={() => {
-                            this.submit();
+                            this.reject();
                         }}
                     >
-                        Unfriend
-                    </button>
-                )}
-                {this.state.notFriends && (
-                    <button
-                        type="submit"
-                        onClick={() => {
-                            this.submit();
-                        }}
-                    >
-                        Send Friend Request
-                    </button>
-                )}
-                {this.state.receivedFriendRequest && (
-                    <button
-                        type="submit"
-                        onClick={() => {
-                            this.submit();
-                        }}
-                    >
-                        Accept Friend Request
-                    </button>
-                )}
-                {this.state.sentFriendRequest && (
-                    <button
-                        type="submit"
-                        onClick={() => {
-                            this.submit();
-                        }}
-                    >
-                        Cancel Friend Request
+                        Refuse friend request
                     </button>
                 )}
             </div>

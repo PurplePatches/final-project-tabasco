@@ -7,6 +7,7 @@ import Uploader from "./uploader";
 import Profile from "./profile";
 import BioEditor from "./bioeditor";
 import OtherProfile from "./otherprofile";
+import Friends from "./friends";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -77,6 +78,8 @@ export default class App extends React.Component {
                             />
                         )}
                     />
+
+                    <Route path="/friends" render={props => <Friends />} />
 
                     {this.state.isUploaderVisible && (
                         <Uploader
