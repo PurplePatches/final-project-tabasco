@@ -24,3 +24,24 @@ export async function unfriend(id) {
         id
     };
 }
+
+export async function onlineUsers(users) {
+    return {
+        type: "ONLINE_USERS",
+        users
+    };
+}
+
+export async function userLeft(userId) {
+    return {
+        type: "USER_LEFT",
+        userId
+    };
+}
+
+export async function userJoined(user) {
+    return {
+        type: "USER_JOINED",
+        user
+    };
+}

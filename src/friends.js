@@ -69,6 +69,7 @@ class Friends extends React.Component {
 }
 
 function mapStateToProps(state) {
+    console.log(state);
     if (!state.friends) {
         return {};
     }

@@ -26,7 +26,7 @@ function getPass(email) {
 
 function getUserData(id) {
     let q =
-        "SELECT first_name, last_name, picture, bio FROM users WHERE id = $1;";
+        "SELECT id, first_name, last_name, picture, bio FROM users WHERE id = $1;";
     let params = [id];
     return db.query(q, params);
 }
@@ -85,6 +85,11 @@ function getFriends(currentUser) {
     return db.query(q, params);
 }
 
+function getUsersByIds(arrayOfIds) {
+    const query = `SELECT id, first_name, last_name, picture FROM users WHERE id = ANY($1)`;
+    return db.query(query, [arrayOfIds]);
+}
+
 module.exports = {
     checkEmail,
     addUser,
@@ -97,5 +102,6 @@ module.exports = {
     friendRequest,
     friendAccept,
     unfriend,
-    getFriends
+    getFriends,
+    getUsersByIds
 };

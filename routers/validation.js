@@ -1,17 +1,11 @@
-const { app } = require("../index");
+const { app, cookieSessionMiddleware } = require("../index");
 
 const db = require("../db");
 const bc = require("../bc");
 
-const cookieSession = require("cookie-session");
 const csurf = require("csurf");
 
-app.use(
-    cookieSession({
-        secret: "bananorama",
-        maxAge: 1000 * 60 * 60 * 24 * 7
-    })
-);
+app.use(cookieSessionMiddleware);
 
 app.use(csurf());
 
