@@ -64,7 +64,21 @@ exports.newPicHistory = function newPicHistory(url, userId) {
     return db.query(q, params);
 };
 
-/////FriendshipStatus
+/////FriendshipS
+
+exports.getFriends = function getFriends(userId) {
+    const q = `
+    SELECT users.id, first_name, last_name, image_url, status
+    FROM friendships
+    JOIN users
+    ON (status = false AND id_recepient = $1 AND id_sender = users.id)
+    OR (status = true AND id_recepient = $1 AND id_sender = users.id)
+    OR (status = true AND id_sender = $1 AND id_recepient = users.id)
+`;
+    let params = [userId];
+    return db.query(q, params);
+};
+
 exports.friendshipStatus = function friendshipStatus(userId, profileId) {
     let q = `SELECT * from friendships where
             (id_sender=$1 AND id_recepient=$2)
@@ -105,4 +119,13 @@ exports.userPassword = function userPassword(email) {
     let q = "SELECT * FROM users WHERE email = $1;";
     let params = [email];
     return db.query(q, params);
+};
+////ONLINE users
+exports.getUsersByIds = function getUsersByIds(arrayOfIds) {
+    const query = `SELECT id, first_name, last_name, image_url FROM users WHERE id = ANY($1)`;
+    return db.query(query, [arrayOfIds]);
+};
+exports.getNewUser = function getNewUser(id) {
+    const query = `SELECT id, first_name, last_name, image_url FROM users WHERE id = $1`;
+    return db.query(query, [id]);
 };

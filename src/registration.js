@@ -23,7 +23,7 @@ export default class Registration extends React.Component {
                 if (data.error) {
                     this.setState({ error: data.error });
                 } else {
-                    location.replace("/bio");
+                    location.replace("/");
                 }
             });
     }

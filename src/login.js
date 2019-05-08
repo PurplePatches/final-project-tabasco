@@ -15,7 +15,7 @@ export default class Login extends React.Component {
             if (data.error) {
                 this.setState({ error: data.error });
             } else {
-                location.replace("/bio");
+                location.replace("/");
             }
         });
     }
@@ -54,7 +54,7 @@ export default class Login extends React.Component {
                 </form>
                 <hr />
                 <p>
-                    If you are already registered go to the
+                    If you are not registered go to the
                     <Link to="/"> Registration! </Link> page
                 </p>
             </div>

@@ -7,6 +7,8 @@ import Uploader from "./uploader";
 import Profile from "./profile.js";
 import Bio from "./bio";
 import OtherProfile from "./otherprofile.js";
+import Friends from "./friends";
+import Online from "./online";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -88,6 +90,8 @@ export default class App extends React.Component {
                                     />
                                 )}
                             />
+                            <Route path="/friends" component={Friends} />
+                            <Route path="/online" component={Online} />
                         </div>
 
                         {this.state.showUploader && (

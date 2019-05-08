@@ -6,7 +6,8 @@ export default class FriendButton extends React.Component {
         this.state = {
             friends: "",
             action: "",
-            buttonText: ""
+            buttonText: "",
+            reject: false
         };
     }
     componentDidMount() {
@@ -39,7 +40,8 @@ export default class FriendButton extends React.Component {
                     this.setState({
                         friends: "pending",
                         action: "accept",
-                        buttonText: "Become Bearies <3"
+                        buttonText: "Become Bearies <3",
+                        reject: true
                     });
                     console.log(
                         "I and only I can accept the request",
@@ -96,6 +98,15 @@ export default class FriendButton extends React.Component {
                 >
                     {this.state.buttonText}
                 </button>
+                {this.state.reject && (
+                    <button
+                        className="friendbutton"
+                        id={this.props.id}
+                        onClick={e => this.submit("delete")}
+                    >
+                        Unbear!
+                    </button>
+                )}
             </div>
         );
     }

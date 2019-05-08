@@ -1,5 +1,9 @@
 const express = require("express");
 const app = express();
+const server = require("http").Server(app);
+const io = require("socket.io")(server, {
+    origins: "localhost:8080 bear-book.herokuapp.com:*"
+});
 const cookieSession = require("cookie-session");
 const bodyParser = require("body-parser");
 const csurf = require("csurf");
@@ -10,6 +14,7 @@ var uidSafe = require("uid-safe");
 var path = require("path");
 const s3 = require("./utils/s3");
 const config = require("./config.json");
+const { isLoggedIn, isLoggedOut } = require("./utils/middleware");
 
 const compression = require("compression");
 
@@ -46,12 +51,15 @@ var uploader = multer({
 });
 app.use(express.static(__dirname + "/public"));
 
-app.use(
-    cookieSession({
-        maxAge: 1000 * 60 * 60 * 24 * 14,
-        secret: process.env.SESSION_SECRET || "I am always angry."
-    })
-);
+const cookieSessionMiddleware = cookieSession({
+    secret: `I'm always angry.`,
+    maxAge: 1000 * 60 * 60 * 24 * 90
+});
+
+app.use(cookieSessionMiddleware);
+io.use(function(socket, next) {
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+});
 app.use(
     bodyParser.urlencoded({
         extended: false
@@ -175,7 +183,12 @@ app.get("/user/:id/json", (request, response) => {
         });
     }
 });
-
+app.get("/friendships", (request, response) => {
+    db.getFriends(request.session.userId).then(({ rows }) => {
+        response.json(rows);
+        console.log("These are the friendships", rows.length);
+    });
+});
 app.get("/friendship/status/:id", (request, response) => {
     console.log(
         "the id i'm making the request with is ",
@@ -234,6 +247,39 @@ app.get("*", (request, response) => {
     }
 });
 
-app.listen(process.env.PORT || 8080, () => {
+server.listen(process.env.PORT || 8080, () => {
     console.log("I'm listening.");
+});
+
+let onlineUser = {};
+io.on("connection", socket => {
+    console.log("Connected");
+    db.getUsersByIds(Object.values(onlineUser)).then(({ rows }) => {
+        console.log("Here the online users", rows);
+        socket.emit("onlineUsers", rows);
+    });
+    const userId = socket.request.session.userId;
+    onlineUser[socket.id] = userId;
+    let logs = Object.values(onlineUser).filter(id => id == userId).length;
+    if (logs == 1) {
+        db.getNewUser(userId).then(({ rows }) => {
+            console.log("Here the New user", rows);
+            socket.broadcast.emit("userJoined", rows);
+        });
+    }
+    console.log(`Socket with the id ${socket.id} is now connected`);
+    if (!socket.request.session || !socket.request.session.userId) {
+        return socket.broadcast.disconnect(true);
+    }
+    /////DISCONNECTION
+    socket.on("disconnect", () => {
+        console.log(
+            "This is the record relative to socket ",
+            onlineUser[socket.id]
+        );
+        io.emit("userLeft", onlineUser[socket.id]);
+        delete onlineUser[socket.id];
+        console.log(`Socket with the id ${socket.id} is now disconnected`);
+        console.log("After disconnecting the remaining users are ", onlineUser);
+    });
 });
