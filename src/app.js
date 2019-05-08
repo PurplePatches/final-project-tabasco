@@ -1,10 +1,10 @@
-import React from "react";
-import axios from "./axios";
-import ProfilePic from "./profilepic";
-import Profile from "./profile";
-import Uploader from "./uploader";
-import OtherProfile from "./otherprofile";
-import { BrowserRouter, Route } from "react-router-dom";
+import React from 'react';
+import axios from './axios';
+import ProfilePic from './profilepic';
+import Profile from './profile';
+import Uploader from './uploader';
+import OtherProfile from './otherprofile';
+import { BrowserRouter, Route } from 'react-router-dom';
 
 export default class App extends React.Component {
     constructor(props) {
@@ -17,14 +17,14 @@ export default class App extends React.Component {
     }
 
     componentDidMount() {
-        axios.get("/user").then(({ data }) => {
+        axios.get('/user').then(({ data }) => {
             this.setState(data[0]);
         });
     }
 
     logOut() {
-        axios.get("/logout").then(() => {
-            location.replace("/welcome");
+        axios.get('/logout').then(() => {
+            location.replace('/welcome');
         });
     }
 

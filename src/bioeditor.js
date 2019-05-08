@@ -1,5 +1,5 @@
-import React from "react";
-import axios from "./axios";
+import React from 'react';
+import axios from './axios';
 
 export default class BioEditor extends React.Component {
     constructor(props) {
@@ -15,12 +15,12 @@ export default class BioEditor extends React.Component {
     updateBio() {
         this.props.passUpdatedBio({ bio: this.state.bio });
         axios
-            .post("/edit", { bio: this.state.bio })
+            .post('/edit', { bio: this.state.bio })
             .then(() => {
                 this.props.changeBio({ bio: this.state.bio });
             })
             .catch(err => {
-                console.log("updateBio() POST /edit ERROR: ", err);
+                console.log('updateBio() POST /edit ERROR: ', err);
             });
         this.props.closeTextarea();
     }

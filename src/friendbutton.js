@@ -1,5 +1,5 @@
-import React from "react";
-import axios from "./axios";
+import React from 'react';
+import axios from './axios';
 
 export default class FriendButton extends React.Component {
     constructor(props) {
@@ -12,34 +12,44 @@ export default class FriendButton extends React.Component {
     }
 
     componentDidMount() {
-        axios.get(`/api/friends/${this.props.recipient}`).then(({ data }) => {
-            this.setState({ ...data });
-        });
+        axios
+            .get(`/api/friends/${this.props.recipient}`)
+            .then(({ data }) => {
+                this.setState({ ...data });
+            })
+            .catch(e => {
+                console.log('GET componentDidMount() ERROR: ', e);
+            });
     }
 
     // NOT WORKING:
     send() {
-        console.log("SEND REQUEST");
-        axios.post(`/api/friend/${this.props.recipient}/send`).then(() => {
-            this.setState({
-                requestAccepted: false,
-                id_recipient: this.props.recipient
+        console.log('SEND REQUEST CLICKED');
+        axios
+            .post(`/api/friends/${this.props.recipient}`, {})
+            .then(() => {
+                this.setState({
+                    requestAccepted: false,
+                    id_recipient: this.props.recipient
+                });
+            })
+            .catch(e => {
+                console.log('POST send() ERROR: ', e);
             });
-        });
     }
 
     unfriend() {
-        console.log("UNFRIEND");
+        console.log('UNFRIEND CLICKED');
         this.setState({ requestAccepted: undefined });
     }
 
     accept() {
-        console.log("ACCEPT REQUEST");
+        console.log('ACCEPT REQUEST CLICKED');
         this.setState({ requestAccepted: true });
     }
 
     cancel() {
-        console.log("CANCEL REQUEST");
+        console.log('CANCEL REQUEST CLICKED');
         this.setState({ requestAccepted: undefined });
     }
 

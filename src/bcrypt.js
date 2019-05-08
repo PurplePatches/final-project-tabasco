@@ -1,7 +1,7 @@
 (function() {
-    "use strict";
+    'use strict';
 
-    const bcrypt = require("bcryptjs");
+    const bcrypt = require('bcryptjs');
 
     exports.hashPassword = function hashPassword(plainTextPassword) {
         return new Promise(function(resolve, reject) {

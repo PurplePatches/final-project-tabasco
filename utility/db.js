@@ -1,10 +1,10 @@
 (function() {
-    "use strict";
+    'use strict';
 
-    const spicedPg = require("spiced-pg");
+    const spicedPg = require('spiced-pg');
     const db = spicedPg(
         process.env.DATABASE_URL ||
-            "postgres:postgres:postgres@localhost:5432/social-network"
+            'postgres:postgres:postgres@localhost:5432/social-network'
     );
 
     ////////////////////
@@ -112,7 +112,7 @@
     // SEND FRIEND REQUEST //
     /////////////////////////
 
-    exports.sendFriendRequest = function(id_sender, id_recipient) {
+    exports.insertFriendRequest = function(id_sender, id_recipient) {
         const q = `INSERT INTO friends (
             id_sender,
             id_recipient,

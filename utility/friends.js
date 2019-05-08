@@ -1,11 +1,15 @@
 (function() {
-    "use strict";
+    'use strict';
 
-    const { app } = require("../index");
-    const db = require("./db");
-    const { userIsLoggedIn } = require("./auth");
+    const { app } = require('../index');
+    const db = require('./db');
+    const { userIsLoggedIn } = require('./auth');
 
-    app.get("/api/friends", userIsLoggedIn, (req, res) => {
+    /////////////////////////////
+    // GET FRIEND INFORMATION //
+    ///////////////////////////
+
+    app.get('/api/friends', userIsLoggedIn, (req, res) => {
         db.getFriends(req.session.userId)
             .then(({ rows }) => {
                 res.json(rows);
@@ -15,8 +19,12 @@
             });
     });
 
-    app.post("/api/friend/:recipient/send", userIsLoggedIn, (req, res) => {
-        db.sendFriendRequest(req.session.userId, req.params.recipient).then(
+    //////////////////////////
+    // SEND FRIEND REQUEST //
+    /////////////////////////
+
+    app.post('/api/friends/:recipient', userIsLoggedIn, (req, res) => {
+        db.insertFriendRequest(req.session.userId, req.params.recipient).then(
             () => res.sendStatus(200)
         );
     });

@@ -1,6 +1,6 @@
-import React from "react";
-import axios from "./axios";
-import { Link } from "react-router-dom";
+import React from 'react';
+import axios from './axios';
+import { Link } from 'react-router-dom';
 
 export default class Registration extends React.Component {
     constructor(props) {
@@ -17,14 +17,14 @@ export default class Registration extends React.Component {
     handleSubmit(e) {
         e.preventDefault();
         axios
-            .post("/register", this.state)
+            .post('/register', this.state)
             .then(data => {
                 if (data.data.success) {
-                    location.replace("/");
+                    location.replace('/');
                 }
             })
             .catch(err => {
-                console.log("handleSubmit() POST /register ERROR: ", err);
+                console.log('handleSubmit() POST /register ERROR: ', err);
             });
     }
 
@@ -70,7 +70,7 @@ export default class Registration extends React.Component {
                     </button>
                 </form>
                 <p>
-                    If you already have an account, please log in{" "}
+                    If you already have an account, please log in{' '}
                     <Link to="/login">here</Link>.
                 </p>
             </React.Fragment>

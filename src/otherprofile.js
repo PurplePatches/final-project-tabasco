@@ -1,6 +1,6 @@
-import React from "react";
-import axios from "./axios";
-import FriendButton from "./friendbutton";
+import React from 'react';
+import axios from './axios';
+import FriendButton from './friendbutton';
 
 export default class OtherProfile extends React.Component {
     constructor(props) {
@@ -15,12 +15,12 @@ export default class OtherProfile extends React.Component {
             .get(`/api/user/${this.props.match.params.id}`)
             .then(({ data }) => {
                 data.redirect
-                    ? this.props.history.push("/")
+                    ? this.props.history.push('/')
                     : this.setState({ ...data });
             })
             .catch(e => {
                 if (e.response.status === 400) {
-                    this.props.history.push("/");
+                    this.props.history.push('/');
                 }
             });
     }
@@ -31,8 +31,8 @@ export default class OtherProfile extends React.Component {
                 <div
                     className={
                         this.props.isUploaderVisible
-                            ? "flex-container-profile blur"
-                            : "flex-container-profile"
+                            ? 'flex-container-profile blur'
+                            : 'flex-container-profile'
                     }
                 >
                     <img src={this.state.user_picture} />

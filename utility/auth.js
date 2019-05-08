@@ -1,9 +1,9 @@
 (function() {
-    "use strict";
+    'use strict';
 
-    const { app } = require("../index");
-    const db = require("./db");
-    const bcrypt = require("../src/bcrypt.js");
+    const { app } = require('../index');
+    const db = require('./db');
+    const bcrypt = require('../src/bcrypt.js');
 
     module.exports = {
         userIsLoggedIn
@@ -13,7 +13,7 @@
     // REGISTER ROUTE //
     ///////////////////
 
-    app.post("/register", (req, res) => {
+    app.post('/register', (req, res) => {
         bcrypt
             .hashPassword(req.body.password)
             .then(hash => {
@@ -34,13 +34,13 @@
                     })
                     .catch(err => {
                         console.log(
-                            "POST /register registerInfo() error: ",
+                            'POST /register registerInfo() error: ',
                             err
                         );
                     });
             })
             .catch(err => {
-                console.log("POST /register hashPassword() error: ", err);
+                console.log('POST /register hashPassword() error: ', err);
             });
     });
 
@@ -48,7 +48,7 @@
     // LOG IN ROUTE //
     /////////////////
 
-    app.post("/login", (req, res) => {
+    app.post('/login', (req, res) => {
         db.getHashedPassword(req.body.email)
             .then(data => {
                 let id = data.rows[0].id;
@@ -63,11 +63,11 @@
                         }
                     })
                     .catch(err => {
-                        console.log("POST /login checkPassword() error: ", err);
+                        console.log('POST /login checkPassword() error: ', err);
                     });
             })
             .catch(err => {
-                console.log("POST /login getHashedPassword() error: ", err);
+                console.log('POST /login getHashedPassword() error: ', err);
             });
     });
 
@@ -75,7 +75,7 @@
     // LOG OUT ROUTE //
     //////////////////
 
-    app.get("/logout", (req, res) => {
+    app.get('/logout', (req, res) => {
         req.session = null;
         res.sendStatus(200);
     });

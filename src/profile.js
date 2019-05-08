@@ -1,6 +1,6 @@
-import React from "react";
-import ProfilePic from "./profilepic";
-import BioEditor from "./bioeditor";
+import React from 'react';
+import ProfilePic from './profilepic';
+import BioEditor from './bioeditor';
 
 export default class Profile extends React.Component {
     constructor(props) {
@@ -27,8 +27,8 @@ export default class Profile extends React.Component {
                 <div
                     className={
                         this.props.isUploaderVisible
-                            ? "flex-container-profile blur"
-                            : "flex-container-profile"
+                            ? 'flex-container-profile blur'
+                            : 'flex-container-profile'
                     }
                 >
                     <ProfilePic

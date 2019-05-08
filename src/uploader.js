@@ -1,5 +1,5 @@
-import React from "react";
-import axios from "./axios";
+import React from 'react';
+import axios from './axios';
 
 export default class Uploader extends React.Component {
     constructor(props) {
@@ -14,25 +14,25 @@ export default class Uploader extends React.Component {
 
     uploadFile() {
         const formData = new FormData();
-        formData.append("file", this.state.file[0]);
+        formData.append('file', this.state.file[0]);
         axios
-            .post("/upload", formData)
+            .post('/upload', formData)
             .then(response => {
                 this.props.updatePicture(response.data[0].user_picture);
                 this.props.setUploaderVisible();
             })
             .catch(err => {
-                console.log("uploadeFile() POST /upload error: ", err);
+                console.log('uploadeFile() POST /upload error: ', err);
             });
     }
 
     closeModal(e) {
         if (
-            e.target.className == "outer-modal" ||
-            e.target.id == "cancel-button"
+            e.target.className == 'outer-modal' ||
+            e.target.id == 'cancel-button'
         ) {
             this.props.setUploaderVisible();
-        } else if (e.target.id == "upload-button") {
+        } else if (e.target.id == 'upload-button') {
             return null;
         }
     }
