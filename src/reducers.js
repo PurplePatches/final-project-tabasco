@@ -4,22 +4,45 @@ export default function reducer(state = {}, action) {
             ...state,
             friendsList: action.friendsList
         };
-    } else if (action.type == "REJECT_FRIENDS") {
+    }
+    if (action.type == "REJECT_FRIENDS") {
         state = {
             ...state,
-            friendsList: state.friendsList.filter(friend => {
-                return friend.id != action.senderId;
-            })
+            friendsList: state.friendsList.filter(
+                friend => friend.id != action.senderId
+            )
         };
-    } else if (action == "ACCEPT_FRIENDS") {
+    }
+    if (action.type == "ACCEPT_FRIENDS") {
         state = {
             ...state,
             friendsList: state.friendsList.map(friend => {
                 if (friend.id == action.recipientId) {
-                    friend.status = "done";
+                    return { ...friend, status: "done" };
+                } else {
+                    return friend;
                 }
-                return friend;
             })
+        };
+    }
+    if (action.type == "ONLINE_USERS") {
+        state = {
+            ...state,
+            onlineUsers: action.users
+        };
+    }
+    if (action.type == "USER_JOINED") {
+        state = {
+            ...state,
+            onlineUsers: state.onlineUsers.concat(action.user)
+        };
+    }
+    if (action.type == "USER_LEFT") {
+        state = {
+            ...state,
+            onlineUsers: state.onlineUsers.filter(
+                user => user.id != action.user
+            )
         };
     }
     return state;

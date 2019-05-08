@@ -160,7 +160,7 @@ app.get("/api/user/:id", (req, res) => {
 app.get("/:id/friend-button", (req, res) => {
     db.getFriendStatus(req.params.id, req.session.userId)
         .then(({ rows }) => {
-            if (!rows[0].status) {
+            if (rows[0].status == "done") {
                 res.json({ buttonState: "Unfriend" });
             } else if (
                 rows[0].status == "pending" &&
@@ -265,21 +265,35 @@ server.listen(8080, function() {
 
 let onlineUsers = {};
 
-// io.on("connection", socket => {
-//     console.log(`socket with the id ${socket.id} is now connected`);
-//     const userId = socket.request.session.userId;
-//     onlineUsers[socket.id] = userId;
-//     db.getUsersbyIds(Object.values(onlineUsers)).then(({ rows }) => {
-//         socket.emit("onlineUsers", rows);
-//     });
-//     socket.on("disconnect", () => {
-//         delete onlineUsers[socket.id];
-//         console.log(`socket with the id ${socket.id} is now disconnected`);
-//     });
-//     socket.emit("hey", {
-//         chicken: "funcky"
-//     });
-//     io.emit("newConnector", "another one!");
-//
-//     socket.broadcast.emit("yo yo");
-// });
+io.on("connection", socket => {
+    console.log(`socket with the id ${socket.id} is now connected`);
+    const userId = socket.request.session.userId;
+    onlineUsers[socket.id] = userId;
+    db.getUsersbyIds(Object.values(onlineUsers)).then(({ rows }) => {
+        socket.emit("onlineUsers", rows);
+    });
+    socket.on("disconnect", () => {
+        delete onlineUsers[socket.id];
+        console.log(`socket with the id ${socket.id} is now disconnected`);
+    });
+    // socket.on("newChatMessage", data => {
+    //     db.insertMessage(socket.request.session.userId).then(() => {
+    //         db.retrieveUser(socket.request.session.userId).then(({ rows }) => {
+    //             let myNewChat = {
+    //                 firstname: rows[0].firstname,
+    //                 lastname: rows[0].lastname,
+    //                 chat: data,
+    //                 id: socket.request.session.userId,
+    //                 timestamp: rows[0].timestamp
+    //             };
+    //             socket.broadcast("chatMessageForRedux", myNewChat);
+    //         });
+    //     });
+    // });
+    // socket.emit("hey", {
+    //     chicken: "funcky"
+    // });
+    io.emit("newConnector", "another one!");
+
+    socket.broadcast.emit("yo yo");
+});

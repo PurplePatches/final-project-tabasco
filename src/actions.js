@@ -23,3 +23,31 @@ export async function acceptFriends(recipientId) {
         recipientId
     };
 }
+
+export async function onlineUsers(users) {
+    return {
+        type: "ONLINE_USERS",
+        users
+    };
+}
+
+export async function userJoined(user) {
+    return {
+        type: "USER_JOINED",
+        user
+    };
+}
+
+export async function userLeft(user) {
+    return {
+        type: "USER_LEFT",
+        user
+    };
+}
+
+export async function addNewChatToRedux(data) {
+    return {
+        type: "ADD_NEW_CHAT",
+        data
+    };
+}

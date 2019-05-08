@@ -8,6 +8,7 @@ import Profile from "./profile";
 import BioEditor from "./bioeditor";
 import OtherProfile from "./otherprofile";
 import Friends from "./friends";
+// import Chat from "./chat";
 
 export default class App extends React.Component {
     constructor(props) {

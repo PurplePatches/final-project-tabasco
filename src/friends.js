@@ -9,24 +9,11 @@ class Friends extends React.Component {
         super(props);
         this.state = {};
     }
-    rejectFriends(id) {
-        this.props.dispatch(rejectFriends(id));
-    }
-    acceptFriends(id) {
-        this.props.dispatch(acceptFriends(id));
-    }
     componentDidMount() {
         this.props.dispatch(receiveFriends());
         console.log(this.props);
     }
     render() {
-        const reject = e => {
-            rejectFriends(e.target.name);
-        };
-        const accept = e => {
-            acceptFriends(e.target.name);
-        };
-        console.log(this.props.friendsList);
         if (!this.props.friendsList) {
             return (
                 <div>
@@ -40,40 +27,82 @@ class Friends extends React.Component {
             <div>
                 {friendsList.map(friend => (
                     <div>
-                        {friend.status == "pending" && (
-                            <div>
-                                <img src={friend.image} />
-                                <p>
-                                    {friend.firstname} {friend.lastname}
-                                </p>
-                                {friend.id == friend.sender_id && (
-                                    <button name={friend.id} onClick={reject}>
-                                        Reject friend request
-                                    </button>
-                                )}
-                                {friend.id == friend.recipient_id && (
-                                    <button name={friend.id} onClick={reject}>
-                                        Cancel friend request
-                                    </button>
-                                )}
-                                {friend.id == friend.sender_id && (
-                                    <button name={friend.id} onClick={accept}>
-                                        Accept friend request
-                                    </button>
-                                )}
-                            </div>
-                        )}
                         {friend.status == "done" && (
                             <div>
                                 <img src={friend.image} />
                                 <p>
-                                    {friend.firstname} {friend.lastname}
+                                    <Link to={"/user/" + friend.id}>
+                                        {friend.firstname} {friend.lastname}
+                                    </Link>
                                 </p>
-                                <button name={friend.id} onClick={reject}>
+                                <button
+                                    onClick={() =>
+                                        this.props.dispatch(
+                                            rejectFriends(friend.id)
+                                        )
+                                    }
+                                >
                                     Unfriend
                                 </button>
                             </div>
                         )}
+                    </div>
+                ))}
+                {friendsList.map(friend => (
+                    <div>
+                        {friend.status == "pending" &&
+                            friend.id == friend.recipient_id && (
+                                <div>
+                                    <img src={friend.image} />
+                                    <p>
+                                        <Link to={"/user/" + friend.id}>
+                                            {friend.firstname} {friend.lastname}
+                                        </Link>
+                                    </p>
+                                    <button
+                                        onClick={() =>
+                                            this.props.dispatch(
+                                                rejectFriends(friend.id)
+                                            )
+                                        }
+                                    >
+                                        Cancel friend request
+                                    </button>
+                                </div>
+                            )}
+                    </div>
+                ))}
+                {friendsList.map(friend => (
+                    <div>
+                        {friend.status == "pending" &&
+                            friend.id == friend.sender_id && (
+                                <div>
+                                    <img src={friend.image} />
+                                    <p>
+                                        <Link to={"/user/" + friend.id}>
+                                            {friend.firstname} {friend.lastname}
+                                        </Link>
+                                    </p>
+                                    <button
+                                        onClick={() =>
+                                            this.props.dispatch(
+                                                rejectFriends(friend.id)
+                                            )
+                                        }
+                                    >
+                                        Reject friend request
+                                    </button>
+                                    <button
+                                        onClick={() =>
+                                            this.props.dispatch(
+                                                acceptFriends(friend.id)
+                                            )
+                                        }
+                                    >
+                                        Accept friend request
+                                    </button>
+                                </div>
+                            )}
                     </div>
                 ))}
             </div>
@@ -82,6 +111,7 @@ class Friends extends React.Component {
 }
 
 const mapStateToProps = function(state) {
+    console.log("state in map", state);
     return {
         friendsList: state.friendsList
     };
