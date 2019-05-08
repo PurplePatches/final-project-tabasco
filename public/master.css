@@ -91,6 +91,8 @@ button {
 .profilePicture {
     padding: 8px;
     border: 8px solid white;
+    min-width: 90px;
+    height: 90px;
 }
 .greyscale {
     filter: grayscale(1);

@@ -59,6 +59,14 @@ exports.requestFriendship = function requestFriendship(
     return db.query(q, params);
 };
 
+// exports.statusFriendship = function statusFriendship(userId) {
+//     let q = `
+//     SELECT sender_id, recipient_id, status FROM friendships
+//     WHERE recipient_id = $1
+//     `;
+//     let params = [sender_id, recipient_id, status];
+//     return db.query(q, params);
+// };
 exports.statusFriendship = function statusFriendship(sender_id, recipient_id) {
     let q = `
     SELECT status, recipient_id, sender_id FROM friendships
@@ -68,16 +76,19 @@ exports.statusFriendship = function statusFriendship(sender_id, recipient_id) {
     return db.query(q, params);
 };
 
-exports.deleteFriendship = function deleteFriendship(sender_id, recipient_id) {
-    `
-    DELETE FROM friendships
-    WHERE sender_id = $1 || recipient_id = $2`;
-    return db.query(params);
+exports.acceptFriendship = function acceptFriendship(sender_id, recipient_id) {
+    let q = `UPDATE friendships
+    SET status = true
+    WHERE (sender_id = $1 AND recipient_id = $2)
+    OR (sender_id = $2 AND recipient_id = $1)`;
+    let params = [sender_id, recipient_id];
+    return db.query(q, params);
 };
 
 exports.cancelFriendship = function cancelFriendship(sender_id, recipient_id) {
-    let q = `DELETE FROM friendship
-    WHERE (recipient_id = $1 AND sender_id = $2)
-    OR (recipient_id = $2 AND sender_id = $1)`;
-    return db.query(params);
+    let q = `DELETE FROM friendships
+    WHERE (sender_id = $1 AND recipient_id = $2)
+    OR (sender_id = $2 AND recipient_id = $1)`;
+    let params = [sender_id, recipient_id];
+    return db.query(q, params);
 };

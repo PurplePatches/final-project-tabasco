@@ -11,6 +11,11 @@ const uidSafe = require("uid-safe");
 const s3 = require("./s3");
 const config = require("./config.json");
 const path = require("path");
+const server = require("http").Server(app);
+const io = require("socket.io")(server, {
+    origins: "localhost:8080 yourapp.herokuapp.com:*"
+});
+console.log("HELLO IM CHECK");
 
 app.use(compression());
 
@@ -65,8 +70,9 @@ app.use(bodyParser.json());
 app.use(express.static("./public"));
 
 ///###########################################
+///################## ONBOARDING ###############
 ///###########################################
-///###########################################
+
 app.get("/welcome", (req, res) => {
     if (req.session.userId) {
         res.redirect("/");
@@ -129,6 +135,9 @@ app.post("/login", (req, res) => {
 //     res.JSON(val);
 // });
 
+///###########################################
+///################## USER DATA ###############
+///###########################################
 app.get("/user", (req, res) => {
     db.loadUserProfile(req.session.userId).then(results => {
         res.json(results.rows[0]);
@@ -161,6 +170,9 @@ app.post("/bio", function(req, res) {
         });
 });
 
+///###########################################
+///################## OTHER USERS DATA ###############
+///###########################################
 app.get("/user/:id/json", (req, res) => {
     if (req.params.id == req.session.userId) {
         res.json({ redirect: true });
@@ -175,21 +187,34 @@ app.get("/user/:id/json", (req, res) => {
         });
 });
 
+///###########################################
+///################## USER TO USER ###############
+///################## INTERACTION #################
+
 app.get("/user/:id/friendship", (req, res) => {
-    console.log("HELLO LOG", req.params.id);
-    db.friendshipStatusriendship(req.session.userId, req.params.id)
+    db.statusFriendship(req.session.userId, req.params.id)
         .then(results => {
+            console.log("figuring out", results);
             if (results.rows[0]) {
-                console.log("TEST TEST TEST !!!");
                 if (results.rows[0].status == true) {
-                    res.json({ friendshipStatus: true });
+                    res.json({
+                        friendshipStatus: true,
+                        recipient_id: req.params.id,
+                        sender_id: req.session.userId
+                    });
                 } else if (results.rows[0].status == false) {
-                    console.log("TEST  TEST !!!");
-                    res.json({ friendshipStatus: false });
+                    res.json({
+                        friendshipStatus: false,
+                        recipient_id: results.rows[0].recipient_id,
+                        sender_id: results.rows[0].sender_id
+                    });
                 }
             } else {
-                console.log("TEST  !!!");
-                res.json({ friendshipStatus: undefined });
+                res.json({
+                    friendshipStatus: undefined,
+                    recipient_id: req.params.id,
+                    sender_id: req.session.userId
+                });
             }
         })
         .catch(err => {
@@ -201,7 +226,11 @@ app.post("/user/:id/requestFriendship", (req, res) => {
     let status = false;
     db.requestFriendship(req.session.userId, req.params.id, status)
         .then(() => {
-            res.json({ friendshipStatus: false });
+            res.json({
+                friendshipStatus: false,
+                recipient_id: req.params.id,
+                sender_id: req.session.userId
+            });
         })
         .catch(err => {
             console.log("ERROR in making friend request", err);
@@ -209,9 +238,13 @@ app.post("/user/:id/requestFriendship", (req, res) => {
 });
 
 app.post("/user/:id/deleteFriendship", (req, res) => {
-    db.deleteFriendship(req.session.userId, req.params.id)
+    db.cancelFriendship(req.session.userId, req.params.id)
         .then(() => {
-            res.json({ friendshipStatus: undefined });
+            res.json({
+                friendshipStatus: undefined,
+                recipient_id: req.params.id,
+                sender_id: req.session.userId
+            });
         })
         .catch(err => {
             console.log("ERROR in deleting friendship", err);
@@ -221,7 +254,11 @@ app.post("/user/:id/deleteFriendship", (req, res) => {
 app.post("/user/:id/acceptFriendship", (req, res) => {
     db.acceptFriendship(req.session.userId, req.params.id)
         .then(() => {
-            res.json({ friendshipStatus: true });
+            res.json({
+                friendshipStatus: true,
+                recipient_id: req.params.id,
+                sender_id: req.session.userId
+            });
         })
         .catch(err => {
             console.log("ERROR in deleting friendship", err);
@@ -229,9 +266,13 @@ app.post("/user/:id/acceptFriendship", (req, res) => {
 });
 
 app.post("/user/:id/cancelFriendship", (req, res) => {
-    db.cancelFriendship(req.session.userId)
+    db.cancelFriendship(req.session.userId, req.params.id)
         .then(() => {
-            res.json({ friendshipStatus: undefined });
+            res.json({
+                friendshipStatus: undefined,
+                recipient_id: req.params.id,
+                sender_id: req.session.userId
+            });
         })
         .catch(err => {
             console.log("ERROR in deleting friendship", err);
@@ -246,6 +287,37 @@ app.get("*", (req, res) => {
     }
 });
 
-app.listen(8080, function() {
+server.listen(8080, function() {
     console.log("I'm listening on 8080.");
 });
+
+///############################ SOCKET #########
+///###########################################
+///###########################################
+//
+// let onlineUsers = {};
+//
+// io.on("connection", socket => {
+//
+//        onlineUsers[socket.id] = socket.request.sessions.userId
+//        onlinerUsers[socket.id] = otherUserId
+//
+//
+//  db.getUsersByIds(
+//     Object.values(onlineUsers)).then(({rows}) { socket.emit("olineUsers, rows");})
+// )
+//
+// socket.on("disconnect", () => {
+//     console.log(`socket with the id ${socket.id} is now disconnected`);
+// });
+//     socket.emmit("EVENT", {
+//         key: "this is socket test"
+//     });
+//     socket.on("ANSWER", data => console.log(data
+//
+//     io.emit("newConncetor", "another connection"));)
+//     //target all except one
+//     socket.broadcast.emit
+//
+//     delete online USers[socket.id]
+// });

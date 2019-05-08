@@ -12,7 +12,7 @@ CREATE TABLE users (
 
 CREATE TABLE friendships (
     id SERIAL PRIMARY KEY,
-    sender_id VARCHAR(100) NOT NULL,
-    recipient_id VARCHAR(180) NOT NULL,
+    sender_id INT NOT NULL,
+    recipient_id INT NOT NULL,
     status BOOLEAN
 );

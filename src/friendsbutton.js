@@ -16,29 +16,23 @@ export default class OtherProfile extends React.Component {
     }
 
     componentDidMount() {
-        axios.get(`/user/${this.props.otherId}/friendship`).then(data => {
-            console.log("DATA LOG --> ", data.friendshipStatus);
-            // if (data.friendshipStatus) {
-            //     this.setState({ data }, () => this.setButtonStatus);
-            // }
-            this.setState({ data }, () => this.setButtonStatus());
+        axios.get(`/user/${this.props.otherId}/friendship`).then(({ data }) => {
+            console.log("DATA FROM TABLE FROM SERVER", data);
+            this.setState(
+                {
+                    friendshipStatus: data.friendshipStatus,
+                    recipient_id: data.recipient_id,
+                    sender_id: data.sender_id
+                },
+                () => this.setButtonStatus()
+            );
         });
     }
 
-    // friendshipStatusriendship() {
-    //     axios
-    //         .get("/user/:id/friendship")
-    //         .then(data => {
-    //             this.setState({ data });
-    //             this.setButtonStatus();
-    //         })
-    //         .catch(err => {
-    //             console.log("ERROR in retriving friendship data--> ", err);
-    //         });
-    // }
-
     setButtonStatus() {
-        const { friendshipStatus, recipient_id } = this.state;
+        const { friendshipStatus, recipient_id, sender_id } = this.state;
+
+        console.log("SHOWING recipient_id", recipient_id, this.state);
         if (friendshipStatus == undefined) {
             this.setState({
                 buttonText: "MAKE FRIEND REQUEST",
@@ -50,12 +44,14 @@ export default class OtherProfile extends React.Component {
                 buttonAction: this.deleteFriendship
             });
         } else if (friendshipStatus == false) {
-            if (recipient_id == this.props.otherId) {
+            // console.log("RECIPIENT", this.props.otherId, recipient_id);
+            // console.log("userId", this.props.userId);
+            if (sender_id == this.props.otherId) {
                 this.setState({
                     buttonText: "ACCEPT FRIENDSHIP REQUEST",
                     buttonAction: this.acceptFriendship
                 });
-            } else {
+            } else if (sender_id !== this.props.otherId) {
                 this.setState({
                     buttonText: "CANCEL FRIENDSHIP REQUEST",
                     buttonAction: this.cancelFriendship
@@ -83,6 +79,14 @@ export default class OtherProfile extends React.Component {
     deleteFriendship() {
         axios
             .post(`/user/${this.props.otherId}/deleteFriendship`)
+            .then(() => {
+                this.setState(
+                    {
+                        friendshipStatus: undefined
+                    },
+                    () => this.setButtonStatus()
+                );
+            })
             .catch(err => {
                 console.log("ERROR in ending friendship --> ", err);
             });
@@ -91,6 +95,14 @@ export default class OtherProfile extends React.Component {
     acceptFriendship() {
         axios
             .post(`/user/${this.props.otherId}/acceptFriendship`)
+            .then(() => {
+                this.setState(
+                    {
+                        friendshipStatus: true
+                    },
+                    () => this.setButtonStatus()
+                );
+            })
             .catch(err => {
                 console.log("ERROR in acceptig friendship --> ", err);
             });

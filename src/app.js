@@ -92,7 +92,7 @@ export default class App extends React.Component {
                             </li>
                         </ul>
                     </nav>
-                    <hr />
+
                     {this.state.isUploaderVisible && (
                         <Uploader
                             setAvatar={url =>
