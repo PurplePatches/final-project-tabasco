@@ -2,6 +2,7 @@ import React from "react";
 // import axios from "./axios";
 
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import { receiveFriends, acceptFriend, unfriend } from "./actions";
 
 class Friends extends React.Component {
@@ -23,7 +24,12 @@ class Friends extends React.Component {
                         this.props.friends.map(friend => {
                             return (
                                 <div className="friend" key={friend.id}>
-                                    <img src={friend.picture} />
+                                    <Link
+                                        to={"/user/" + friend.id}
+                                        className="friendImage"
+                                    >
+                                        <img src={friend.picture} />
+                                    </Link>
                                     <h3>
                                         {friend.first_name} {friend.last_name}
                                     </h3>
@@ -40,13 +46,18 @@ class Friends extends React.Component {
                             );
                         })}
                 </div>
+                <h2> Wannabes </h2>
                 <div className="wannabes">
-                    <h2> Wannabes </h2>
                     {this.props.wannabes &&
                         this.props.wannabes.map(wannabe => {
                             return (
-                                <div className="wannabe" key={wannabe.id}>
-                                    <img src={wannabe.picture} />
+                                <div className="friend" key={wannabe.id}>
+                                    <Link
+                                        to={"/user/" + wannabe.id}
+                                        className="friendImage"
+                                    >
+                                        <img src={wannabe.picture} />
+                                    </Link>
                                     <h3>
                                         {wannabe.first_name} {wannabe.last_name}
                                     </h3>

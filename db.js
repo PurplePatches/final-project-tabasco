@@ -91,7 +91,6 @@ function getUsersByIds(arrayOfIds) {
 }
 
 function getChat() {
-    console.log("getChat is running");
     const q =
         "SELECT chat.id AS chatId, userId, message, posted, first_name, last_name FROM chat JOIN users ON chat.userId = users.id ORDER BY chatId DESC LIMIT 10;";
     return db.query(q);

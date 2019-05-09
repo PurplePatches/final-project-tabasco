@@ -4,9 +4,14 @@
     background-color: #cce4e5;
 }
 
+body {
+    margin: 0;
+}
+
 h1,
 h2,
-h3 {
+h3,
+h4 {
     font-family: "Expletus Sans", sans-serif;
     color: #16253a;
 }
@@ -23,6 +28,13 @@ a {
     text-decoration: none;
     font-weight: 500;
     color: #51bc54;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
 }
 
 button {
@@ -72,7 +84,7 @@ form {
     justify-content: space-between;
     align-items: center; */
     display: grid;
-    grid-template-columns: 80% 10% 10%;
+    grid-template-columns: 20% 60% 10% 10%;
     border-bottom: 1px solid #16253a;
     padding: 5px;
     width: 100%;
@@ -95,27 +107,125 @@ form {
     display: flex;
     justify-content: center;
     align-items: center;
+    /* max-width: 60px;
+    max-height: 60px; */
+}
+
+.header .profilePic .profileImage {
     max-width: 60px;
     max-height: 60px;
 }
 
-.profilePic .profileImage {
+.uploader {
+    background-color: rgba(50, 50, 50, 0.8);
     width: 100%;
     height: 100%;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.profile {
-    width: 80%;
+.profile,
+.currentBio {
+    width: 70%;
+}
+
+.nameAndPic,
+.bio,
+.currentBio,
+.editBioField,
+.friendsList,
+.otherProfile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 5px;
 }
 
 .nameAndPic .profilePic {
-    max-width: 180px;
-    max-height: 180px;
+    max-width: 350px;
+    max-height: 350px;
 }
 
 #bioInput {
     height: 200px;
     width: 300px;
     background-color: #f7f7f2;
+    font-size: 16px;
+}
+
+.friends,
+.wannabes,
+.chatPage {
+    display: flex;
+    flex-wrap: wrap;
+    width: 90%;
+    justify-content: center;
+}
+
+.friendImage {
+    width: 150px;
+    height: 150px;
+    /* margin: 5px; */
+}
+
+.friend {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 170px;
+    height: 280px;
+}
+
+.onlineUsers {
+    display: flex;
+    flex-wrap: wrap;
+    width: 30%;
+    padding: 5px;
+}
+
+.onlineUser {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 3px;
+}
+
+.onlineUserPic {
+    width: 80px;
+    height: 80px;
+}
+
+.chat {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+}
+
+.chatContainer {
+    height: 80vh;
+    overflow-y: scroll;
+}
+
+.chatMessage {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    border-bottom: 1px solid #16253a;
+}
+
+.chatMessage * {
+    margin: 5px;
+}
+
+.datePost {
+    font-size: 12px;
+}
+
+.chat textarea {
+    background-color: #f7f7f2;
+    margin: 5px;
+    height: 8vh;
     font-size: 16px;
 }

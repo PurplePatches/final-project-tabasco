@@ -99,10 +99,8 @@ io.on("connection", socket => {
     }
 
     socket.on("receiveChat", () => {
-        console.log("receiveChat is running!");
         db.getChat()
             .then(({ rows }) => {
-                console.log("rows in index getChat then", rows);
                 const answer = rows.reverse().map(message => {
                     const datePost = new Date(message.posted);
                     return { ...message, posted: datePost.toGMTString() };

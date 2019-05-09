@@ -24,8 +24,8 @@ export default class Uploader extends React.Component {
     render() {
         return (
             <div className="uploader">
-                <button onClick={this.props.toggleUploader}> X </button>
-                <div>
+                <div className="uploadPopup">
+                    <button onClick={this.props.toggleUploader}> X </button>
                     <label htmlFor="upload">Upload</label>
                     <input
                         style={{ opacity: 0 }}

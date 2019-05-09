@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "./axios";
+import { Link } from "react-router-dom";
 
 export default class Header extends React.Component {
     constructor(props) {
@@ -14,7 +15,17 @@ export default class Header extends React.Component {
     render() {
         return (
             <div className="header">
-                <img className="logo" src="/logo.png" />
+                <Link to="/">
+                    <img className="logo" src="/logo.png" />
+                </Link>
+                <div className="menu">
+                    <Link to="/friends">
+                        <button>Friends</button>
+                    </Link>
+                    <Link to="/chat">
+                        <button>Chat</button>
+                    </Link>
+                </div>
                 <button id="logout" onClick={this.logout}>
                     Logout
                 </button>

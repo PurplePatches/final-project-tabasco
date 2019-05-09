@@ -11,6 +11,7 @@ class Chat extends React.Component {
     }
     componentDidMount() {
         !this.props.chatMessages && socket.emit("receiveChat");
+        // this.chatDiv.scrollTop = this.chatDiv.scrollHeight;
     }
 
     handleInput(e) {
@@ -31,10 +32,12 @@ class Chat extends React.Component {
                         this.props.onlineUsers.map(onUser => {
                             return (
                                 <div className="onlineUser" key={onUser.id}>
-                                    <img src={onUser.picture} />
-                                    <h3>
+                                    <div className="onlineUserPic">
+                                        <img src={onUser.picture} />
+                                    </div>
+                                    <h4>
                                         {onUser.first_name} {onUser.last_name}
-                                    </h3>
+                                    </h4>
                                 </div>
                             );
                         })}
@@ -51,12 +54,16 @@ class Chat extends React.Component {
                                         className="chatMessage"
                                         key={chatMessage.chatid}
                                     >
-                                        <p>{chatMessage.posted}</p>
-                                        <h3>
-                                            {chatMessage.first_name}{" "}
-                                            {chatMessage.last_name}
-                                        </h3>
                                         <p>{chatMessage.message}</p>
+                                        <div className="messageUser">
+                                            <p className="datePost">
+                                                {chatMessage.posted}
+                                            </p>
+                                            <h4>
+                                                {chatMessage.first_name}{" "}
+                                                {chatMessage.last_name}
+                                            </h4>
+                                        </div>
                                     </div>
                                 );
                             })}
