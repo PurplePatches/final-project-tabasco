@@ -249,7 +249,7 @@ app.get("*", (request, response) => {
 });
 
 server.listen(process.env.PORT || 8080, () => {
-    ca.rainbow("I'm listening.");
+    console.log("I'm listening.");
 });
 
 let onlineUser = {};

@@ -11,12 +11,12 @@ CREATE UNIQUE INDEX friendz ON friendships(greatest(id_sender,id_recepient), lea
 
 -- 1 2 3 4
 
-SELECT * FROM friendships
-WHERE ((id_sender = $1 AND id_recepient = $2)
-WHERE (id_sender = $2 AND id_recepient = $1)) AND status = 1;
-
-
-LOOKUP TABLE?
+-- SELECT * FROM friendships
+-- WHERE ((id_sender = $1 AND id_recepient = $2)
+-- WHERE (id_sender = $2 AND id_recepient = $1)) AND status = 1;
+--
+--
+-- LOOKUP TABLE?
 
 INSERT INTO friendships (id_sender, id_recepient, status) VALUES (21, 1, 't');
 INSERT INTO friendships (id_sender, id_recepient, status) VALUES (25, 1, 't');
