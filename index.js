@@ -13,7 +13,7 @@ const cookieSessionMiddleware = (exports.cookieSessionMiddleware = cookieSession
     }
 ));
 
-const moment = require("moment");
+// const moment = require("moment");
 
 const compression = require("compression");
 app.use(compression());
@@ -83,19 +83,19 @@ io.on("connection", socket => {
         });
 
     let thisUserData;
+    db.getUserData(userId)
+        .then(({ rows }) => {
+            thisUserData = rows[0];
+        })
+        .catch(err => {
+            console.log(err);
+        });
 
     if (onlineUsers[userId]) {
         onlineUsers[userId].push(socket.id);
     } else {
         onlineUsers[userId] = [socket.id];
-        db.getUserData(userId)
-            .then(({ rows }) => {
-                thisUserData = rows[0];
-                socket.broadcast.emit("userJoined", rows[0]);
-            })
-            .catch(err => {
-                console.log(err);
-            });
+        socket.broadcast.emit("userJoined", thisUserData);
     }
 
     socket.on("receiveChat", () => {
