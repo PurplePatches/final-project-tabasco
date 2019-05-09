@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-// import * as io from "socket.io-client";
+import * as io from "socket.io-client";
 import { Provider } from "react-redux";
 
 import { createStore, applyMiddleware } from "redux";
@@ -8,11 +8,9 @@ import reduxPromise from "redux-promise";
 import reducer from "./reducers";
 import { composeWithDevTools } from "redux-devtools-extension";
 
-// import { init } from "./socket";
+import { init } from "./socket";
 import Welcome from "./welcome";
 import App from "./app";
-
-// io.connect();
 
 export const store = createStore(
     reducer,
@@ -29,7 +27,7 @@ if (location.pathname == "/welcome") {
             <App />
         </Provider>
     );
-    // init(store);
+    init(store);
 }
 
 ReactDOM.render(elem, document.querySelector("main"));

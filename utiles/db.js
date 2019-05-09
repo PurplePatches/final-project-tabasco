@@ -94,3 +94,9 @@ exports.retrieveFriends = function retrieveFriends(userId) {
     let params = [userId];
     return db.query(q, params);
 };
+
+exports.getUsersbyIds = function getUsersbyIds(usersIds) {
+    let q = `SELECT firstname, lastname, image, id FROM users WHERE id = ANY($1)`;
+    let params = [usersIds];
+    return db.query(q, params);
+};

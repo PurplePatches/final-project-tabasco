@@ -13,7 +13,11 @@ const config = require("./config.json");
 const path = require("path");
 const server = require("http").Server(app);
 const io = require("socket.io")(server, {
-    origins: "localhost:8080 yourfunckychickenapp.herokuapp.com:*"
+    origins: "localhost:8080"
+});
+const cookieSessionMiddleware = cookieSession({
+    secret: `french`,
+    maxAge: 1000 * 60 * 60 * 24 * 7 * 6
 });
 
 app.use(compression());
@@ -47,12 +51,10 @@ if (process.env.NODE_ENV != "production") {
     app.use("/bundle.js", (req, res) => res.sendFile(`${__dirname}/bundle.js`));
 }
 
-app.use(
-    cookieSession({
-        secret: `french`,
-        maxAge: 1000 * 60 * 60 * 24 * 7 * 6
-    })
-);
+app.use(cookieSessionMiddleware);
+io.use(function(socket, next) {
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+});
 
 app.use(csurf());
 
@@ -266,15 +268,30 @@ server.listen(8080, function() {
 let onlineUsers = {};
 
 io.on("connection", socket => {
-    console.log(`socket with the id ${socket.id} is now connected`);
+    if (!socket.request.session || !socket.request.session.userId) {
+        return socket.disconnect(true);
+    }
+
     const userId = socket.request.session.userId;
     onlineUsers[socket.id] = userId;
+
     db.getUsersbyIds(Object.values(onlineUsers)).then(({ rows }) => {
         socket.emit("onlineUsers", rows);
     });
+
+    if (
+        Object.values(onlineUsers).filter(
+            userId => userId === socket.request.session.userId
+        ).length === 1
+    ) {
+        db.getUserProfile(socket.request.session.userId).then(({ rows }) => {
+            socket.broadcast.emit("userJoined", rows[0]);
+        });
+    }
+
     socket.on("disconnect", () => {
         delete onlineUsers[socket.id];
-        console.log(`socket with the id ${socket.id} is now disconnected`);
+        io.emit("userLeft", socket.request.session.userId);
     });
     // socket.on("newChatMessage", data => {
     //     db.insertMessage(socket.request.session.userId).then(() => {
@@ -293,7 +310,7 @@ io.on("connection", socket => {
     // socket.emit("hey", {
     //     chicken: "funcky"
     // });
-    io.emit("newConnector", "another one!");
+    // io.emit("newConnector", "another one!");
 
     socket.broadcast.emit("yo yo");
 });

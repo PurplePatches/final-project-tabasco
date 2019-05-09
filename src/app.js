@@ -8,6 +8,7 @@ import Profile from "./profile";
 import BioEditor from "./bioeditor";
 import OtherProfile from "./otherprofile";
 import Friends from "./friends";
+import Online from "./online";
 // import Chat from "./chat";
 
 export default class App extends React.Component {
@@ -81,6 +82,7 @@ export default class App extends React.Component {
                     />
 
                     <Route path="/friends" render={props => <Friends />} />
+                    <Route path="/online" render={props => <Online />} />
 
                     {this.state.isUploaderVisible && (
                         <Uploader
