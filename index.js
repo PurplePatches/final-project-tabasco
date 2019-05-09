@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const ca = require("chalk-animation");
 const server = require("http").Server(app);
 const io = require("socket.io")(server, {
     origins: "localhost:8080 bear-book.herokuapp.com:*"
@@ -248,17 +249,16 @@ app.get("*", (request, response) => {
 });
 
 server.listen(process.env.PORT || 8080, () => {
-    console.log("I'm listening.");
+    ca.rainbow("I'm listening.");
 });
 
 let onlineUser = {};
 io.on("connection", socket => {
-    console.log("Connected");
+    const userId = socket.request.session.userId;
     db.getUsersByIds(Object.values(onlineUser)).then(({ rows }) => {
         console.log("Here the online users", rows);
         socket.emit("onlineUsers", rows);
     });
-    const userId = socket.request.session.userId;
     onlineUser[socket.id] = userId;
     let logs = Object.values(onlineUser).filter(id => id == userId).length;
     if (logs == 1) {
@@ -271,6 +271,36 @@ io.on("connection", socket => {
     if (!socket.request.session || !socket.request.session.userId) {
         return socket.broadcast.disconnect(true);
     }
+
+    ///////////////CHAT
+    db.getUsersAndChats().then(({ rows }) => {
+        console.log("Getting the chat and the users", rows);
+        socket.emit("chatMessages", rows);
+    });
+
+    socket.on("newChatMessage", data => {
+        console.log("emitting the insert event", data, userId);
+        db.newChatMessage(userId, data).then(({ rows }) => {
+            console.log("Targeting rows", rows);
+            var data = rows[0].message;
+            var time = rows[0].created_at;
+            var chatId = rows[0].id;
+            db.getNewUser(userId).then(({ rows }) => {
+                let myNewChatObj = {
+                    userId: userId,
+                    first_name: rows[0].first_name,
+                    image_url: rows[0].image_url,
+                    message: data,
+                    id: chatId,
+                    created_at: time
+                };
+                console.log("Before emitting it to redux", myNewChatObj);
+                io.sockets.emit("chatMessageForRedux", myNewChatObj);
+            });
+        });
+        // this message is sent to socket.js
+    });
+
     /////DISCONNECTION
     socket.on("disconnect", () => {
         console.log(
@@ -279,7 +309,7 @@ io.on("connection", socket => {
         );
         io.emit("userLeft", onlineUser[socket.id]);
         delete onlineUser[socket.id];
-        console.log(`Socket with the id ${socket.id} is now disconnected`);
+        ca.neon(`Socket with the id ${socket.id} is now disconnected`);
         console.log("After disconnecting the remaining users are ", onlineUser);
     });
 });

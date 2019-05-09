@@ -47,3 +47,17 @@ export function userLeft(user) {
         user
     };
 }
+export function getLastMessages(chats) {
+    console.log("Getting the last messages ", chats);
+    return {
+        type: "GET_PUBLIC_MESSAGES",
+        chats
+    };
+}
+export function addNewChatToRedux(chat) {
+    console.log("Adding the chat to Redux", chat);
+    return {
+        type: "NEW_PUBLIC_MESSAGE",
+        chat
+    };
+}

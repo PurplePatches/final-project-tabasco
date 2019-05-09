@@ -92,7 +92,7 @@ class Friends extends React.Component {
     }
 }
 
-const mapStateToProps = function(state) {
+const mapStateToProps = state => {
     console.log("This is the state ", state);
     return {
         users: state.users

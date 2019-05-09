@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 import axios from "./axios";
 import { BrowserRouter, Route } from "react-router-dom";
 
@@ -9,6 +11,7 @@ import Bio from "./bio";
 import OtherProfile from "./otherprofile.js";
 import Friends from "./friends";
 import Online from "./online";
+import Chat from "./chat";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -32,17 +35,36 @@ export default class App extends React.Component {
             return (
                 <BrowserRouter>
                     <div id="app">
-                        <ProfilePic
-                            id={this.state.id}
-                            first={this.state.first_name}
-                            last={this.state.last_name}
-                            image_url={this.state.image_url}
-                            clickHandler={() =>
-                                this.setState({
-                                    showUploader: true
-                                })
-                            }
-                        />
+                        <div id="header">
+                            <h1>
+                                <img
+                                    src="/img/bearbook-logo.png"
+                                    alt="Bear Book Homepage"
+                                />
+                            </h1>
+                            <nav>
+                                <li>
+                                    <Link to="/friends">Friends</Link>
+                                </li>
+                                <li>
+                                    <Link to="/chat">Chat</Link>
+                                </li>
+                                <li>
+                                    <Link to="/online">Online Users</Link>
+                                </li>
+                            </nav>
+                            <ProfilePic
+                                id={this.state.id}
+                                first={this.state.first_name}
+                                last={this.state.last_name}
+                                image_url={this.state.image_url}
+                                clickHandler={() =>
+                                    this.setState({
+                                        showUploader: true
+                                    })
+                                }
+                            />
+                        </div>
                         <div>
                             <Route
                                 exact
@@ -92,6 +114,7 @@ export default class App extends React.Component {
                             />
                             <Route path="/friends" component={Friends} />
                             <Route path="/online" component={Online} />
+                            <Route path="/chat" component={Chat} />
                         </div>
 
                         {this.state.showUploader && (

@@ -42,11 +42,16 @@ class Online extends React.Component {
                     );
                 });
         }
-        return <div> {onlines} </div>;
+        return (
+            <section className="project" id="friendspage">
+                <h3>Here you can see who's online right now</h3>
+                <div id="onlineusers">{onlines}</div>
+            </section>
+        );
     }
 }
 
-const mapStateToProps = function(state) {
+const mapStateToProps = state => {
     console.log("This is the state ", state);
     return {
         users: state.onlineusers

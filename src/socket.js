@@ -1,5 +1,11 @@
 import * as io from "socket.io-client";
-import { onlineUsers, userJoined, userLeft } from "./actions";
+import {
+    onlineUsers,
+    userJoined,
+    userLeft,
+    getLastMessages,
+    addNewChatToRedux
+} from "./actions";
 
 export let socket;
 
@@ -18,6 +24,15 @@ export const init = store => {
 
         socket.on("userLeft", userId => {
             store.dispatch(userLeft(userId));
+        });
+
+        socket.on("chatMessages", data => {
+            store.dispatch(getLastMessages(data));
+        });
+
+        socket.on("chatMessageForRedux", data => {
+            console.log("In Socket.js ", data);
+            store.dispatch(addNewChatToRedux(data));
         });
     }
 };

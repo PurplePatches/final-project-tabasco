@@ -20,6 +20,39 @@ main #app {
     display: flex;
     flex-direction: column;
 }
+#header {
+    display: flex;
+    justify-content: space-between;
+}
+#header h1 img {
+    width: 200px;
+    margin: 10px;
+}
+#header nav {
+    min-width: 60px;
+    min-height: 60px;
+    background: url(/img/hamburgermenu.svg) top 10px center / contain no-repeat;
+    display: flex;
+    padding: 30px 20px 20px;
+    box-sizing: border-box;
+}
+#header nav:hover {
+    background: none;
+}
+#header nav:hover li {
+    display: block;
+    margin-right: 20px;
+}
+#header nav:hover li a {
+    color: grey;
+    text-decoration: none;
+}
+#header nav:hover li a:hover {
+    color: saddenbrown;
+}
+#header nav li {
+    display: none;
+}
 #profile {
     display: flex;
     flex-direction: column;
@@ -34,6 +67,7 @@ span#profilepic {
     display: flex;
     align-items: center;
     align-self: flex-end;
+    justify-self: flex-end;
     cursor: url(/img/mouse.png) 1 1, auto;
 }
 #userdata {
@@ -71,6 +105,7 @@ span#profilepic {
 #userdata hr {
     margin: 20px 0;
 }
+#chats-container .singlemessage span.userpic img,
 img.top_profile,
 #userdata img {
     width: 100%;
@@ -116,12 +151,17 @@ section#modal {
 section.project#friendspage {
     margin: 0 auto;
 }
+section.project#friendspage #onlineusers {
+    display: flex;
+    flex-wrap: wrap;
+}
 #friends,
 #wannabes {
     margin-bottom: 30px;
 }
 #friends h3,
-#wannabes h3 {
+#wannabes h3,
+section.project#friendspage h3 {
     margin-bottom: 10px;
     border-bottom: 1px solid gold;
     padding-bottom: 20px;
@@ -152,6 +192,40 @@ section.project#friendspage {
     flex-direction: row;
     justify-content: space-evenly;
     flex-wrap: wrap;
+}
+#chats-container {
+    height: 640px;
+    overflow-y: scroll;
+}
+#chats-container .singlemessage {
+    flex-direction: row;
+    justify-content: normal;
+    background: bisque;
+}
+#chats-container .singlemessage:nth-child(even) {
+    flex-direction: row-reverse;
+    background: antiquewhite;
+}
+#chats-container .singlemessage span.userpic {
+    width: 50px;
+    border-radius: 20px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    align-self: flex-end;
+    cursor: url(/img/mouse.png) 1 1, auto;
+    margin-right: 20px;
+}
+#chats-container .singlemessage:nth-child(even) span.userpic {
+    margin-right: 0;
+    margin-left: 20px;
+}
+#chats-container .singlemessage span.userpic a {
+    text-align: center;
+    color: grey;
+}
+#chats-container .singlemessage p {
+    font-size: 14px;
 }
 span#close {
     align-self: flex-end;

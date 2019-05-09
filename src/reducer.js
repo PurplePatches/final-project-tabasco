@@ -50,6 +50,20 @@ export default function reducer(state = {}, action) {
                 })
             });
             break;
+        case "GET_PUBLIC_MESSAGES":
+            console.log("Reducing the ", action);
+            return Object.assign({}, state, {
+                ...state,
+                chats: action.chats.reverse()
+            });
+            break;
+        case "NEW_PUBLIC_MESSAGE":
+            console.log("Reducing the ", action);
+            return Object.assign({}, state, {
+                ...state,
+                chats: [...state.chats, action.chat]
+            });
+            break;
     }
     return state;
 

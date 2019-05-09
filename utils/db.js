@@ -129,3 +129,15 @@ exports.getNewUser = function getNewUser(id) {
     const query = `SELECT id, first_name, last_name, image_url FROM users WHERE id = $1`;
     return db.query(query, [id]);
 };
+// CHATS
+exports.getUsersAndChats = function getUsersAndChats() {
+    const query = `SELECT users.id AS userId, users.first_name, users.Image_url, chats.id, chats.id_sender, chats.id_recepient, chats.message, chats.created_at FROM chats
+   LEFT JOIN users ON (chats.id_sender = users.id )
+    ORDER BY chats.id DESC LIMIT 10`;
+    return db.query(query);
+};
+exports.newChatMessage = function newChatMessage(userId, message, receiver) {
+    const query = `INSERT INTO chats (id_sender, message, id_recepient) VALUES ($1, $2, $3) RETURNING *;`;
+    let params = [userId, message, receiver || null];
+    return db.query(query, params);
+};
