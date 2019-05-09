@@ -86,8 +86,22 @@ function getFriends(currentUser) {
 }
 
 function getUsersByIds(arrayOfIds) {
-    const query = `SELECT id, first_name, last_name, picture FROM users WHERE id = ANY($1)`;
-    return db.query(query, [arrayOfIds]);
+    const q = `SELECT id, first_name, last_name, picture FROM users WHERE id = ANY($1)`;
+    return db.query(q, [arrayOfIds]);
+}
+
+function getChat() {
+    console.log("getChat is running");
+    const q =
+        "SELECT chat.id AS chatId, userId, message, posted, first_name, last_name FROM chat JOIN users ON chat.userId = users.id ORDER BY chatId DESC LIMIT 10;";
+    return db.query(q);
+}
+
+function addChat(userId, message) {
+    const q =
+        "INSERT INTO chat (userId, message) VALUES ($1, $2) RETURNING id, posted;";
+    const params = [userId, message];
+    return db.query(q, params);
 }
 
 module.exports = {
@@ -103,5 +117,7 @@ module.exports = {
     friendAccept,
     unfriend,
     getFriends,
-    getUsersByIds
+    getUsersByIds,
+    getChat,
+    addChat
 };

@@ -1,5 +1,11 @@
 import * as io from "socket.io-client";
-import { onlineUsers, userJoined, userLeft } from "./actions";
+import {
+    onlineUsers,
+    userJoined,
+    userLeft,
+    receiveChat,
+    newChatMessage
+} from "./actions";
 
 export let socket;
 
@@ -18,6 +24,14 @@ export function init(store) {
 
         socket.on("userLeft", userId => {
             store.dispatch(userLeft(userId));
+        });
+
+        socket.on("gotChat", chatMessages => {
+            store.dispatch(receiveChat(chatMessages));
+        });
+
+        socket.on("gotNewChatMessage", chatMessage => {
+            store.dispatch(newChatMessage(chatMessage));
         });
     }
 }

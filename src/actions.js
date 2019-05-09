@@ -25,23 +25,37 @@ export async function unfriend(id) {
     };
 }
 
-export async function onlineUsers(users) {
+export function onlineUsers(users) {
     return {
         type: "ONLINE_USERS",
         users
     };
 }
 
-export async function userLeft(userId) {
+export function userLeft(userId) {
     return {
         type: "USER_LEFT",
         userId
     };
 }
 
-export async function userJoined(user) {
+export function userJoined(user) {
     return {
         type: "USER_JOINED",
         user
+    };
+}
+
+export function receiveChat(chatMessages) {
+    return {
+        type: "RECEIVE_CHAT",
+        chatMessages
+    };
+}
+
+export function newChatMessage(chatMessage) {
+    return {
+        type: "NEW_CHAT_MESSAGE",
+        chatMessage
     };
 }

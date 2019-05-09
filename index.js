@@ -13,6 +13,8 @@ const cookieSessionMiddleware = (exports.cookieSessionMiddleware = cookieSession
     }
 ));
 
+const moment = require("moment");
+
 const compression = require("compression");
 app.use(compression());
 
@@ -71,21 +73,66 @@ io.on("connection", socket => {
         }
     });
 
-    db.getUsersByIds(otherOnlineUsers).then(({ rows }) => {
-        console.log("rows", rows);
-        socket.emit("onlineUsers", rows);
-    });
+    db.getUsersByIds(otherOnlineUsers)
+        .then(({ rows }) => {
+            console.log("rows", rows);
+            socket.emit("onlineUsers", rows);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+
+    let thisUserData;
 
     if (onlineUsers[userId]) {
         onlineUsers[userId].push(socket.id);
     } else {
         onlineUsers[userId] = [socket.id];
-        db.getUserData(userId).then(({ rows }) => {
-            socket.broadcast.emit("userJoined", rows[0]);
-        });
+        db.getUserData(userId)
+            .then(({ rows }) => {
+                thisUserData = rows[0];
+                socket.broadcast.emit("userJoined", rows[0]);
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
 
-    console.log("onlineUsers: ", onlineUsers);
+    socket.on("receiveChat", () => {
+        console.log("receiveChat is running!");
+        db.getChat()
+            .then(({ rows }) => {
+                console.log("rows in index getChat then", rows);
+                const answer = rows.reverse().map(message => {
+                    const datePost = new Date(message.posted);
+                    return { ...message, posted: datePost.toGMTString() };
+                });
+
+                socket.emit("gotChat", answer);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    });
+
+    socket.on("newChatMessage", async chatMessage => {
+        db.addChat(userId, chatMessage)
+            .then(({ rows }) => {
+                const datePost = new Date(rows[0].posted);
+                let newChatMessage = {
+                    chatid: rows[0].id,
+                    userId: thisUserData.id,
+                    first_name: thisUserData.first_name,
+                    last_name: thisUserData.last_name,
+                    message: chatMessage,
+                    posted: datePost.toGMTString()
+                };
+                io.emit("gotNewChatMessage", newChatMessage);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    });
 
     socket.on("disconnect", () => {
         onlineUsers[userId] = onlineUsers[userId].filter(socketId => {
