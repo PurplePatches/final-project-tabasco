@@ -3,8 +3,8 @@ DROP TABLE IF EXISTS friendship;
 
 CREATE TABLE friendship (
     id SERIAL PRIMARY KEY,
-    requester_id VARCHAR,
-    recipient_id VARCHAR,
+    requester_id INTEGER NOT NULL,
+    recipient_id INTEGER NOT NULL,
     sentrequest BOOLEAN,
     accepted BOOLEAN,
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP

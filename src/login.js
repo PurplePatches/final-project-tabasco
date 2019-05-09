@@ -10,7 +10,10 @@ export default class Login extends React.Component {
         axios
             .post(
                 "/login",
-                { email: this.email, newpassword: this.newpassword },
+                {
+                    email: this.email,
+                    newpassword: this.newpassword
+                },
                 {
                     xsrfCookieName: "mytoken",
                     xsrfHeaderName: "csrf-token"
@@ -19,7 +22,7 @@ export default class Login extends React.Component {
             .then(({ data }) => {
                 // this.setState({
                 //     error: true;
-                // })
+                // // })
                 location.replace("/");
             })
             .catch(err => {

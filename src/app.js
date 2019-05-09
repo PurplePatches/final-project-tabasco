@@ -7,6 +7,9 @@ import Uploader from "./uploader";
 import Profile from "./profile";
 import BioEditor from "./bioeditor";
 import OtherProfile from "./otherprofile";
+import Chat from "./chat";
+import Friends from "./friends";
+import UsersMenu from "./usersmenu";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -22,13 +25,28 @@ export default class App extends React.Component {
                 lastname: data.lastname,
                 url: data.url,
                 bio: data.bio,
-                accepted: data.accepted
+                accepted: data.accepted,
+                recipient_id: data.recipient_id,
+                requester_id: data.requester_id,
+                sentrequest: data.sentrequest
             });
             console.log("DATA", data);
         });
     }
     setBio(newBio) {
         this.setState({ bio: newBio });
+    }
+    logout() {
+        axios
+            .post("/logout")
+            .then(({ data }) => {
+                this.setState({
+                    id: null
+                });
+            })
+            .catch(err => {
+                console.log("error in logout", err);
+            });
     }
     render() {
         if (!this.state.id) {
@@ -46,6 +64,28 @@ export default class App extends React.Component {
                         <p className="logoname">CONECT</p>
                     </div>
 
+                    <div id="menu">
+                        <a className="lnk" href="/">
+                            PROFILE
+                        </a>
+                        <a className="lnk" href="/friends">
+                            FRIENDS
+                        </a>
+
+                        <a className="lnk" href="/usersmenu">
+                            USERS
+                        </a>
+                        <a className="lnk" href="/chat">
+                            CHAT
+                        </a>
+                        <a
+                            onClick={e => this.logout()}
+                            className="lnk"
+                            href="/logout"
+                        >
+                            LOGOUT
+                        </a>
+                    </div>
                     <ProfilePic
                         url={this.state.url}
                         firstname={this.state.firstname}
@@ -56,7 +96,7 @@ export default class App extends React.Component {
                         }
                     />
                 </div>
-                <div id="content">
+                <div className="content">
                     <BrowserRouter>
                         <div>
                             <div>
@@ -88,9 +128,18 @@ export default class App extends React.Component {
                                         history={props.history}
                                         userId={this.state.id}
                                         accepted={this.state.accepted}
+                                        recipient_id={this.state.recipient_id}
+                                        requester_id={this.state.requester_id}
+                                        sentrequest={this.state.sentrequest}
                                     />
                                 )}
                             />
+                            <Route
+                                path="/friends"
+                                render={props => <Friends />}
+                            />
+                            <Route path="/usersmenu" component={UsersMenu} />
+                            <Route path="/chat" component={Chat} />
                         </div>
                     </BrowserRouter>
                     {this.state.isUploaderVisible && (

@@ -25,12 +25,34 @@ export default class Uploader extends React.Component {
                 console.log("error in axios", err);
             });
     }
-
+    logout() {
+        axios
+            .post("/logout")
+            .then(({ data }) => {
+                this.setState({
+                    id: null
+                });
+            })
+            .catch(err => {
+                console.log("error in logout", err);
+            });
+    }
     render() {
         return (
             <div id="wrapuploader">
                 <div className="uploader">
                     <form id="form">
+                        <button
+                            id="close"
+                            onClick={() =>
+                                this.setState({
+                                    isUploaderVisible: false
+                                })
+                            }
+                        >
+                            X
+                        </button>
+
                         <p>Change your Profile Picture?</p>
                         <input
                             id="file"
@@ -46,18 +68,8 @@ export default class Uploader extends React.Component {
                         <button onClick={e => this.uploadFile(e)}>
                             Upload
                         </button>
-                        <button
-                            onClick={() =>
-                                this.setState({
-                                    isUploaderVisible: false
-                                })
-                            }
-                        >
-                            Close
-                        </button>
-                        <button onClick={() => this.setState({ userId: null })}>
-                            Logout
-                        </button>
+
+                        <button onClick={e => this.logout()}>Logout</button>
                     </form>
                 </div>
             </div>

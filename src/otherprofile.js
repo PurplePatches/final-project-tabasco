@@ -51,6 +51,9 @@ export default class OtherProfile extends React.Component {
                     bio={this.state.bio}
                     userId={this.state.userId}
                     accepted={this.state.accepted}
+                    recipient_id={this.state.recipient_id}
+                    requester_id={this.state.requester_id}
+                    sentrequest={this.state.sentrequest}
                 />
             </div>
         );

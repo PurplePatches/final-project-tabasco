@@ -40,6 +40,12 @@ exports.updateUsersBio = function updateUsers(bio, id) {
     return db.query(q, params);
 };
 
+exports.getId = function getId(email) {
+    let q = `SELECT id FROM users WHERE email=$1;`;
+    let params = [email];
+    return db.query(q, params);
+};
+
 //((((((((((((((((((((((((((((((((((((((((((     LOGIN     ))))))))))))))))))))))))))))))))))))))))))
 
 exports.getPassword = function getPassword(email) {
@@ -50,9 +56,9 @@ exports.getPassword = function getPassword(email) {
 
 //((((((((((((((((((((((((((((((((((((((((((     PROFILE     ))))))))))))))))))))))))))))))))))))))))))
 
-exports.getUsersInformation = function getUsersInformation(userId) {
-    let q = `SELECT * FROM users WHERE id = $1;`;
-    let params = [userId];
+exports.getUsersInformation = function getUsersInformation(id) {
+    let q = `SELECT * FROM users WHERE id=$1`;
+    let params = [id];
     return db.query(q, params);
 };
 
@@ -74,9 +80,11 @@ exports.sendRequest = function sendRequest(
     return db.query(q, params);
 };
 
-exports.friendship = function friendship(recipient_id) {
-    const q = `SELECT * FROM friendship WHERE recipient_id=$1`;
-    let params = [recipient_id];
+exports.friendship = function friendship(recipient_id, requester_id) {
+    const q = `SELECT * FROM friendship
+    WHERE recipient_id=$1
+    AND requester_id=$2;`;
+    let params = [recipient_id, requester_id];
     return db.query(q, params);
 };
 
@@ -89,9 +97,56 @@ exports.cancelRequest = function cancelRequest(recipient_id, requester_id) {
     return db.query(q, params);
 };
 
+exports.accept = function accept(recipient_id, requester_id) {
+    let q = `UPDATE friendship
+    SET accepted = true
+    WHERE recipient_id = $1
+    AND requester_id = $2;`;
+    let params = [recipient_id, requester_id];
+    return db.query(q, params);
+};
+
+// exports.getFriends = function getFriends() {
+//     const q = `SELECT * FROM users;`;
+//     let params = [];
+//     return db.query(q, params);
+// };
+
+exports.getFriends = function getFriends(id) {
+    const q = `
+    SELECT users.id, firstname, lastname, url, accepted
+    FROM friendship
+    JOIN users
+    ON (accepted = false AND recipient_id = $1 AND requester_id = users.id)
+    OR (accepted = true AND recipient_id = $1 AND requester_id = users.id)
+    OR (accepted = true AND requester_id = $1 AND recipient_id = users.id)
+`;
+    let params = [id];
+    return db.query(q, params);
+};
+
+exports.getSentRequest = function getSentRequest(id) {
+    let q = `SELECT users.id, firstname, lastname, url, sentrequest
+    FROM friendship
+    JOIN users
+    ON (sentrequest = false AND recipient_id = $1 AND requester_id = users.id)
+    OR (sentrequest = true AND recipient_id = $1 AND requester_id = users.id)
+    OR (sentrequest = true AND requester_id = $1 AND recipient_id = users.id);`;
+    let params = [id];
+    return db.query(q, params);
+};
+
 //((((((((((((((((((((((((((((((((((((((((((((((((((()))))))))))))))))))))))))))))))))))))))))))))))))))
 
 exports.getUsersById = function getUsersByIds(arrayOfIds) {
     const q = `SELECT id, firstname, lastname, url FROM users WHERE id = ANY($1)`;
     return db.query(q[arrayOfIds]);
 };
+
+exports.getUsers = function getUsers() {
+    const q = `SELECT * FROM users`;
+    return db.query(q);
+};
+
+//
+// INSERT INTO friendship (requester_id, recipient_id, accepted) VALUES (204, 34, true) RETURNING *;

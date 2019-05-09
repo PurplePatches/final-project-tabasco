@@ -104,7 +104,7 @@ button {
     color: silver;
     border-radius: 20px;
     height: 40px;
-    width: 200px;
+    width: 250px;
     margin: 10px;
     font-family: monospace;
     font-size: 20px;
@@ -211,8 +211,8 @@ textarea {
 }
 #profilepic {
     border-radius: 100px;
-    height: 100px;
-    width: 100px;
+    height: 120px;
+    width: 120px;
 }
 
 #header {
@@ -221,7 +221,7 @@ textarea {
     justify-content: space-between;
 }
 
-#content {
+.content {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -243,4 +243,108 @@ textarea {
 #waiting {
     font-size: 50px;
     color: red;
+}
+
+#friends {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 30px;
+    padding: 20px 20px;
+}
+#nofriends {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 30px;
+    padding: 100px;
+}
+
+#menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    height: 70px;
+    width: 1100px;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 20px;
+}
+
+.lnk {
+    color: rgba(2, 44, 67, 1);
+    font-size: 30px;
+    font-weight: bolder;
+    text-decoration: underline;
+}
+
+.lnk:link {
+    text-decoration: none;
+    font-weight: bolder;
+
+    background-color: rgba(255, 255, 255, 0);
+    color: rgba(2, 44, 67, 1);
+}
+
+.lnk:visited {
+    color: rgba(2, 44, 67, 1);
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.lnk:hover {
+    text-decoration: underline;
+}
+
+.friendstitle {
+    font-size: 30px;
+    font-weight: bolder;
+}
+
+.boxfriend {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.itm {
+    margin: 10px;
+    border: 1px gray solid;
+}
+
+#users {
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+}
+
+#combo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#goto {
+    background-color: gray;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 5px;
+    color: rgba(2, 44, 67, 1);
+}
+
+#goto:visited {
+    color: rgba(2, 44, 67, 1);
+}
+
+#close {
+    border-radius: 30px;
+    height: 50px;
+    width: 50px;
+    font-family: "Poiret One", cursive;
+    background-color: silver;
+    border: 2px gray solid;
+    color: gray;
+    font-weight: bolder;
 }
