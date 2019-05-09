@@ -36,7 +36,7 @@ class Chat extends React.Component {
                 >
                     {chats != undefined &&
                         chats.map(message => {
-                            let userlink = "/user/" + message.id_sender;
+                            let userlink = "/user/" + message.userId;
                             console.log("Each one", message);
                             return (
                                 <div key={message.id} className="singlemessage">
