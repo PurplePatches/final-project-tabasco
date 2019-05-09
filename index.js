@@ -62,7 +62,7 @@ io.use(function(socket, next) {
 });
 
 let onlineUsers = {};
-io.on("connection", socket => {
+io.on("connection", async socket => {
     console.log(`socket with the id ${socket.id} is now connected`);
 
     const userId = socket.request.session.userId;
@@ -82,14 +82,16 @@ io.on("connection", socket => {
             console.log(err);
         });
 
-    let thisUserData;
-    db.getUserData(userId)
-        .then(({ rows }) => {
-            thisUserData = rows[0];
-        })
-        .catch(err => {
-            console.log(err);
-        });
+    let { rows } = await db.getUserData(userId);
+
+    let thisUserData = rows[0];
+    // db.getUserData(userId)
+    //     .then(({ rows }) => {
+    //         thisUserData = rows[0];
+    //     })
+    //     .catch(err => {
+    //         console.log(err);
+    //     });
 
     if (onlineUsers[userId]) {
         onlineUsers[userId].push(socket.id);

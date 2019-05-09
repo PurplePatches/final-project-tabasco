@@ -33,6 +33,7 @@ export function onlineUsers(users) {
 }
 
 export function userLeft(userId) {
+    console.log("userLeft action running, userId:", userId);
     return {
         type: "USER_LEFT",
         userId
@@ -40,6 +41,7 @@ export function userLeft(userId) {
 }
 
 export function userJoined(user) {
+    console.log("userJoined action running, user:", user);
     return {
         type: "USER_JOINED",
         user
