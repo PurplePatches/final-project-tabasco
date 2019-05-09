@@ -103,6 +103,13 @@ function addChat(userId, message) {
     return db.query(q, params);
 }
 
+function searchUser(typedFirst, typedLast) {
+    const q =
+        "SELECT id, first_name, last_name, picture FROM users WHERE (first_name LIKE $1) AND (last_name LIKE $2) ORDER BY first_name ASC LIMIT 5";
+    const params = [typedFirst, typedLast];
+    return db.query(q, params);
+}
+
 module.exports = {
     checkEmail,
     addUser,
@@ -118,5 +125,6 @@ module.exports = {
     getFriends,
     getUsersByIds,
     getChat,
-    addChat
+    addChat,
+    searchUser
 };

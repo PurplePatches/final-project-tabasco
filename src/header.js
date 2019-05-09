@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "./axios";
 import { Link } from "react-router-dom";
+import Search from "./search";
 
 export default class Header extends React.Component {
     constructor(props) {
@@ -18,6 +19,7 @@ export default class Header extends React.Component {
                 <Link to="/">
                     <img className="logo" src="/logo.png" />
                 </Link>
+                <Search />
                 <div className="menu">
                     <Link to="/friends">
                         <button>Friends</button>

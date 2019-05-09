@@ -10,6 +10,7 @@ import BioEditor from "./bioeditor";
 import OtherProfile from "./otherprofile";
 import Friends from "./friends";
 import Chat from "./chat";
+import Searchpage from "./searchpage";
 
 export default class App extends React.Component {
     constructor(props) {
@@ -100,6 +101,7 @@ export default class App extends React.Component {
                     />
                     <Route path="/friends" render={() => <Friends />} />
                     <Route path="/chat" render={() => <Chat />} />
+                    <Route path="/search" render={() => <Searchpage />} />
                 </div>
             </BrowserRouter>
         );

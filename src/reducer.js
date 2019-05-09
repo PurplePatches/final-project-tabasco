@@ -73,5 +73,19 @@ export default function(state = {}, action) {
         };
     }
 
+    if (action.type == "SEARCH_RESULTS") {
+        state = {
+            ...state,
+            searchResults: action.names
+        };
+    }
+
+    if (action.type == "CLEAR_SEARCH") {
+        state = {
+            ...state,
+            searchResults: null
+        };
+    }
+
     return state;
 }

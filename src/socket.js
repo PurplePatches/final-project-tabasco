@@ -4,7 +4,8 @@ import {
     userJoined,
     userLeft,
     receiveChat,
-    newChatMessage
+    newChatMessage,
+    searchResults
 } from "./actions";
 
 export let socket;
@@ -32,6 +33,10 @@ export function init(store) {
 
         socket.on("gotNewChatMessage", chatMessage => {
             store.dispatch(newChatMessage(chatMessage));
+        });
+
+        socket.on("searchResults", names => {
+            store.dispatch(searchResults(names));
         });
     }
 }

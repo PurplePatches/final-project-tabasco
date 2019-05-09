@@ -127,6 +127,25 @@ io.on("connection", async socket => {
             });
     });
 
+    socket.on("searching", typedNames => {
+        if (typedNames == "" || typedNames == " ") {
+            return;
+        }
+        const names = typedNames.split(" ");
+
+        let typedFirst = names[0] + "%";
+        let typedLast = "" + "%";
+
+        if (names[1]) {
+            typedLast = names[1] + "%";
+            console.log(typedLast);
+        }
+
+        db.searchUser(typedFirst, typedLast).then(({ rows }) => {
+            socket.emit("searchResults", rows);
+        });
+    });
+
     socket.on("disconnect", () => {
         onlineUsers[userId] = onlineUsers[userId].filter(socketId => {
             if (socketId != socket.id) {

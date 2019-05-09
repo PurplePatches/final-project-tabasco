@@ -61,3 +61,16 @@ export function newChatMessage(chatMessage) {
         chatMessage
     };
 }
+
+export function searchResults(names) {
+    return {
+        type: "SEARCH_RESULTS",
+        names
+    };
+}
+
+export function clearSearch() {
+    return {
+        type: "CLEAR_SEARCH"
+    };
+}

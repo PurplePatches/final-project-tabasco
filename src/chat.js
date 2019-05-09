@@ -1,5 +1,7 @@
 import React from "react";
 
+import { Link } from "react-router-dom";
+
 import { connect } from "react-redux";
 import { socket } from "./socket";
 // import { receiveChat } from "./actions";
@@ -32,9 +34,12 @@ class Chat extends React.Component {
                         this.props.onlineUsers.map(onUser => {
                             return (
                                 <div className="onlineUser" key={onUser.id}>
-                                    <div className="onlineUserPic">
+                                    <Link
+                                        to={"/user/" + onUser.id}
+                                        className="onlineUserPic"
+                                    >
                                         <img src={onUser.picture} />
-                                    </div>
+                                    </Link>
                                     <h4>
                                         {onUser.first_name} {onUser.last_name}
                                     </h4>
