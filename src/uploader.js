@@ -62,7 +62,7 @@ export default class Uploader extends React.Component {
                         </label>
 
                         <button onClick={e => this.submit(e)}>
-                            Join the Community
+                            Get the next level of Bearability
                         </button>
                     </form>
                 </div>
