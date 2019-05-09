@@ -18,12 +18,7 @@
         password
     ) {
         let query = `
-        INSERT INTO users (
-            first_name,
-            last_name,
-            email_address,
-            password
-        )
+        INSERT INTO users (first_name, last_name, email_address, password)
         VALUES ($1, $2, $3, $4)
         RETURNING id;`;
         let parameters = [
@@ -40,7 +35,8 @@
     //////////////////
 
     exports.getHashedPassword = function getHashedPassword(email_address) {
-        let query = `SELECT password, id
+        let query = `
+        SELECT password, id
         FROM users
         WHERE email_address = $1`;
         let parameters = [email_address || null];
@@ -52,7 +48,8 @@
     ///////////////////
 
     exports.uploadPicture = function uploadPicture(id, user_picture) {
-        let query = `UPDATE users
+        let query = `
+        UPDATE users
         SET user_picture = $2
         WHERE id = $1
         RETURNING *`;
@@ -65,7 +62,8 @@
     /////////////////////////
 
     exports.getUserInformation = function getUserInformation(id) {
-        let query = `SELECT *
+        let query = `
+        SELECT *
         FROM users
         WHERE id = $1;`;
         let parameters = [id || null];
@@ -77,7 +75,8 @@
     ///////////////
 
     exports.updateBio = function updateBio(id, bio) {
-        let query = `UPDATE users
+        let query = `
+        UPDATE users
         SET bio = $2
         WHERE id = $1
         RETURNING bio;`;
@@ -89,22 +88,14 @@
     // GET FRIEND INFORMATION //
     ///////////////////////////
 
-    exports.getFriends = function(user_id) {
-        const query = `SELECT
-        id_sender, id_recipient, request_accepted, accepted_on,
-        users.id as id, first_name, last_name, user_picture
-        FROM friends
-        JOIN users
-        ON users.id = CASE
-        WHEN id_sender = $1
-        THEN id_recipient
-        ELSE id_sender
-        END
-        WHERE (id_sender = $1 AND request_accepted = true)
-        OR (id_recipient = $1)`;
-        const parameters = [user_id];
+    exports.getFriends = function(id_sender, id_recipient) {
+        const query = `
+        SELECT * FROM friends
+        WHERE (id_sender = $2 AND id_recipient = $1)
+        OR (id_recipient = $2 AND id_sender = $1)`;
+        const parameters = [id_sender, id_recipient];
         return db.query(query, parameters).then(result => {
-            return result.rows;
+            return result;
         });
     };
 
@@ -113,12 +104,37 @@
     /////////////////////////
 
     exports.insertFriendRequest = function(id_sender, id_recipient) {
-        const q = `INSERT INTO friends (
-            id_sender,
-            id_recipient,
-            request_accepted)
+        const query = `
+        INSERT INTO friends (id_sender, id_recipient, request_accepted)
         VALUES ($1, $2, false)`;
-        const params = [id_sender, id_recipient];
-        return db.query(q, params);
+        const parameters = [id_sender, id_recipient];
+        return db.query(query, parameters);
+    };
+
+    ////////////////////////////
+    // CANCEL FRIEND REQUEST //
+    //////////////////////////
+
+    exports.deleteFriendRequest = function(id_sender, id_recipient) {
+        const query = `
+        DELETE FROM friends
+        WHERE (id_sender = $1 AND id_recipient = $2)
+        OR (id_recipient = $1 AND id_sender = $2)`;
+        const parameters = [id_sender, id_recipient];
+        return db.query(query, parameters);
+    };
+
+    ////////////////////////////
+    // ACCEPT FRIEND REQUEST //
+    //////////////////////////
+
+    exports.acceptFriendRequest = function(id_sender, id_recipient) {
+        const query = `
+        UPDATE friends
+        SET request_accepted = true
+        WHERE (id_sender = $1 AND id_recipient = $2)
+        OR (id_recipient = $1 AND id_sender = $2)`;
+        const parameters = [id_sender, id_recipient];
+        return db.query(query, parameters);
     };
 })();

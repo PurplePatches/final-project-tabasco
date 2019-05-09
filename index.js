@@ -79,6 +79,7 @@
     require('./utility/upload');
     require('./utility/user');
     require('./utility/edit');
+    require('./utility/friends');
 
     app.get('*', (req, res) => {
         if (!req.session.userId) {

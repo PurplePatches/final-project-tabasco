@@ -6,9 +6,8 @@ export default class FriendButton extends React.Component {
         super(props);
         this.state = {};
         this.send = this.send.bind(this);
-        this.cancel = this.cancel.bind(this);
         this.accept = this.accept.bind(this);
-        this.unfriend = this.unfriend.bind(this);
+        this.delete = this.delete.bind(this);
     }
 
     componentDidMount() {
@@ -22,15 +21,17 @@ export default class FriendButton extends React.Component {
             });
     }
 
-    // NOT WORKING:
     send() {
-        console.log('SEND REQUEST CLICKED');
         axios
-            .post(`/api/friends/${this.props.recipient}`, {})
+            .post(`/api/friends/${this.props.recipient}/send`)
             .then(() => {
                 this.setState({
-                    requestAccepted: false,
-                    id_recipient: this.props.recipient
+                    friendship: [
+                        {
+                            request_accepted: false,
+                            id_recipient: this.props.recipient
+                        }
+                    ]
                 });
             })
             .catch(e => {
@@ -38,23 +39,38 @@ export default class FriendButton extends React.Component {
             });
     }
 
-    unfriend() {
-        console.log('UNFRIEND CLICKED');
-        this.setState({ requestAccepted: undefined });
+    delete() {
+        axios
+            .post(`/api/friends/${this.props.recipient}/delete`)
+            .then(() => {
+                this.setState({
+                    friendship: [],
+                    id_recipient: null
+                });
+            })
+            .catch(e => {
+                console.log('POST delete() ERROR: ', e);
+            });
     }
 
     accept() {
-        console.log('ACCEPT REQUEST CLICKED');
-        this.setState({ requestAccepted: true });
-    }
-
-    cancel() {
-        console.log('CANCEL REQUEST CLICKED');
-        this.setState({ requestAccepted: undefined });
+        axios
+            .post(`/api/friends/${this.props.recipient}/accept`)
+            .then(() => {
+                this.setState({
+                    friendship: [{ request_accepted: true }]
+                });
+            })
+            .catch(e => {
+                console.log('POST accept() ERROR: ', e);
+            });
     }
 
     render() {
-        if (this.state.requestAccepted === undefined) {
+        if (!this.state.friendship) {
+            return null;
+        }
+        if (this.state.friendship.length == 0) {
             return (
                 <React.Fragment>
                     <button onClick={this.send} className="wide-button">
@@ -62,18 +78,20 @@ export default class FriendButton extends React.Component {
                     </button>
                 </React.Fragment>
             );
-        } else if (this.state.requestAccepted) {
+        } else if (this.state.friendship[0].request_accepted) {
             return (
                 <React.Fragment>
-                    <button onClick={this.unfriend} className="wide-button">
+                    <button onClick={this.delete} className="wide-button">
                         End friendship
                     </button>
                 </React.Fragment>
             );
-        } else if (this.state.id_recipient === this.props.recipient) {
+        } else if (
+            this.state.friendship[0].id_recipient == this.props.recipient
+        ) {
             return (
                 <React.Fragment>
-                    <button onClick={this.cancel} className="wide-button">
+                    <button onClick={this.delete} className="wide-button">
                         Cancel friend request
                     </button>
                 </React.Fragment>
