@@ -37,11 +37,14 @@ export default class App extends React.Component {
                     <div id="app">
                         <div id="header">
                             <h1>
-                                <img
-                                    src="/img/bearbook-logo.png"
-                                    alt="Bear Book Homepage"
-                                />
+                                <Link to="/">
+                                    <img
+                                        src="/img/bearbook-logo.png"
+                                        alt="Bear Book Homepage"
+                                    />
+                                </Link>
                             </h1>
+
                             <nav>
                                 <li>
                                     <Link to="/friends">Friends</Link>
