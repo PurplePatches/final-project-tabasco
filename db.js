@@ -5,44 +5,44 @@ const db = spicedPg(
 );
 
 exports.addUser = function(firstname, lastname, email, password) {
-    let q = `INSERT INTO users (firstname, lastname, email, password)
+    const q = `INSERT INTO users (firstname, lastname, email, password)
         VALUES ($1, $2, $3, $4)
         RETURNING id`;
-    let params = [firstname, lastname, email, password];
+    const params = [firstname, lastname, email, password];
     return db.query(q, params);
 };
 
 exports.loadUser = function(email) {
-    let q = `SELECT id, email, password
+    const q = `SELECT id, email, password
     FROM users
     WHERE email = $1`;
-    let params = [email];
+    const params = [email];
     return db.query(q, params);
 };
 
 exports.loadUserProfile = function(id) {
-    let q = `SELECT id, firstname, lastname, useravatar, bio
+    const q = `SELECT id, firstname, lastname, useravatar, bio
     FROM users
     WHERE id = $1`;
-    let params = [id];
+    const params = [id];
     return db.query(q, params);
 };
 
 exports.addAvatar = function addImage(id, url) {
-    let q = `UPDATE users
+    const q = `UPDATE users
             SET useravatar = $2
             WHERE id = $1
             RETURNING useravatar`;
-    let params = [id, url];
+    const params = [id, url];
     return db.query(q, params);
 };
 
 exports.uploadBio = function uploadBio(id, bio) {
-    let q = `UPDATE users
+    const q = `UPDATE users
     SET bio = $2
     WHERE id = $1;`;
 
-    let params = [id, bio || null];
+    const params = [id, bio || null];
     return db.query(q, params);
 };
 
@@ -51,44 +51,58 @@ exports.requestFriendship = function requestFriendship(
     recipient_id,
     status
 ) {
-    let q = `
+    const q = `
     INSERT INTO friendships (sender_id, recipient_id, status)
     VALUES ($1, $2, $3)
     RETURNING *;`;
-    let params = [sender_id, recipient_id, status];
+    const params = [sender_id, recipient_id, status];
     return db.query(q, params);
 };
 
 // exports.statusFriendship = function statusFriendship(userId) {
-//     let q = `
+//     const q = `
 //     SELECT sender_id, recipient_id, status FROM friendships
 //     WHERE recipient_id = $1
 //     `;
-//     let params = [sender_id, recipient_id, status];
+//     const params = [sender_id, recipient_id, status];
 //     return db.query(q, params);
 // };
 exports.statusFriendship = function statusFriendship(sender_id, recipient_id) {
-    let q = `
+    const q = `
     SELECT status, recipient_id, sender_id FROM friendships
     WHERE (recipient_id = $1 AND sender_id = $2)
     OR (sender_id = $1 AND recipient_id = $2)`;
-    let params = [sender_id, recipient_id];
+    const params = [sender_id, recipient_id];
     return db.query(q, params);
 };
 
 exports.acceptFriendship = function acceptFriendship(sender_id, recipient_id) {
-    let q = `UPDATE friendships
+    const q = `UPDATE friendships
     SET status = true
     WHERE (sender_id = $1 AND recipient_id = $2)
     OR (sender_id = $2 AND recipient_id = $1)`;
-    let params = [sender_id, recipient_id];
+    const params = [sender_id, recipient_id];
     return db.query(q, params);
 };
 
 exports.cancelFriendship = function cancelFriendship(sender_id, recipient_id) {
-    let q = `DELETE FROM friendships
+    const q = `DELETE FROM friendships
     WHERE (sender_id = $1 AND recipient_id = $2)
     OR (sender_id = $2 AND recipient_id = $1)`;
-    let params = [sender_id, recipient_id];
+    const params = [sender_id, recipient_id];
+    return db.query(q, params);
+};
+
+exports.fetchUsers = function fetchUsers(userId) {
+    const q = `
+    SELECT users.id, firstname, lastname, useravatar, status, sender_id, recipient_id
+    FROM friendships
+    JOIN users
+    ON (status = false AND recipient_id = $1 AND sender_id = users.id)
+    OR (status = false AND sender_id = $1 AND recipient_id = users.id)
+    OR (status = true AND recipient_id = $1 AND sender_id = users.id)
+    OR (status = true AND sender_id = $1 AND recipient_id = users.id)
+    `;
+    const params = [userId];
     return db.query(q, params);
 };

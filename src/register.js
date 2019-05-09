@@ -42,37 +42,39 @@ export default class Register extends React.Component {
             this.ifPasswordWrong();
         };
         return (
-            <form>
-                {this.state.error && <div className="error">Opps</div>}
-                <input
-                    onInput={handleInput}
-                    name="firstname"
-                    placeholder="First name"
-                    autoComplete="first-name"
-                />
-                <input
-                    onInput={handleInput}
-                    name="lastname"
-                    placeholder="Second name"
-                    autoComplete="second-name"
-                />
-                <input
-                    onInput={handleInput}
-                    name="email"
-                    placeholder="Email"
-                    autoComplete="email"
-                />
-                <input
-                    onInput={handleInput}
-                    className={this.state.validatePassword}
-                    name="password"
-                    type="password"
-                    placeholder="Password"
-                    autoComplete="new-password"
-                />
-                <button onClick={this.submit}> REGISTER </button>
-                <Link to="/login">Click here to Log in!</Link>
-            </form>
+            <div className="flexContainer">
+                <form className="authForm">
+                    {this.state.error && <div className="error">Opps</div>}
+                    <input
+                        onInput={handleInput}
+                        name="firstname"
+                        placeholder="First name"
+                        autoComplete="first-name"
+                    />
+                    <input
+                        onInput={handleInput}
+                        name="lastname"
+                        placeholder="Second name"
+                        autoComplete="second-name"
+                    />
+                    <input
+                        onInput={handleInput}
+                        name="email"
+                        placeholder="Email"
+                        autoComplete="email"
+                    />
+                    <input
+                        onInput={handleInput}
+                        className={this.state.validatePassword}
+                        name="password"
+                        type="password"
+                        placeholder="Password"
+                        autoComplete="new-password"
+                    />
+                    <button onClick={this.submit}> REGISTER </button>
+                    <Link to="/login">Click here to Log in!</Link>
+                </form>
+            </div>
         );
     }
 }

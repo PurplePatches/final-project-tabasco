@@ -39,27 +39,31 @@ export default class Login extends React.Component {
             // this.ifPasswordWrong();
         };
         return (
-            <form>
-                {this.state.error && (
-                    <div className="error">Opps Something went wrong!!!</div>
-                )}
-                <input
-                    onInput={handleInput}
-                    name="email"
-                    placeholder="Email"
-                    autoComplete="email"
-                />
-                <input
-                    onInput={handleInput}
-                    // className={this.state.validatePassword}
-                    name="password"
-                    type="password"
-                    placeholder="Password"
-                    autoComplete="new-password"
-                />
-                <button onClick={this.submit}> LOG IN </button>
-                <Link to="/">Click here to Register!</Link>
-            </form>
+            <div className="flexContainer">
+                <form className="authForm">
+                    {this.state.error && (
+                        <div className="error">
+                            Opps Something went wrong!!!
+                        </div>
+                    )}
+                    <input
+                        onInput={handleInput}
+                        name="email"
+                        placeholder="Email"
+                        autoComplete="email"
+                    />
+                    <input
+                        onInput={handleInput}
+                        // className={this.state.validatePassword}
+                        name="password"
+                        type="password"
+                        placeholder="Password"
+                        autoComplete="new-password"
+                    />
+                    <button onClick={this.submit}> LOG IN </button>
+                    <Link to="/">Click here to Register!</Link>
+                </form>
+            </div>
         );
     }
 }

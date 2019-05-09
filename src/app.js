@@ -3,7 +3,7 @@ import axios from "./axios";
 import Uploader from "./uploader";
 import ProfilePic from "./profilepic";
 import Profile from "./profile";
-import BioEditor from "./bioEditor";
+// import BioEditor from "./bioEditor";
 import OtherProfile from "./otherProfile";
 import Chat from "./chat";
 import Friends from "./friends";
@@ -36,7 +36,7 @@ export default class App extends React.Component {
     }
     componentDidMount() {
         axios.get("/user").then(({ data }) => {
-            console.log("DATA CDM", data);
+            console.log("DATA ComponentDidMout", data);
             this.setState({
                 id: data.id,
                 firstname: data.firstname,
@@ -52,7 +52,7 @@ export default class App extends React.Component {
         }
         return (
             <BrowserRouter>
-                <div className="container">
+                <div className="appContainer">
                     <nav className="navbar">
                         <img src="/assets/whiteHatsLogo.png" id="logo" />
                         <ul>

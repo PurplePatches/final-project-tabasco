@@ -186,6 +186,14 @@ app.get("/user/:id/json", (req, res) => {
             console.log("ERROR in loading profile", err);
         });
 });
+///###########################################
+///################## FRIENDS  ###############
+///################## BOARD #################
+app.get("/friends/fetchUsers", (req, res) => {
+    db.fetchUsers(req.session.userId).then(friendships => {
+        res.json(friendships.rows);
+    });
+});
 
 ///###########################################
 ///################## USER TO USER ###############
