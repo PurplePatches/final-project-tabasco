@@ -85,13 +85,6 @@ io.on("connection", async socket => {
     let { rows } = await db.getUserData(userId);
 
     let thisUserData = rows[0];
-    // db.getUserData(userId)
-    //     .then(({ rows }) => {
-    //         thisUserData = rows[0];
-    //     })
-    //     .catch(err => {
-    //         console.log(err);
-    //     });
 
     if (onlineUsers[userId]) {
         onlineUsers[userId].push(socket.id);
