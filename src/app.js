@@ -116,7 +116,12 @@ export default class App extends React.Component {
                                 )}
                             />
                             <Route path="/friends" component={Friends} />
-                            <Route path="/online" component={Online} />
+                            <Route
+                                path="/online"
+                                render={props => (
+                                    <Online loggedId={this.state.id} />
+                                )}
+                            />
                             <Route path="/chat" component={Chat} />
                         </div>
 

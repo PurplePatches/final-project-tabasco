@@ -259,7 +259,9 @@ io.on("connection", socket => {
         console.log("Here the online users", rows);
         socket.emit("onlineUsers", rows);
     });
+
     onlineUser[socket.id] = userId;
+
     let logs = Object.values(onlineUser).filter(id => id == userId).length;
     if (logs == 1) {
         db.getNewUser(userId).then(({ rows }) => {

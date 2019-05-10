@@ -1,11 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { unfriend } from "./actions";
 class Online extends React.Component {
     constructor(props) {
         super(props);
-        //console.log("Online", this.props);
+        console.log("Online", this.props);
     }
 
     render() {
@@ -15,32 +14,32 @@ class Online extends React.Component {
         {
             users != undefined &&
                 users.map(single => {
-                    let userlink = "/user/" + single.id;
-                    onlines.push(
-                        <div className="friendslist project" key={single.id}>
-                            <Link to={userlink}>
-                                <span className="profilepic">
-                                    <img
-                                        className="top_profile"
-                                        src={single.image_url}
-                                        alt={
-                                            (single.first_name,
-                                            single.last_name)
-                                        }
-                                    />
-                                </span>
-                                {single.first_name + " " + single.last_name}
-                            </Link>
-                            <button
-                                onClick={() => {
-                                    this.props.dispatch(unfriend(single.id));
-                                }}
-                                className="friendbutton"
+                    if (single.id != this.props.loggedId) {
+                        let userlink = "/user/" + single.id;
+                        onlines.push(
+                            <div
+                                className="friendslist project"
+                                key={single.id}
                             >
-                                Unbear
-                            </button>
-                        </div>
-                    );
+                                <Link to={userlink}>
+                                    <span className="profilepic">
+                                        <img
+                                            className="top_profile"
+                                            src={
+                                                single.image_url ||
+                                                "/img/default.png"
+                                            }
+                                            alt={
+                                                (single.first_name,
+                                                single.last_name)
+                                            }
+                                        />
+                                    </span>
+                                    {single.first_name + " " + single.last_name}
+                                </Link>
+                            </div>
+                        );
+                    }
                 });
         }
         return (
