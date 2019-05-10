@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import * as moment from "moment";
 import { connect } from "react-redux";
 import { socket } from "./socket";
 
@@ -56,7 +57,7 @@ class Chat extends React.Component {
                                         {message.message}
                                     </p>
                                     <p className="date">
-                                        {message.created_at.slice(0, 16)}
+                                        {moment(message.created_at).fromNow()}
                                     </p>
                                 </div>
                             );

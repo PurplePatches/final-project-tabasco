@@ -55,6 +55,9 @@ export default class App extends React.Component {
                                 <li>
                                     <Link to="/online">Online Users</Link>
                                 </li>
+                                <li>
+                                    <a href="/logout">Logout</a>
+                                </li>
                             </nav>
                             <ProfilePic
                                 id={this.state.id}
