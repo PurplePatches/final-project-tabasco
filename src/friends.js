@@ -26,7 +26,7 @@ class Friends extends React.Component {
                             <span className="profilepic">
                                 <img
                                     className="top_profile"
-                                    src={single.image_url}
+                                    src={single.image_url || "/img/default.png"}
                                     alt={(single.first_name, single.last_name)}
                                 />
                             </span>
@@ -49,7 +49,7 @@ class Friends extends React.Component {
                             <span className="profilepic">
                                 <img
                                     className="top_profile"
-                                    src={single.image_url}
+                                    src={single.image_url || "/img/default.png"}
                                     alt={(single.first_name, single.last_name)}
                                 />
                             </span>

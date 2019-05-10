@@ -12,7 +12,10 @@ export default class Profile extends React.Component {
                 <div id="userdata" className="project">
                     <span>
                         <img
-                            src={this.props.profilePic.props.image_url}
+                            src={
+                                this.props.profilePic.props.image_url ||
+                                "/img/default.png"
+                            }
                             alt=""
                         />
                     </span>

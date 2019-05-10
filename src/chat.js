@@ -44,7 +44,10 @@ class Chat extends React.Component {
                                         <Link to={userlink}>
                                             <img
                                                 className="top_profile"
-                                                src={message.image_url}
+                                                src={
+                                                    message.image_url ||
+                                                    "/img/default.png"
+                                                }
                                             />
                                             <h5>{message.first_name}</h5>
                                         </Link>
