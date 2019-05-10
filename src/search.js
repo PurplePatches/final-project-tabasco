@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "./axios";
+
 import { Link } from "react-router-dom";
 import { socket } from "./socket";
 import { connect } from "react-redux";

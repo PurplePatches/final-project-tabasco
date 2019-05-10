@@ -13,7 +13,6 @@ class Chat extends React.Component {
     }
     componentDidMount() {
         !this.props.chatMessages && socket.emit("receiveChat");
-        // this.chatDiv.scrollTop = this.chatDiv.scrollHeight;
     }
 
     handleInput(e) {
@@ -27,6 +26,13 @@ class Chat extends React.Component {
 
     render() {
         console.log(this.props);
+        if (this.chatDiv) {
+            // console.log(this.chatDiv);
+            this.chatDiv.scrollTop = this.chatDiv.scrollHeight;
+            // console.log(this.chatDiv.scrollTop);
+            // console.log(this.chatDiv.scrollHeight);
+            // console.log(this.chatDiv.clientHeight);
+        }
         return (
             <div className="chatPage">
                 <div className="onlineUsers">

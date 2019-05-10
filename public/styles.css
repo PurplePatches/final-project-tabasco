@@ -162,7 +162,8 @@ form {
 
 .friends,
 .wannabes,
-.chatPage {
+.chatPage,
+.searchPage {
     display: flex;
     flex-wrap: wrap;
     width: 90%;
@@ -175,12 +176,14 @@ form {
     /* margin: 5px; */
 }
 
-.friend {
+.friend,
+.searchPageResult {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 170px;
     height: 280px;
+    margin: 10px;
 }
 
 .onlineUsers {

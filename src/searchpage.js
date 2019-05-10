@@ -1,7 +1,6 @@
 import React from "react";
-import axios from "./axios";
 import { Link } from "react-router-dom";
-import { socket } from "./socket";
+// import { socket } from "./socket";
 import { connect } from "react-redux";
 import { clearSearch } from "./actions";
 
@@ -24,9 +23,12 @@ class Searchpage extends React.Component {
                             <div
                                 onClick={this.clearSearch}
                                 key={name.id}
-                                className="searchPageResults"
+                                className="searchPageResult"
                             >
-                                <Link to={"/user/" + name.id}>
+                                <Link
+                                    to={"/user/" + name.id}
+                                    className="friendImage"
+                                >
                                     <img src={name.picture} />
                                     <h2>
                                         {name.first_name} {name.last_name}
