@@ -9,7 +9,6 @@ import axios from "./axios";
 import { Link } from "react-router-dom";
 import { receiveFriends, acceptFriend, unfriend } from "./actions";
 import { connect } from "react-redux";
-import FriendsButton from "./friendsbutton";
 
 class Friends extends React.Component {
     constructor(props) {
@@ -19,6 +18,7 @@ class Friends extends React.Component {
     componentDidMount() {
         this.props.dispatch(receiveFriends());
     }
+
     acceptFriend(arg) {
         this.props.dispatch(acceptFriend(arg));
     }
@@ -26,26 +26,19 @@ class Friends extends React.Component {
         this.props.dispatch(unfriend(arg));
     }
     render() {
-        const reject = e => {
-            unfriend(e.target.name);
-        };
-        const agree = e => {
-            acceptFriend(e.target.name);
-        };
-
-        console.log(this.props.result, "HEERE");
+        console.log(this.props, "this.props");
         if (!this.props.result) {
             return null;
         }
-        const users = this.props.result;
-        console.log(users, "USERS LABEL");
+        const list = this.props.result;
+
         const usersList = (
             <div className="profile-container">
-                <h1>
+                <h1 className="w-100 ">
                     {" "}
                     <i className="far fa-list-alt" /> Your friends list:{" "}
                 </h1>
-                {users.map(user => (
+                {list.map(user => (
                     <div>
                         {user.sender_id != this.props.id && (
                             <div>
@@ -56,27 +49,52 @@ class Friends extends React.Component {
                                 <Link to={"/user/" + user.id}>
                                     <div className="view overlay zoom">
                                         <img
-                                            className="img-fluid z-depth-1"
+                                            className="img-fluid friends"
                                             alt="zoom"
-                                            src={user.url}
+                                            src={user.url || "./default.jpg"}
                                         />
                                     </div>
                                 </Link>
                                 {user.accepted && (
                                     <div>
-                                        <button name={user.id} onClick={reject}>
-                                            DELETE YOU!
+                                        <button
+                                            className="btn btn-danger btn-rounded btn-sm hvr-icon-wobble-horizontal w-50"
+                                            onClick={() =>
+                                                this.props.dispatch(
+                                                    unfriend(user.id)
+                                                )
+                                            }
+                                        >
+                                            DELETE FRIEND{" "}
+                                            <i className="far fa-trash-alt hvr-icon" />
                                         </button>
                                     </div>
                                 )}
 
                                 {!user.accepted && (
                                     <div>
-                                        <button name={user.id} onClick={agree}>
-                                            Accept
+                                        <button
+                                            className="btn btn-success btn-rounded btn-sm hvr-icon-wobble-horizontal w-50"
+                                            onClick={() =>
+                                                this.props.dispatch(
+                                                    acceptFriend(user.id)
+                                                )
+                                            }
+                                        >
+                                            {" "}
+                                            Accept?{" "}
+                                            <i className="fas fa-plus-circle hvr-icon" />{" "}
                                         </button>
-                                        <button name={user.id} onClick={reject}>
-                                            Decline
+                                        <button
+                                            className="btn btn-danger btn-rounded btn-sm hvr-icon-wobble-horizontal w-50"
+                                            onClick={() =>
+                                                this.props.dispatch(
+                                                    unfriend(user.id)
+                                                )
+                                            }
+                                        >
+                                            Decline{" "}
+                                            <i className="far fa-trash-alt hvr-icon" />
                                         </button>
                                     </div>
                                 )}
@@ -90,6 +108,7 @@ class Friends extends React.Component {
     }
 }
 const mapStateToProps = function(state) {
+    //global redux state
     console.log("global state in friends: ", state);
     return {
         result: state.users

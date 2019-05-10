@@ -77,3 +77,35 @@ exports.acceptFriend = function acceptFriend(userId, otherId, boolean) {
     let params = [userId, otherId, boolean];
     return db.query(q, params);
 };
+
+exports.getUsersByIds = function getUsersByIds(arrayOfIds) {
+    const query = `SELECT id, first, last, url FROM users WHERE id = ANY($1)`;
+    return db.query(query, [arrayOfIds]);
+};
+
+exports.deleteUser = function deleteUser(userId) {
+    const query = `DELETE FROM users WHERE id = $1`;
+    return db.query(query, [userId]);
+};
+
+exports.deleteFriendships = function deleteFriendships(userId) {
+    const query = `DELETE FROM friendship WHERE recipient_id = $1 OR sender_id = $1`;
+    return db.query(query, [userId]);
+};
+
+exports.retrieveChatAuthors = function retrieveChatAuthors() {
+    let q = `SELECT users.id, users.first, users.last, users.url, chat.message FROM users INNER JOIN chat ON users.id = chat.user_id ORDER BY
+chat.id DESC LIMIT 10`;
+    return db.query(q);
+};
+
+exports.retrieveChat = function retrieveChat() {
+    const query = `SELECT * FROM chat ORDER BY
+id DESC`;
+    return db.query(query);
+};
+
+exports.insertMessage = function insertMessage(data, id) {
+    const query = `INSERT INTO chat (message, user_id) VALUES($1, $2)`;
+    return db.query(query, [data, id]);
+};

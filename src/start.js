@@ -31,12 +31,12 @@ let elem;
 if (location.pathname == "/welcome") {
     elem = <Welcome />;
 } else {
+    init(store);
     elem = (
         <Provider store={store}>
             <App />
         </Provider>
     );
-    init(store);
 }
 
 ReactDOM.render(elem, document.querySelector("main"));

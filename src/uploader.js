@@ -33,7 +33,7 @@ export default class Uploader extends React.Component {
     }
     render() {
         return (
-            <div>
+            <div className="modal-background">
                 <div className="modal-wrapper">
                     <p className="cross" onClick={this.props.clickHandler}>
                         {" "}

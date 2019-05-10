@@ -13,10 +13,15 @@ export default function reducer(state = {}, action) {
         state = {
             ...state,
             users: state.users.map(friend => {
+                //IMPORTANT:
                 if (friend.id == action.otherId) {
-                    friend.accepted = true;
+                    return {
+                        ...friend,
+                        accepted: true
+                    };
+                } else {
+                    return friend;
                 }
-                return friend;
             })
         };
     } else if (action.type == "UNFRIEND") {
@@ -25,6 +30,34 @@ export default function reducer(state = {}, action) {
             users: state.users.filter(arg => {
                 return arg.id != action.otherId;
             })
+        };
+        return state;
+    } else if (action.type == "GET_ONLINE_USERS") {
+        console.log(action.online, "state in get online users reducer");
+        state = {
+            ...state,
+            online: action.online
+        };
+    } else if (action.type == "USER_LEFT") {
+        state = {
+            ...state,
+            online: state.online.filter(arg => action.userId != arg.id)
+        };
+        console.log("after filter", state.online);
+    } else if (action.type == "USER_JOINED") {
+        state = {
+            ...state,
+            online: state.online.concat(action.userId)
+        };
+    } else if (action.type == "GET_MESSAGES") {
+        state = {
+            ...state,
+            messages: action.data
+        };
+    } else if (action.type == "NEW_CHAT_MESSAGE") {
+        state = {
+            ...state,
+            messages: state.messages.concat(action.data)
         };
     }
 

@@ -31,4 +31,39 @@ export async function unfriend(otherId) {
         otherId
     };
 }
+
+export function onlineUsers(data) {
+    return {
+        type: "GET_ONLINE_USERS",
+        online: data
+    };
+}
+
+export function userLeft(userId) {
+    return {
+        type: "USER_LEFT",
+        userId
+    };
+}
+
+export function userJoined(userId) {
+    return {
+        type: "USER_JOINED",
+        userId
+    };
+}
+
+export function getMessages(data) {
+    return {
+        type: "GET_MESSAGES",
+        data
+    };
+}
+
+export function newChatMessage(data) {
+    return {
+        type: "NEW_CHAT_MESSAGE",
+        data
+    };
+}
 //NEED ONLINEUSERS / USERJOINED / USERLEFT

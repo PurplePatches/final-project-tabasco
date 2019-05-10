@@ -45,6 +45,7 @@ const cookieSessionMiddleware = cookieSession({
 });
 
 app.use(cookieSessionMiddleware);
+//taking all data from cookies and send it to socket so we can use it
 io.use(function(socket, next) {
     cookieSessionMiddleware(socket.request, socket.request.res, next);
 });
@@ -133,6 +134,15 @@ app.post("/login", (req, res) => {
 app.get("/logout", (req, res) => {
     req.session = null;
     res.redirect("/welcome");
+});
+
+app.get("/delete", (req, res) => {
+    db.deleteUser(req.session.userId).then(whatever => {
+        db.deleteFriendships(req.session.userId).then(whatever => {
+            req.session = null;
+            res.redirect("/welcome");
+        });
+    });
 });
 
 app.get("/welcome", function(req, res) {
@@ -273,6 +283,7 @@ app.post("/accept", (req, res) => {
         }
     );
 });
+
 //FRIENDS LIST
 app.get("/friends/a", (req, res) => {
     db.retrieveFriends(req.session.userId).then(({ rows }) => {
@@ -295,6 +306,8 @@ app.get("*", function(req, res) {
     }
 });
 
+//SERVER listen
+
 server.listen(8080, function() {
     console.log("I'm listening.");
 });
@@ -305,33 +318,76 @@ let onlineUsers = {};
 io.on("connection", function(socket) {
     console.log(`socket with the id ${socket.id} is now connected`);
 
-    socket.emit("hey", {
-        lol: "mdr",
-        deux: 2
-    });
-    //WHAT I HAVE TO DO FOR ID ARRAY
-
-    //how to delete : delete onlineUsers[socket.id]
-
-    //if array: filter
-
+    if (!socket.request.session.userId || !socket.request.session) {
+        return socket.disconnect(true);
+    }
     const userId = socket.request.session.userId;
-    console.log(socket.request.session.userId, "SOCKET REQ"); //it works, 1!
 
-    // db.getUsersByIds(Object.values(onlineUsers)).then(({ rows }) => {
-    //     socket.emit("onlineUsers", rows);
-    // });
-    // onlineUsers[socket.id] = userId;
+    onlineUsers[socket.id] = userId;
 
-    //.values gives the value of the key / value pair
+    console.log("onlineUsers after new connection:", onlineUsers);
 
-    socket.on("yo", data => console.log(data));
+    console.log("obj values:", Object.values(onlineUsers));
 
-    socket.broadcast.emit("yooo only you!");
-    io.sockets.emit("newConnector", "another");
-    console.log(io.sockets.sockets, "SOCKETS SOCKETS");
+    db.getUsersByIds(Object.values(onlineUsers)).then(({ rows }) => {
+        console.log(rows, "rows of getUsersByIds");
+        socket.emit("onlineUsers", rows);
+    });
+
+    if (Object.values(onlineUsers).filter(arg => arg == userId).length === 1) {
+        console.log("userJOINED once!", socket.request.session.userId);
+        db.retrieveUser(socket.request.session.userId).then(({ rows }) => {
+            socket.broadcast.emit("userJoined", rows[0]);
+        });
+    }
 
     socket.on("disconnect", function() {
         console.log(`socket with the id ${socket.id} is now disconnected`);
+        console.log(onlineUsers, "online users after disconnect");
+
+        delete onlineUsers[socket.id];
+        io.emit("userLeft", socket.request.session.userId);
     });
+
+    //how to delete : delete onlineUsers[socket.id]
+    socket.on("getMessages", () => {
+        db.retrieveChat().then(({ rows }) => {
+            db.retrieveChatAuthors().then(({ rows }) => {
+                console.log("rows in get messages", rows);
+                io.emit("getMessages", rows);
+            });
+        });
+    });
+    //.values gives the value of the key / value pair
+    socket.on("newChatMessage", data => {
+        //QUERY DB TO GET INFO ABOUT USER WHO POSTED THE INFO
+        db.insertMessage(data, socket.request.session.userId).then(() => {
+            db.retrieveUser(userId).then(({ rows }) => {
+                console.log(data, "info back from socket.on");
+                console.log(rows[0].id);
+                //make an object which is the same as one that redux excpects :
+                let myNewChatObj = {
+                    first: rows[0].first,
+                    last: rows[0].last,
+                    url: rows[0].url,
+                    message: data
+                    //etc...
+                };
+                db.retrieveChat().then(({ rows }) => {
+                    db.retrieveChatAuthors().then(({ rows }) => {
+                        console.log("rows in get messages", rows);
+                        io.emit("getMessages", rows);
+                    });
+                });
+
+                console.log(myNewChatObj, "myNewChat");
+
+                io.emit("newChatMessage", myNewChatObj);
+            });
+        });
+    });
+
+    socket.broadcast.emit("yooo only you!");
+    io.sockets.emit("newConnector", "another");
+    // console.log(io.sockets.sockets, "SOCKETS SOCKETS");
 });

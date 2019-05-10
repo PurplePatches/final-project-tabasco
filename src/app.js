@@ -10,6 +10,9 @@ import BioEditor from "./bioeditor";
 import OtherProfile from "./otherprofile";
 import Friends from "./friends";
 
+import Chat from "./chat";
+import Online from "./online";
+
 export default class App extends React.Component {
     constructor(props) {
         super(props);
@@ -54,15 +57,21 @@ export default class App extends React.Component {
         return (
             <BrowserRouter>
                 <div>
-                    <img className="logo" src="../logo.png" />
+                    <Link to="/">
+                        <img className="logo" src="../logo.png" />
+                    </Link>
                     <nav>
                         <ul className="nav justify-content-center white lighten-4 py-4">
                             <li>
-                                <a href="/">Home</a>
+                                <Link to="/">HOME</Link>
                             </li>
                             <li>
-                                <a href="/friends">Friends</a>
+                                <Link to="/friends">FRIENDS</Link>
                             </li>
+                            <li>
+                                <Link to="/chat">CHAT</Link>
+                            </li>
+                            <Link to="/online">ONLINE USERS</Link>
                         </ul>
                     </nav>
                     <Route
@@ -74,6 +83,20 @@ export default class App extends React.Component {
                                 history={props.history}
                             />
                         )}
+                    />
+                    <Route path="/online" component={Online} />
+                    <Route
+                        path="/chat"
+                        render={props => {
+                            console.log(props, "props in online");
+                            console.log(this.state, "state in online");
+                            return (
+                                <div className="chat">
+                                    <Online />
+                                    <Chat />
+                                </div>
+                            );
+                        }}
                     />
                     <Route
                         path="/friends"
