@@ -9,6 +9,11 @@ class Chat extends React.Component {
         super(props);
         this.handleInput = this.handleInput.bind(this);
     }
+    componentDidMount() {
+        if (this.myDiv) {
+            this.myDiv.scrollTop = this.myDiv.scrollHeight;
+        }
+    }
     handleInput(e) {
         if (e.which === 13) {
             let newChat = e.target.value.trim();
@@ -38,7 +43,7 @@ class Chat extends React.Component {
                     {chats != undefined &&
                         chats.map(message => {
                             let userlink = "/user/" + message.userid;
-                            console.log("Each one", message);
+
                             return (
                                 <div key={message.id} className="singlemessage">
                                     <span className="userpic">
