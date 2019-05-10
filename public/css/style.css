@@ -114,6 +114,7 @@ img.top_profile,
     margin-top: 0px;
     border-radius: 10px;
 }
+
 section#modal {
     position: fixed;
     top: 0;
@@ -199,8 +200,9 @@ section.project#friendspage h3 {
 }
 #chats-container .singlemessage {
     flex-direction: row;
-    justify-content: normal;
+    justify-content: space-between;
     background: bisque;
+    position: relative;
 }
 #chats-container .singlemessage:nth-child(even) {
     flex-direction: row-reverse;
@@ -226,6 +228,27 @@ section.project#friendspage h3 {
 }
 #chats-container .singlemessage p {
     font-size: 14px;
+}
+#chats-container .singlemessage p.date {
+    align-self: flex-start;
+    margin-top: 10px;
+    color: gray;
+    font-size: 12px;
+}
+#chats-container .singlemessage:nth-child(odd) p.date {
+    padding-right: 10px;
+}
+#chats-container .singlemessage:nth-child(even) p.date {
+    padding-left: 10px;
+}
+
+#chats-container .singlemessage:nth-child(odd) p.textMessage {
+    position: absolute;
+    left: 70px;
+}
+#chats-container .singlemessage:nth-child(even) p.textMessage {
+    position: absolute;
+    right: 70px;
 }
 span#close {
     align-self: flex-end;

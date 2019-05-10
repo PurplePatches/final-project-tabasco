@@ -52,7 +52,12 @@ class Chat extends React.Component {
                                             <h5>{message.first_name}</h5>
                                         </Link>
                                     </span>
-                                    <p>{message.message}</p>
+                                    <p className="textMessage">
+                                        {message.message}
+                                    </p>
+                                    <p className="date">
+                                        {message.created_at.slice(0, 16)}
+                                    </p>
                                 </div>
                             );
                         })}
