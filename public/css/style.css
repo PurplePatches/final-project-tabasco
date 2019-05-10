@@ -248,7 +248,7 @@ section.project#friendspage h3 {
 }
 #chats-container .singlemessage:nth-child(even) p.textMessage {
     position: absolute;
-    right: 70px;
+    right: 80px;
 }
 span#close {
     align-self: flex-end;
